@@ -139,6 +139,7 @@ It allows you to use the c prefix to set constructor values inline in a concise 
 ```
 </details>
 
+
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 
@@ -441,6 +442,8 @@ Setters method is set with value 10
 ```
 
 - Setter injection involves providing dependencies through setter methods. The class provides setter methods for each dependency, and the IoC container uses these methods to set the dependencies after creating an instance of the class. Setter injection allows for more flexibility, as dependencies can be changed or re-injected at runtime. Using setters method the objects/beans are instantiated and these objects are injected.
+
+## Reference Injection
 - Lets say Laptop class uses another class name Code which has methods below
 
 ```
@@ -664,16 +667,276 @@ Coding done
 
 - In constructor injection, dependencies are provided to a class through its constructor. The dependencies are declared as constructor parameters, and the IoC container resolves and injects the dependencies when creating an instance of the class. This type of injection promotes immutability and ensures that all required dependencies are available when creating an object. Using constructors, objects are created.
 - **Use Setter Injection when variable values are optional and use Constructor Injection when varible values are mandatory.**
-- 
+
+
+## Autowire
+- Lets say we have a ProgrammingLanguage interface which has a method `print()`.
+
+```
+package com.simple.springProject;
+
+public interface ProgrammingLanguage {
+
+	public void print();
+}
+```
+
+- We have 2 programming languages defined , one is PythonCode and another one is JavaCode. Each class implements `print()` in their own style.
+
+1. PythonCode Class
+
+```
+package com.simple.springProject;
+
+public class PythonCode implements ProgrammingLanguage {
+
+	@Override
+	public void print() {
+		System.out.println("Printing Style in Python");
+	}
+
+}
+```
+2. JavaCode Class
+
+```
+package com.simple.springProject;
+
+public class JavaCode implements ProgrammingLanguage {
+
+	@Override
+	public void print() {
+		System.out.println("Printing Style in Java");
+	}
+
+}
+```
+
+- Both classes have different style to print `print()` method.
+- Now the Laptop class uses ProgrammingLanguage interface as its class variable, and inside the compile method we use the interface method which is `print()`.
+
+```
+package com.simple.springProject;
+
+public class Laptop {
+
+	private int lines;
+	private Code code;
+	private ProgrammingLanguage programmingLanguage;
+
+	
+	public Code getCode() {
+		return code;
+	}
+	
+	public void setCode(Code code) {
+		this.code = code;
+	}
+
+	public void compile() {
+		System.out.println("Compiling...");
+		code.coding();
+		programmingLanguage.print();
+	}
+
+	public int getLines() {
+		return lines;
+	}
+
+	public void setLines(int lines) {
+		this.lines = lines;
+	}
+
+	
+	/**
+	 * Parameterize Constructor
+	 */
+	public Laptop(int lines) {
+		setLines(lines);
+	}
+
+	public ProgrammingLanguage getProgrammingLanguage() {
+		return programmingLanguage;
+	}
+
+	public void setProgrammingLanguage(ProgrammingLanguage programmingLanguage) {
+		this.programmingLanguage = programmingLanguage;
+	}
+}
+```
+
+- In the Config XML, we create two more beans for PythonCode and JavaCode, and we wanted to give reference of these bean into Laptop. (ProgrammingLanguage is an interface and not a class)
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd" >
+
+     <bean class="com.simple.springProject.Laptop" id="laptopId" >
+     	<constructor-arg value="110"></constructor-arg>
+     	<property name="code" ref="codeId"></property>
+     	<property name="programmingLanguage" ref="programmingLanguage"></property>
+     	
+     </bean>
+     
+     <bean class="com.simple.springProject.Code" id="codeId"/>
+    
+      <bean class="com.simple.springProject.PythonCode" id="programmingLanguage"/>
+                   
+       <bean class="com.simple.springProject.JavaCode" id="javaCodeId"/>
+        
+</beans>
+```
+
+- So our reference name as well as class variable name defined in Laptop is name which is **programmingLanguage**. Now since both are same then we can skip the `<property name="programmingLanguage" ref="programmingLanguage"></property>` tag and tell spring to directly pick up beans which has same variable class names using additional attribute name **autowire**. So basically autowire beans by using their variable names.
+- This how it looks Config XML looks like
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd" >
+
+     <bean class="com.simple.springProject.Laptop" id="laptopId"  autowire="byName" >
+     	<constructor-arg value="110"></constructor-arg>
+     	<property name="code" ref="codeId"></property>     	
+     </bean>
+     
+     <bean class="com.simple.springProject.Code" id="codeId"/>
+    
+      <bean class="com.simple.springProject.PythonCode" id="programmingLanguage"/>
+                   
+       <bean class="com.simple.springProject.JavaCode" id="javaCodeId"/>
+        
+</beans>
+```
+
+- When we autowire the **programmingLanguage** bean and execute the code we can see the `print()` method of PythonCode is getting printed since we have given id as programmingLanguage in configuration bean for PythonCode. So when the bean is available spring automatically connects with it. If the bean id is not found which needs to be same as class variable name, spring will throw an error.
+
+```
+package com.simple.springProject;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/springProject/springConfig.xml");
+		
+		/**
+		 * Autowiring 
+		 */
+		Laptop autoWiringLapObj=(Laptop) factory.getBean("laptopId");
+		autoWiringLapObj.compile();
+
+		
+	}
+
+}
+```
+
+- What happens, if instead of name if we specify spring to autowire beans based on the class type. Basically autowire Laptop class with ProgrammingLanguage type. So basically Laptop class is dependent on ProgrammingLanguage type. So in Autowire we can mentioned that as well. Below is the config xml for it.
+
+```
+     <bean class="com.simple.springProject.Laptop" id="laptopId"  autowire="byType" >
+     	<constructor-arg value="110"></constructor-arg>
+     	<property name="code" ref="codeId"></property>     	
+     </bean>
+     
+     <bean class="com.simple.springProject.Code" id="codeId"/>
+    
+      <bean class="com.simple.springProject.PythonCode" id="programmingLanguage"/>
+                   
+       <bean class="com.simple.springProject.JavaCode" id="javaCodeId"/>
+```
+
+- Now when we try to run the main method we will get an error
+
+```
+Jul 23, 2024 1:48:38 AM org.springframework.context.support.AbstractApplicationContext refresh
+WARNING: Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'laptopId' defined in class path resource [com/simple/springProject/springConfig.xml]: Unsatisfied dependency expressed through bean property 'programmingLanguage': No qualifying bean of type 'com.simple.springProject.ProgrammingLanguage' available: expected single matching bean but found 2: programmingLanguage,javaCodeId
+Exception in thread "main" org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'laptopId' defined in class path resource [com/simple/springProject/springConfig.xml]: Unsatisfied dependency expressed through bean property 'programmingLanguage': No qualifying bean of type 'com.simple.springProject.ProgrammingLanguage' available: expected single matching bean but found 2: programmingLanguage,javaCodeId
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireByType(AbstractAutowireCapableBeanFactory.java:1536)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1430)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:599)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:522)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:200)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:975)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:971)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:625)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:144)
+	at org.springframework.context.support.ClassPathXmlApplicationContext.<init>(ClassPathXmlApplicationContext.java:85)
+	at com.simple.springProject.SimpleSpringProject.main(SimpleSpringProject.java:10)
+Caused by: org.springframework.beans.factory.NoUniqueBeanDefinitionException: No qualifying bean of type 'com.simple.springProject.ProgrammingLanguage' available: expected single matching bean but found 2: programmingLanguage,javaCodeId
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveNotUnique(DependencyDescriptor.java:218)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1420)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireByType(AbstractAutowireCapableBeanFactory.java:1521)
+	... 13 more
+```
+- If we observer config XML, there are two classes or types for ProgrammingLanguage one is with PythonCode and another one is JavaCode, this makes confusion for spring to pick which one and inject it into Laptop class. In such scenario we can mentioned which been needs to be set once of them as primary or give one of them as preference. Below is the config xml for it.
+
+```
+    <bean class="com.simple.springProject.Alien" name="objectOfAlienSetters" >
+	    <property name="age" value="10"></property>
+    </bean>
+    
+     <bean class="com.simple.springProject.Laptop" id="laptopId"  autowire="byType" >
+     	<constructor-arg value="110"></constructor-arg>
+     	<property name="code" ref="codeId"></property>     	
+     </bean>
+     
+     <bean class="com.simple.springProject.Code" id="codeId"/>
+    
+      <bean class="com.simple.springProject.PythonCode" id="programmingLanguage"/>
+                   
+       <bean class="com.simple.springProject.JavaCode" id="javaCodeId" primary="true"/>
+        
+```
+
+- Here we have set JavaCode class as primary , lets check the main execution output.
+
+```
+Output:
+Compiling...
+Coding done
+Printing Style in Java
+```
+
+- Autowiring is a feature that automatically injects the dependencies (other beans) into a class without requiring explicit configuration. It helps to simplify bean wiring by automatically connecting beans based on their types. Autowiring can be used to inject dependencies into a Spring bean, whether it's through constructor injection, setter injection, or field injection. The autowiring process is based on the types of the beans and the types of the dependencies required by the bean being autowired.
+- Limitations: Autowiring cannot be used to inject primitive types. This is because primitive types are not objects. They are simply the raw values of the type, such as int, boolean, String, etc. It works with reference/Objects only.
+
+### Types of Autowiring
+1. no: It’s the default autowiring mode. It means no autowiring.
+2. byType: Autowiring by type is the default mode. When you use autowire="byType" in the XML configuration or use annotations like @Autowired, Spring searches for a bean of the same type as the dependency and injects it.
+3. byName: Autowiring by name looks for a bean whose ID matches the name of the dependency in XML, and if found, it injects that bean.
+4. byConstructor: Autowiring by constructor is similar to byType, but it works for constructor injection. It looks for beans of the same type as the constructor parameter and injects them. In Autowiring by constructor, Spring will call the parameterized constructor that matches the dependencies it needs to inject. If there is no parameterized constructor available, Spring will fall back to using the default constructor (i.e., a constructor with no arguments) if it exists.
 
 
 
-
-
-
-
-
-
+## Why Spring is usefull, field method injections
 
 
 

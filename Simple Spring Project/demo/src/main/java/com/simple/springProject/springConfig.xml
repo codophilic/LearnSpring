@@ -10,13 +10,28 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context.xsd" >
+                           
+     
+    <bean class="com.simple.springProject.Alien" name="objectOfAlien" scope="singleton">
+    </bean>
+    <bean class="com.simple.springProject.Alien" name="objectOfAlienprototype" scope="prototype">
+    </bean>
     
-     <bean class="com.simple.springProject.Laptop" id="laptopId" >
+
+    <bean class="com.simple.springProject.Alien" name="objectOfAlienSetters" >
+	    <property name="age" value="10"></property>
+    </bean>
+    
+     <bean class="com.simple.springProject.Laptop" id="laptopId"  autowire="byType" >
      	<constructor-arg value="110"></constructor-arg>
-     	<property name="code" ref="codeId"></property>
+     	<property name="code" ref="codeId"></property>     	
      </bean>
      
      <bean class="com.simple.springProject.Code" id="codeId"/>
     
-                           
+      <bean class="com.simple.springProject.PythonCode" id="programmingLanguage"/>
+                   
+       <bean class="com.simple.springProject.JavaCode" id="javaCodeId" primary="true"/>
+        
+        
 </beans>

@@ -66,6 +66,12 @@ public class SimpleSpringProject {
 		 * Constructor Injection
 		 */
 		System.out.println(refLapObj.getLines());
+		
+		/**
+		 * Autowiring 
+		 */
+		Laptop autoWiringLapObj=(Laptop) factory.getBean("laptopId");
+		autoWiringLapObj.compile();
 
 		
 	}
