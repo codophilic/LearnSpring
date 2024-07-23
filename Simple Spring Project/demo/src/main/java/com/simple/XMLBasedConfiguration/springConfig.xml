@@ -12,33 +12,33 @@
                            http://www.springframework.org/schema/context/spring-context.xsd" >
                            
      
-    <bean class="com.simple.springProject.Alien" name="objectOfAlien" scope="singleton">
+    <bean class="com.simple.XMLBasedConfiguration.Alien" name="objectOfAlien" scope="singleton">
     </bean>
-    <bean class="com.simple.springProject.Alien" name="objectOfAlienprototype" scope="prototype">
+    <bean class="com.simple.XMLBasedConfiguration.Alien" name="objectOfAlienprototype" scope="prototype">
     </bean>
     
 
-    <bean class="com.simple.springProject.Alien" name="objectOfAlienSetters" >
+    <bean class="com.simple.XMLBasedConfiguration.Alien" name="objectOfAlienSetters" >
 	    <property name="age" value="10"></property>
     </bean>
     
-     <bean class="com.simple.springProject.Laptop" id="laptopId"  autowire="byType" >
+     <bean class="com.simple.XMLBasedConfiguration.Laptop" id="laptopId"  autowire="byType" >
      	<constructor-arg value="110"></constructor-arg>
      	<property name="code" ref="codeId"></property>     	
      </bean>
      
-     <bean class="com.simple.springProject.Code" id="codeId"/>
+     <bean class="com.simple.XMLBasedConfiguration.Code" id="codeId"/>
     
-     <bean class="com.simple.springProject.PythonCode" id="programmingLanguage"/>
+     <bean class="com.simple.XMLBasedConfiguration.PythonCode" id="programmingLanguage"/>
                    
-      <bean class="com.simple.springProject.JavaCode" id="javaCodeId" primary="true"/>
+      <bean class="com.simple.XMLBasedConfiguration.JavaCode" id="javaCodeId" primary="true"/>
         
-      <bean class="com.simple.springProject.AdditionOfNumbers" id="addNumBean">
+      <bean class="com.simple.XMLBasedConfiguration.AdditionOfNumbers" id="addNumBean">
     	<constructor-arg value="6" />
     	<constructor-arg value="7" />
       </bean>
       
-       <bean class="com.simple.springProject.AdditionOfNumbers" id="addNumBeanInt">
+       <bean class="com.simple.XMLBasedConfiguration.AdditionOfNumbers" id="addNumBeanInt">
     	<constructor-arg value="6"  type="int" index="1"/>
     	<constructor-arg value="7" type="int" index="0"/>
       </bean>

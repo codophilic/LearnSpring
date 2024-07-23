@@ -92,7 +92,7 @@ public void setFlavourName(String name){
 - DI means that you don't create objects yourself. Instead, you let an IoC container create them for you. The IoC container will also inject the dependencies of those objects into them. This means that you don't have to worry about creating and configuring objects yourself. The IoC container will do it for you.
 - Dependency injection (DI) is a technique that focuses on providing the dependencies (objects or services) that a class requires from an external source, rather than having the class create or obtain those dependencies itself. The idea is to "inject" the dependencies into a class from the outside.
 - Spring IoC container acts as a centralized repository of objects (beans) in your application. It creates and manages instances of objects, resolves their dependencies, and injects them where needed. It takes care of object lifecycle management and ensures that dependencies are correctly wired together.
-- Consider below snip, this indicates the object is created by us and not by Spring.
+- Consider below snip, this indicates the object is created by us and not by Spring. 
 
 ```
 		/**
@@ -1142,17 +1142,289 @@ Printing Style in Java
 
 - Above learnings are implement [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project).
 
-## Why Spring is usefull
+## Why Spring is useful
 - Loose Coupling: Spring promotes loose coupling through dependency injection, making it easier to manage and test components. By configuring beans and their dependencies in a separate configuration file or class, the components in your application become loosely coupled. This improves modularity, testability, and flexibility in your codebase. **Example in the Autowire we had two class which implements the same interface, and during the configuration we specified to spring that which object we want, thus making it loosely coupled**.
-- Dependency Management: It automates the process of managing object dependencies, which simplifies configuration and increases maintainability. Spring manages the dependencies between beans. You can specify the dependencies of a bean, and the IoC container automatically resolves and injects them. This simplifies the process of managing complex dependencies between components.
+- Dependency Management: It automates the process of managing object dependencies, which simplifies configuration and increases maintainability. Spring manages the dependencies between beans. You can specify the dependencies of a bean, and the IoC container automatically resolves and injects them. This simplifies the process of managing complex dependencies between components. Due to this you don't need to compile your code again , just configure XML and save it.
 - Centralized Management: Beans and their configuration are managed in a centralized manner. This allows for easy modification, maintenance, and scalability of the application. You can change the behavior of beans or swap implementations by simply modifying the configuration, without modifying the application code.
 - Simplifying application development: Spring provides a programming model that simplifies the development of complex enterprise applications. This helps developers be more productive and write better code.
 - Encouraging good design practices: Spring promotes good design practices, such as separation of concerns and test-driven development. This helps ensure that applications are maintainable, scalable, and easy to evolve over time.
 - Reducing development time: By providing a set of pre-built modules, Spring helps developers write code faster and reduces the amount of boilerplate code they need to write.
 
+## Annotation-based Configuration
+- In the above approach , we configured configurations using XML files. In annotation appraoch we declare annotations like `@Component`, `@Service`, `@Repository`, etc., to mark classes as Spring beans. The Spring IoC container scans the application's classpath and automatically detects and manages these annotated beans.
+- In Spring, annotations are special markers used to simplify configuration and setup of the application.
+- Let us take an example, so we have a class Laptop, so earlier in xml config we create config file for a class using `<bean>` attribute, but in annotation we have `@Component` as annotation way to create beans in Spring.
 
+```
+package com.simple.AnnotationBasedConfiguration;
 
+import org.springframework.stereotype.Component;
 
+/**
+ * <bean class="com.simple.AnnotationBasedConfiguration" name="objectofLaptop"/>
+ */
+@Component
+public class Laptop {
+
+	public void start() {
+		System.out.println("Laptop is starting ...");
+	}
+}
+
+```
+
+- Below is our main method where we execute the beans by asking Spring to gives us the object or beans.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/AnnotationBasedConfiguration/springConfig.xml");
+
+		Laptop lapObj=(Laptop) factory.getBean("Laptop");
+	}
+
+}
+
+```
+
+- So we have defined one annotation for Laptop bean and we have declare our config xml file but when we try to run this method we will get an error.
+
+```
+Exception in thread "main" org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'Laptop' available
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanDefinition(DefaultListableBeanFactory.java:895)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getMergedLocalBeanDefinition(AbstractBeanFactory.java:1362)
+```
+
+- Whats the problem? the problem is we have declare the annotation and config xml, but when spring uses the config xml ,it will look for XML based configuration details but we are here using annotation based configurations which spring does not know. So in the config xml we need to specify Spring that we are using annotation based configurations.
+- Below is the xml config file which specify spring to use annotation configuration for a given package.
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd" >  
+                           
+    <!--  Enabling Component Scanning Annotations  -->
+	<context:component-scan base-package="com.simple.AnnotationBasedConfiguration"/> 
+        
+</beans>
+```
+
+- Now we have specify spring to refer annotation based configurations , now post execution we will get below output
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/AnnotationBasedConfiguration/springConfig.xml");
+
+		Laptop lapObj=(Laptop) factory.getBean("laptop");
+		lapObj.start();
+	}
+
+}
+
+Output:
+Laptop is starting ...
+```
+
+- If you notice in XML based configuration we also declare a bean name but in case of annotation the default bean name is small case of the class (**laptop**). If we want to customized the bean name we can do it like below way.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.stereotype.Component;
+
+/**
+ * <bean class="com.simple.AnnotationBasedConfiguration" name="objectofLaptop"/>
+ */
+@Component("lap")
+public class Laptop {
+	
+	private PythonCode pyCode;
+	
+	
+
+	public void start() {
+		System.out.println("Laptop is starting ...");
+	}
+}
+
+```
+
+- Below is the main method.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/AnnotationBasedConfiguration/springConfig.xml");
+
+		Laptop lapObj=(Laptop) factory.getBean("lap");
+		lapObj.start();
+	}
+
+}
+
+Output:
+Laptop is starting ...
+```
+
+- `@Component` annotation creates an Object for the bean and the object is name is based on camel case of class name. So whenever we create a class and wanted to use that class as an object , always annote it using `@Component`.
+- Lets say we have another class name PythonCode and our Laptop class is dependent on PythonCode class. Below is the PythonCode class.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class PythonCode {
+
+	public void run() {
+		System.out.println("Python Code is running..");
+	}
+}
+```
+
+- Using `@Component` we have told spring this is an bean and it might be asked in middle of the code. Below is the Laptop class.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.stereotype.Component;
+
+/**
+ * <bean class="com.simple.AnnotationBasedConfiguration" name="objectofLaptop"/>
+ */
+@Component("lap")
+public class Laptop {
+	
+	private PythonCode pyCode;
+
+	public void start() {
+		System.out.println("Laptop is starting ...");
+		pyCode.run();
+	}
+
+	public PythonCode getPyCode() {
+		return pyCode;
+	}
+
+	public void setPyCode(PythonCode pyCode) {
+		this.pyCode = pyCode;
+	}
+}
+```
+
+- It seems we have created bean for PythonCode and we are using that class into Laptop. So when we run, it gives us **pyCode** is null.
+
+```
+Exception in thread "main" java.lang.NullPointerException: Cannot invoke "com.simple.AnnotationBasedConfiguration.PythonCode.run()" because "this.pyCode" is null
+	at com.simple.AnnotationBasedConfiguration.Laptop.start(Laptop.java:15)
+	at com.simple.AnnotationBasedConfiguration.SimpleSpringProject.main(SimpleSpringProject.java:13)
+```
+
+- To solve this we need to use annotation `@Autowired`.
+
+``` 
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ * <bean class="com.simple.AnnotationBasedConfiguration" name="objectofLaptop"/>
+ */
+@Component("lap")
+public class Laptop {
+	
+	/**
+	 * <bean class="com.simple.XMLBasedConfiguration.Laptop" id="laptopId" autowire=
+	 * "byType" > <constructor-arg value="110"></constructor-arg>
+	 * <property name="code" ref="codeId"></property> </bean>
+	 *
+	 */
+	@Autowired
+	private PythonCode pyCode;
+
+	public void start() {
+		System.out.println("Laptop is starting ...");
+		pyCode.run();
+	}
+
+	public PythonCode getPyCode() {
+		return pyCode;
+	}
+
+	public void setPyCode(PythonCode pyCode) {
+		this.pyCode = pyCode;
+	}
+}
+```
+
+- Now when we run the main method , we get the below output.
+
+```
+Output:
+Laptop is starting ...
+Python Code is running..
+```
+
+- `@Autowired` annotations injects dependencies automatically. When you mark a field, constructor, or setter method with `@Autowired`, Spring looks for a matching bean in the application context and injects it into the marked location. This helps in managing dependencies between different parts of your application without needing to manually create or pass objects around.
+
+```
+Examples
+
+Field Injection
+
+@Autowired
+private Car car;
+
+Constructor Injection
+
+@Autowired
+public Driver(Car car) {
+    this.car = car;
+}
+
+Setter Injection
+
+private Car car;
+
+@Autowired
+public void setCar(Car car) {
+    this.car = car;
+}
+```
 
 
 

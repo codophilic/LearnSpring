@@ -1,4 +1,4 @@
-package com.simple.springProject;
+package com.simple.XMLBasedConfiguration;
 
 public class Code {
 
