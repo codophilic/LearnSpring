@@ -929,10 +929,10 @@ Printing Style in Java
 - Limitations: Autowiring cannot be used to inject primitive types. This is because primitive types are not objects. They are simply the raw values of the type, such as int, boolean, String, etc. It works with reference/Objects only.
 
 ### Types of Autowiring
-1. no: It’s the default autowiring mode. It means no autowiring.
-2. byType: Autowiring by type is the default mode. When you use autowire="byType" in the XML configuration or use annotations like @Autowired, Spring searches for a bean of the same type as the dependency and injects it.
-3. byName: Autowiring by name looks for a bean whose ID matches the name of the dependency in XML, and if found, it injects that bean.
-4. byConstructor: Autowiring by constructor is similar to byType, but it works for constructor injection. It looks for beans of the same type as the constructor parameter and injects them. In Autowiring by constructor, Spring will call the parameterized constructor that matches the dependencies it needs to inject. If there is no parameterized constructor available, Spring will fall back to using the default constructor (i.e., a constructor with no arguments) if it exists.
+1. **no**: It’s the default autowiring mode. It means no autowiring.
+2. **byType**: Autowiring by type is the default mode. When you use autowire="byType" in the XML configuration or use annotations like @Autowired, Spring searches for a bean of the same type as the dependency and injects it.
+3. **byName**: Autowiring by name looks for a bean whose ID matches the name of the dependency in XML, and if found, it injects that bean.
+4. **byConstructor**: Autowiring by constructor is similar to byType, but it works for constructor injection. It looks for beans of the same type as the constructor parameter and injects them. In Autowiring by constructor, Spring will call the parameterized constructor that matches the dependencies it needs to inject. If there is no parameterized constructor available, Spring will fall back to using the default constructor (i.e., a constructor with no arguments) if it exists.
 
 - Above learnings are implement [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project).
 
