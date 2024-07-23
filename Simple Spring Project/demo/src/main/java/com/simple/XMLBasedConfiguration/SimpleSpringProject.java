@@ -81,7 +81,20 @@ public class SimpleSpringProject {
 		addNumsInt.addition();
 		
 		
+		/**
+		 * Setter Injections of Collections
+		 */
 		
+		Student s3=(Student)factory.getBean("student");
+	       
+	    System.out.println(s3.toString());
+		
+	      /**
+	       * Standalone Collections
+	       */
+		Employee emp=(Employee)factory.getBean("employee");
+		System.out.println(emp.toString());
+	       
 	}
 
 }

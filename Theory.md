@@ -411,6 +411,14 @@ Object created via constructor
     <bean class="com.simple.springProject.Alien" name="objectOfAlienprototype" >
     <property name="age" value="100"></property>
     </bean>
+
+	    
+    <!-- 
+    OR using p:schema the setter injection declaration can be changed to below
+        <bean class="com.simple.XMLBasedConfiguration.Alien" name="objectOfAlienSetters" p:age="10" >
+    </bean>
+    
+     -->
                            
 </beans>
 ```
@@ -442,6 +450,258 @@ Setters method is set with value 10
 ```
 
 - Setter injection involves providing dependencies through setter methods. The class provides setter methods for each dependency, and the IoC container uses these methods to set the dependencies after creating an instance of the class. Setter injection allows for more flexibility, as dependencies can be changed or re-injected at runtime. Using setters method the objects/beans are instantiated and these objects are injected.
+- In the above example we have injected primitives values, similarly we can inject List, Set, Map and Properties types.
+- Lets say we have a Student class which has primitives values as well as collections types.
+
+```
+package com.simple.XMLBasedConfiguration;
+
+import java.util.*;
+
+public class Student {
+	
+	
+	//Primitive Data types
+	private String ID;
+	private String Name;
+	private String Address;
+	
+	
+	public Student() { // This is a default constructor , which is require for setters injection
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Student(String iD, String name, String address) {
+		super();
+		ID = iD;
+		Name = name;
+		Address = address;
+	}
+
+	public String getID() {
+		return ID;
+	}
+	public void setID(String iD) {
+		ID = iD;
+	}
+	public String getName() {
+		return Name;
+	}
+	public void setName(String name) {
+		Name = name;
+	}
+	public String getAddress() {
+		return Address;
+	}
+	public void setAddress(String address) {
+		Address = address;
+	}
+	
+	
+	// List , Sets , Maps and Properties
+	
+	List<Integer> list=new ArrayList<Integer>();
+	
+	Set<Integer> set = new HashSet<Integer>();
+	
+	Map<String,Integer> map = new HashMap<String,Integer>();
+	
+	Properties MyProps = new Properties();
+
+
+	public Properties getMyProps() {
+		return MyProps;
+	}
+	public void setMyProps(Properties myProps) {
+		MyProps = myProps;
+	}
+	public List<Integer> getList() {
+		return list;
+	}
+	public void setList(List<Integer> list) {
+		this.list = list;
+	}
+	public Set<Integer> getSet() {
+		return set;
+	}
+	public void setSet(Set<Integer> set) {
+		this.set = set;
+	}
+	public Map<String, Integer> getMap() {
+		return map;
+	}
+	public void setMap(Map<String, Integer> map) {
+		this.map = map;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "Student [ID=" + ID + ", Name=" + Name + ", Address=" + Address + ", list=" + list + ", set=" + set
+				+ ", map=" + map + ", MyProps=" + MyProps + "]";
+	}
+}
+```
+
+- Lets say we wanted to initialized values whenever the bean is created by spring into these collections, below is the config xml file.
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd" >
+
+      
+      <bean name="student" class="com.simple.XMLBasedConfiguration.Student" p:ID="4" p:Name="Harsh" p:Address="Mumbai">
+
+        <property name="list">
+        <list>
+        <value>100</value>
+        <value>200</value>
+        </list>
+        </property>
+        
+        
+        <property name="set">
+        <set>
+        <value>100</value>
+        <value>200</value>
+        <value>100</value>
+        </set>
+        </property>
+        
+        
+        <property name="map">
+        <map>
+        <entry key="Java" value="1"/>
+        <entry key="Python" value="2"/>
+        </map>
+        </property>
+        
+        <property name="MyProps">
+        <props>
+        <prop key="prop1">value1</prop>
+        <prop key="prop2">value2</prop>
+        </props>
+        </property>
+        
+    </bean>
+        
+</beans>
+```
+
+- Below is the main method, post execution we can see our collections values got injected.
+
+```
+package com.simple.XMLBasedConfiguration;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/XMLBasedConfiguration/springConfig.xml");
+
+		/**
+		 * Setter Injections of Collections
+		 */
+		
+		Student s3=(Student)factory.getBean("student");
+	       
+	       System.out.println(s3.toString());
+		
+		
+	}
+
+}
+
+Output:
+Student [ID=4, Name=Harsh, Address=Mumbai, list=[100, 200], set=[100, 200], map={Java=1, Python=2}, MyProps={prop2=value2, prop1=value1}]
+```
+
+- Lets say we have multiple classes which may uses the same collections values, so instead of writing it multiple times can we have a utility which defined them by a reference and whenever any bean requires those values we can provide that bean this reference? , Yes, in Spring, you can define and configure standalone collections such as lists, sets, and maps in XML-based configuration using the `<util>` namespace. This is useful when you want to configure collections of values or beans that are not directly associated with a specific class.
+- Below is the xml config file for it.
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd" >
+         
+    <!-- Standalone List -->
+    <!-- To enabled downloading of external references go to windows -> preferences -> XML allow download -->
+    <util:list  list-class="java.util.LinkedList" id="myList">
+        <value>1</value>
+        <value>2</value>
+        <value>3</value>
+    </util:list> 
+    
+    <util:map map-class="java.util.TreeMap" id="myMap">
+    	<entry key="123" value="11" />
+    	<entry key="124" value="22" />
+    </util:map>
+    
+    <util:properties id="myProps">
+    	<prop key="dbDriver">sqlDriverPath</prop>
+    </util:properties>
+    
+     <bean name="employee" class="com.simple.XMLBasedConfiguration.Employee" >
+     	<property name="list" ref="myList"/>
+     	<property name="map" ref="myMap"/>
+     	<property name="MyProps" ref="myProps"/>
+     </bean>
+
+</beans>
+```
+
+- Below is the main method , post execution we can see our standalone collections are injected successfully.
+
+```
+package com.simple.XMLBasedConfiguration;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/XMLBasedConfiguration/springConfig.xml");
+		
+	      /**
+	       * Standalone Collections
+	       */
+		Employee emp=(Employee)factory.getBean("employee");
+		System.out.println(emp.toString());
+	       
+	}
+
+}
+
+Output:
+Employee [list=[1, 2, 3], map={123=11, 124=22}, MyProps={dbDriver=sqlDriverPath}]
+```
 
 ## Reference Injection
 - Lets say Laptop class uses another class name Code which has methods below
@@ -511,6 +771,16 @@ Exception in thread "main" java.lang.NullPointerException: Cannot invoke "com.si
      
      <bean class="com.simple.springProject.Code" id="codeId"/>
     
+	<!-- 
+         
+	Alternative way of writing the ref bean
+		 
+		 <property name="code" ref="codeId"/>
+		 
+		 Using P schema 
+		 p:code-ref="codeId"
+     
+      -->
                            
 </beans>
 ```
@@ -1426,11 +1696,224 @@ public void setCar(Car car) {
 }
 ```
 
+- Lets say we have an interface of Car, and there are two classes Ferrari and AstonMartin which implements Car interface.
+- Car Interface
+```
+package com.simple.AnnotationBasedConfiguration;
+
+public interface Car {
+
+	public void engine();
+}
+
+```
+
+- Ferrari Class
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Ferrari implements Car {
+
+	@Override
+	public void engine() {
+		System.out.println("Ferrari Engine");
+
+	}
+
+}
+```
+- AstonMartin Class
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class AstonMartin implements Car {
+
+	@Override
+	public void engine() {
+		System.out.println("AstonMartin Engine");
+
+	}
+
+}
+```
+
+- Lets say we have a driver class which will run the car.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Driver {
+
+	@Autowired
+	private Car car;
+
+	public Car getCar() {
+		return car;
+	}
+
+	public void setCar(Car car) {
+		this.car = car;
+	}
+	
+	public void start() {
+		System.out.println("Starting Engine..");
+		car.engine();
+	}
+	
+}
+```
+
+- Now when we call bean for implemented interface of car, spring will return which bean? it will throw and error
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
 
 
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/AnnotationBasedConfiguration/springConfig.xml");
+
+		Laptop lapObj=(Laptop) factory.getBean("lap");
+		lapObj.start();
+		
+		Driver driver=(Driver) factory.getBean("driver");
+		driver.start();
+	}
+
+}
+
+Output:
+Jul 23, 2024 11:11:56 PM org.springframework.context.support.AbstractApplicationContext refresh
+WARNING: Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'driver': Unsatisfied dependency expressed through field 'car': No qualifying bean of type 'com.simple.AnnotationBasedConfiguration.Car' available: expected single matching bean but found 2: astonMartin,ferrari
+Exception in thread "main" org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'driver': Unsatisfied dependency expressed through field 'car': No qualifying bean of type 'com.simple.AnnotationBasedConfiguration.Car' available: expected single matching bean but found 2: astonMartin,ferrari
+```
+
+- Here the same issue we faced in autowiring when we did xml base configuration for `autowiring="byType"`. To resolve this we had used a primary attribute on one of the class. So in case of annotation we can resolve it using `@Primary` and another annotation `@Qualifier(name=)`.
+- Using `@Primary` annotation
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+
+/**
+ * 
+ * <bean class="com.simple.AnnotationBasedConfiguration" id="javaCodeId" primary="true"/>
+ */
+
+@Component
+@Primary 
+public class Ferrari implements Car {
+
+	@Override
+	public void engine() {
+		System.out.println("Ferrari Engine");
+
+	}
+
+}
+```
+
+- When we run the code we get below output
+
+```
+Output:
+Laptop is starting ...
+Python Code is running..
+Starting Engine..
+Ferrari Engine
+```
+
+- Using `@Qualifier` annotation.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Driver {
+
+	@Autowired
+	@Qualifier("astonMartin")
+	private Car car;
+
+	public Car getCar() {
+		return car;
+	}
+
+	public void setCar(Car car) {
+		this.car = car;
+	}
+	
+	public void start() {
+		System.out.println("Starting Engine..");
+		car.engine();
+	}
+	
+}
+
+Output:
+Laptop is starting ...
+Python Code is running..
+Starting Engine..
+AstonMartin Engine
+```
+
+- In Spring, the `@Qualifier` annotation is used along with `@Autowired` to disambiguate beans when multiple beans of the same type are available for autowiring. When there are multiple beans of the same type, Spring might not be able to determine which bean to inject based solely on type, leading to an ambiguity error. The `@Qualifier` annotation helps resolve this ambiguity by specifying the exact bean name or qualifier to be injected.
+- With the `@Qualifier` annotation, you can precisely control which bean you want to inject when there are multiple beans of the same type. This is particularly useful when dealing with complex configurations and scenarios where multiple beans of the same type exist, and you need to ensure the correct bean is wired into your classes. If bean name is not found then it will throw exception.
+- The name in the `@Qualifier` field should be exactly same as of the class name but the first character should be always in lowercase, as spring creates beans this way.
+- In `@Component` we specify name, we can use that name as well in the `@Qualifier` annotation like below
+
+```
+package com.example;
+
+import org.springframework.stereotype.Component;
+
+@Component("customServiceName")
+public class MyService {
+    // Class implementation
+}
 
 
+package com.example;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MyController {
+
+    @Autowired
+    @Qualifier("customServiceName") // Use the custom bean name
+    private MyService myService;
+
+    // Class implementation
+}
+```
+
+- Similarly 
 
 
 

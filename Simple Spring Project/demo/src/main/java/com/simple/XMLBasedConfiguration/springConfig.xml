@@ -5,13 +5,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:c="http://www.springframework.org/schema/c"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context
-                           http://www.springframework.org/schema/context/spring-context.xsd" >
-                           
-     
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd" >
+
     <bean class="com.simple.XMLBasedConfiguration.Alien" name="objectOfAlien" scope="singleton">
     </bean>
     <bean class="com.simple.XMLBasedConfiguration.Alien" name="objectOfAlienprototype" scope="prototype">
@@ -22,10 +24,28 @@
 	    <property name="age" value="10"></property>
     </bean>
     
+    <!-- 
+    OR using p:schema the setter injection declaration can be changed to below
+        <bean class="com.simple.XMLBasedConfiguration.Alien" name="objectOfAlienSetters" p:age="10" >
+    </bean>
+     -->
+    
+    
      <bean class="com.simple.XMLBasedConfiguration.Laptop" id="laptopId"  autowire="byType" >
      	<constructor-arg value="110"></constructor-arg>
      	<property name="code" ref="codeId"></property>     	
      </bean>
+     
+     <!-- 
+         
+	Alternative way of writing the ref bean
+		 
+		 <property name="code" ref="codeId"/>
+		 
+		 Using P schema 
+		 p:code-ref="codeId"
+     
+      -->
      
      <bean class="com.simple.XMLBasedConfiguration.Code" id="codeId"/>
     
@@ -43,5 +63,64 @@
     	<constructor-arg value="7" type="int" index="0"/>
       </bean>
       
+      
+      <bean name="student" class="com.simple.XMLBasedConfiguration.Student" p:ID="4" p:Name="Harsh" p:Address="Mumbai">
+
+        <property name="list">
+        <list>
+        <value>100</value>
+        <value>200</value>
+        </list>
+        </property>
         
+        
+        <property name="set">
+        <set>
+        <value>100</value>
+        <value>200</value>
+        <value>100</value>
+        </set>
+        </property>
+        
+        
+        <property name="map">
+        <map>
+        <entry key="Java" value="1"/>
+        <entry key="Python" value="2"/>
+        </map>
+        </property>
+        
+        <property name="MyProps">
+        <props>
+        <prop key="prop1">value1</prop>
+        <prop key="prop2">value2</prop>
+        </props>
+        </property>
+        
+    </bean>
+        
+         
+    <!-- Standalone List -->
+    <!-- To enabled downloading of external references go to windows -> preferences -> XML allow download -->
+    <util:list  list-class="java.util.LinkedList" id="myList">
+        <value>1</value>
+        <value>2</value>
+        <value>3</value>
+    </util:list> 
+    
+    <util:map map-class="java.util.TreeMap" id="myMap">
+    	<entry key="123" value="11" />
+    	<entry key="124" value="22" />
+    </util:map>
+    
+    <util:properties id="myProps">
+    	<prop key="dbDriver">sqlDriverPath</prop>
+    </util:properties>
+    
+     <bean name="employee" class="com.simple.XMLBasedConfiguration.Employee" >
+     	<property name="list" ref="myList"/>
+     	<property name="map" ref="myMap"/>
+     	<property name="MyProps" ref="myProps"/>
+     </bean>
+
 </beans>
