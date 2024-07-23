@@ -1696,6 +1696,61 @@ public void setCar(Car car) {
 }
 ```
 
+- In XML based configuration, we have saw bean scope which is singleton or prototype where a **singleton** class ensures there's only one instance of that class ever created in your program. This single instance can have multiple references, meaning different parts of your code can access and interact with the same object.
+- A prototype bean is a new instance that is created every time the bean is requested. So the new instance is created by spring only when it is called by `getBean()`. **Now whenever we initialized ApplicationContext spring does not create those beans in case of prototype scope.**
+- In annotation configuration to define bean scope we have `@Scope` annotation.
+- Consider we have a class Alien, for which we have declare a scope as prototype.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope("prototype")
+public class Alien {
+
+	
+}
+```
+
+- Below is main program, which outputs hashcode for both object. The hashcode are different which indicates the scope of the bean.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/AnnotationBasedConfiguration/springConfig.xml");
+
+		/**
+		 * Singleton and ProtoType
+		 */
+		
+		Alien al1=factory.getBean(Alien.class);
+		System.out.println("Hash Code for First Object - "+al1.hashCode());
+		
+		Alien al2=factory.getBean(Alien.class);
+		System.out.println("Hash Code for Second Object - "+al2.hashCode());
+		
+		
+		
+	}
+
+}
+
+Output:
+Hash Code for First Object - 1349182676
+Hash Code for Second Object - 2108763062
+```
+
 - Lets say we have an interface of Car, and there are two classes Ferrari and AstonMartin which implements Car interface.
 - Car Interface
 ```
@@ -1913,7 +1968,174 @@ public class MyController {
 }
 ```
 
-- Similarly 
+- In XML based configuration, we could inject values into the variables similarly in annotation we have `@Value` annotation. Lets say we need to inject primitive values as well as standalone collections values using annotation based configurations.
+- Consider below class of Students. 
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import java.util.*;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Student {
+	
+	
+	//Primitive Data types
+	@Value("123")
+	private String ID;
+	
+	@Value("Harsh")
+	private String Name;
+	
+	@Value("Mumbai")
+	private String Address;
+	
+	
+	
+	// List , Sets , Maps and Properties
+	
+	@Value("#{myList}")
+	private List<Integer> list;
+	
+	@Value("#{myMap}")
+	private Map<String,Integer> map;
+	
+	@Value("#{myProps}")
+	private Properties MyProps;
+	
+	
+	public Student() { // This is a default constructor , which is require for setters injection
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Student(String iD, String name, String address) {
+		super();
+		ID = iD;
+		Name = name;
+		Address = address;
+	}
+
+	public String getID() {
+		return ID;
+	}
+	public void setID(String iD) {
+		ID = iD;
+	}
+	public String getName() {
+		return Name;
+	}
+	public void setName(String name) {
+		Name = name;
+	}
+	public String getAddress() {
+		return Address;
+	}
+	public void setAddress(String address) {
+		Address = address;
+	}
+	public Properties getMyProps() {
+		return MyProps;
+	}
+	public void setMyProps(Properties myProps) {
+		MyProps = myProps;
+	}
+	public List<Integer> getList() {
+		return list;
+	}
+	public void setList(List<Integer> list) {
+		this.list = list;
+	}
+
+	public Map<String, Integer> getMap() {
+		return map;
+	}
+	public void setMap(Map<String, Integer> map) {
+		this.map = map;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "Student [ID=" + ID + ", Name=" + Name + ", Address=" + Address + ", list=" + list
+				+ ", map=" + map + ", MyProps=" + MyProps + "]";
+	}
+}
+```
+
+- For primitive values where String or integer are the datatypes, withing `@Value` annotation we can pass the value for those datatype, whereas for standalone collections like list, map ,properties etc.. we use Spring Expression Language (SpEL). Spring Expression Language (SpEL) is used for defining expressions to evaluate dynamically.
+- Below is the config xml for util schema where we declare the values of list , map and properties.
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd" >
+                           
+    <!--  Enabling Component Scanning Annotations  -->
+	<context:component-scan base-package="com.simple.AnnotationBasedConfiguration"/> 
+    
+        <!-- Standalone List -->
+    <!-- To enabled downloading of external references go to windows -> preferences -> XML allow download -->
+    <util:list  list-class="java.util.LinkedList" id="myList">
+        <value>1</value>
+        <value>2</value>
+        <value>3</value>
+    </util:list> 
+    
+    <util:map map-class="java.util.TreeMap" id="myMap">
+    	<entry key="123" value="11" />
+    	<entry key="124" value="22" />
+    </util:map>
+    
+    <util:properties id="myProps">
+    	<prop key="dbDriver">sqlDriverPath</prop>
+    </util:properties>
+</beans>
+```
+
+- Below is the main method, if you note here we can also pass **ClassName.class** in the `getBean()` method.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/AnnotationBasedConfiguration/springConfig.xml");
+		
+		Student st=factory.getBean(Student.class);
+		System.out.println(st.toString());
+	}
+
+}
+
+Output:
+Student [ID=123, Name=Harsh, Address=Mumbai, list=[1, 2, 3], map={123=11, 124=22}, MyProps={dbDriver=sqlDriverPath}]
+```
+
+- The `#{...}` syntax inside a @Value annotation in Spring is known as **Spring Expression Language (SpEL)**. It allows you to define expressions that can perform operations such as accessing properties, invoking methods, manipulating collections, and evaluating logical expressions.
+- Spring resolves this expressions during Runtime.
+
+
 
 
 

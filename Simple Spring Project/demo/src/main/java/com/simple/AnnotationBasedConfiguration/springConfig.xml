@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:c="http://www.springframework.org/schema/c"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/util
-                           http://www.springframework.org/schema/util/spring-util.xsd" >  
+                           http://www.springframework.org/schema/util/spring-util.xsd" >
                            
     <!--  Enabling Component Scanning Annotations  -->
 	<context:component-scan base-package="com.simple.AnnotationBasedConfiguration"/> 
-        
+    
+        <!-- Standalone List -->
+    <!-- To enabled downloading of external references go to windows -> preferences -> XML allow download -->
+    <util:list  list-class="java.util.LinkedList" id="myList">
+        <value>1</value>
+        <value>2</value>
+        <value>3</value>
+    </util:list> 
+    
+    <util:map map-class="java.util.TreeMap" id="myMap">
+    	<entry key="123" value="11" />
+    	<entry key="124" value="22" />
+    </util:map>
+    
+    <util:properties id="myProps">
+    	<prop key="dbDriver">sqlDriverPath</prop>
+    </util:properties>
 </beans>
