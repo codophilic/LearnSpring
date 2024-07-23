@@ -668,6 +668,212 @@ Coding done
 - In constructor injection, dependencies are provided to a class through its constructor. The dependencies are declared as constructor parameters, and the IoC container resolves and injects the dependencies when creating an instance of the class. This type of injection promotes immutability and ensures that all required dependencies are available when creating an object. Using constructors, objects are created.
 - **Use Setter Injection when variable values are optional and use Constructor Injection when varible values are mandatory.**
 
+### Ambuiguity in Constructor injection
+- Suppose there are 3 constructors out of which 2 constructor is a constructor overloading. 
+- First Constructor accepts input as double, second constructor accepts input as integer and the third accepts input as string. Now in config xml we pass constructor values, Spring will pick up which constructor? 
+- It will take that constructor which is defined as per order in the code. If double constructor is written before integer constructor then the double constructor will be considered for injection.
+- Below is the class written for AdditionOfNumbers
+
+```
+package com.simple.springProject;
+
+public class AdditionOfNumbers {
+
+	private int n1;
+	private int n2;
+	
+	
+	public AdditionOfNumbers(int n1, int n2) {
+		System.out.println("Integer Constructor");
+		System.out.println("N1: "+n1);
+		System.out.println("N2: "+n2);
+		this.n1 = n1;
+		this.n2 = n2;
+	}
+	
+	public AdditionOfNumbers(double n1, double n2) { // Constructor Overloading
+		System.out.println("Double Constructor");
+		this.n1 = (int)n1;
+		this.n2 = (int)n2;
+		this.n1=0;
+		this.n2=1;
+	}	
+	
+	public void addition() {
+		int sum=this.n1+this.n2;
+		System.out.println("Addition is: "+sum);
+	}
+}
+```
+
+- Below is the config xml file
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd" >
+                           
+      <bean class="com.simple.springProject.AdditionOfNumbers" id="addNumBean" c:n1="6" c:n2="7">
+      </bean>
+      
+        
+</beans>
+```
+
+- When we execute the main program, as per ordering integer parameterized constructor is called and values are injected into it
+
+```
+package com.simple.springProject;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/springProject/springConfig.xml");
+		
+		AdditionOfNumbers addNums=(AdditionOfNumbers) factory.getBean("addNumBean");
+		addNums.addition();
+		
+	}
+
+}
+
+Output:
+Integer Constructor
+N1: 6
+N2: 7
+Addition is: 13
+```
+
+- Lets say we wanted to use double parameterized constructor, we need to specify what type of variable we are passing to the constructor. So if we pass (double,double) as arguments to constructor , Spring will take the double parameterized constructor.
+- Below is the config xml file for it
+
+``` 
+<bean class="com.simple.springProject.AdditionOfNumbers" id="addNumBean">
+    	<constructor-arg value="6" type="double" />
+    	<constructor-arg value="7" type="double" />
+      </bean>
+```
+
+- When we run the code we get below output for it, in double constructor we have type cast it into integer as 0 and 1 thus obtaining 1 as sum.
+
+```
+Double Constructor
+Addition is: 1
+```
+
+- Lets say we also add a new constructor which takes arguments as a string and in the config xml if we don't define the type attribute, what will happen? 
+- Below is the code for AdditionOfNumber class
+
+```
+package com.simple.springProject;
+
+public class AdditionOfNumbers {
+
+	private int n1;
+	private int n2;
+	
+	
+	public AdditionOfNumbers(int n1, int n2) {
+		System.out.println("Integer Constructor");
+		System.out.println("N1: "+n1);
+		System.out.println("N2: "+n2);
+		this.n1 = n1;
+		this.n2 = n2;
+	}
+	
+	public AdditionOfNumbers(double n1, double n2) { // Constructor Overloading
+		System.out.println("Double Constructor");
+		this.n1 = (int)n1;
+		this.n2 = (int)n2;
+		this.n1=0;
+		this.n2=1;
+	}
+	
+	public AdditionOfNumbers(String n1, String n2) { // Constructor Overloading
+		System.out.println("String Constructor");
+		this.n1 = Integer.parseInt(n1);
+		this.n2 = Integer.parseInt(n2);
+	}
+	
+	
+	public void addition() {
+		int sum=this.n1+this.n2;
+		System.out.println("Addition is: "+sum);
+	}
+}
+
+```
+
+- Below is the config XML file
+
+```
+      <bean class="com.simple.springProject.AdditionOfNumbers" id="addNumBean">
+    	<constructor-arg value="6" />
+    	<constructor-arg value="7" />
+      </bean>
+```
+
+- Now as per our understanding, it must call the constructor which is written above as per ordering, but it will the string parameterized constructor.
+
+```
+Output:
+String Constructor
+Addition is: 13
+```
+
+- Why so? basically in the config xml file these values are considered as string. In the config xml whenever we mentioned `<constructor-arg value="6" />` this is default considered as string. This creates an ambuiguity (doubtfulness or uncertainty).
+- To solve this ambuiguity and lets say between those these parameterized constructor we can use attribute **type**. 
+- Apart from these ambuiguity, in spring constructor injection, we can specify which value to be taken as first argument and which value to be taken as second argument by using **index**. Below is the config xml for it.
+
+```
+       <bean class="com.simple.springProject.AdditionOfNumbers" id="addNumBeanInt">
+    	<constructor-arg value="6"  type="int" index="1"/>
+    	<constructor-arg value="7" type="int" index="0"/>
+      </bean>
+```
+
+- Below we get the output post running main method
+
+```
+package com.simple.springProject;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/springProject/springConfig.xml");
+		
+		AdditionOfNumbers addNumsInt=(AdditionOfNumbers) factory.getBean("addNumBeanInt");
+		addNumsInt.addition();
+		
+	}
+
+}
+
+
+Output:
+Integer Constructor
+N1: 7
+N2: 6
+Addition is: 13
+Addition is: 13
+```
 
 ## Autowire
 - Lets say we have a ProgrammingLanguage interface which has a method `print()`.
@@ -936,7 +1142,13 @@ Printing Style in Java
 
 - Above learnings are implement [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project).
 
-## Why Spring is usefull, field method injections
+## Why Spring is usefull
+- Loose Coupling: Spring promotes loose coupling through dependency injection, making it easier to manage and test components. By configuring beans and their dependencies in a separate configuration file or class, the components in your application become loosely coupled. This improves modularity, testability, and flexibility in your codebase. **Example in the Autowire we had two class which implements the same interface, and during the configuration we specified to spring that which object we want, thus making it loosely coupled**.
+- Dependency Management: It automates the process of managing object dependencies, which simplifies configuration and increases maintainability. Spring manages the dependencies between beans. You can specify the dependencies of a bean, and the IoC container automatically resolves and injects them. This simplifies the process of managing complex dependencies between components.
+- Centralized Management: Beans and their configuration are managed in a centralized manner. This allows for easy modification, maintenance, and scalability of the application. You can change the behavior of beans or swap implementations by simply modifying the configuration, without modifying the application code.
+- Simplifying application development: Spring provides a programming model that simplifies the development of complex enterprise applications. This helps developers be more productive and write better code.
+- Encouraging good design practices: Spring promotes good design practices, such as separation of concerns and test-driven development. This helps ensure that applications are maintainable, scalable, and easy to evolve over time.
+- Reducing development time: By providing a set of pre-built modules, Spring helps developers write code faster and reduces the amount of boilerplate code they need to write.
 
 
 

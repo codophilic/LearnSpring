@@ -29,9 +29,19 @@
      
      <bean class="com.simple.springProject.Code" id="codeId"/>
     
-      <bean class="com.simple.springProject.PythonCode" id="programmingLanguage"/>
+     <bean class="com.simple.springProject.PythonCode" id="programmingLanguage"/>
                    
-       <bean class="com.simple.springProject.JavaCode" id="javaCodeId" primary="true"/>
+      <bean class="com.simple.springProject.JavaCode" id="javaCodeId" primary="true"/>
         
+      <bean class="com.simple.springProject.AdditionOfNumbers" id="addNumBean">
+    	<constructor-arg value="6" />
+    	<constructor-arg value="7" />
+      </bean>
+      
+       <bean class="com.simple.springProject.AdditionOfNumbers" id="addNumBeanInt">
+    	<constructor-arg value="6"  type="int" index="1"/>
+    	<constructor-arg value="7" type="int" index="0"/>
+      </bean>
+      
         
 </beans>

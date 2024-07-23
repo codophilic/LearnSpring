@@ -72,7 +72,13 @@ public class SimpleSpringProject {
 		 */
 		Laptop autoWiringLapObj=(Laptop) factory.getBean("laptopId");
 		autoWiringLapObj.compile();
+		
+		AdditionOfNumbers addNums=(AdditionOfNumbers) factory.getBean("addNumBean");
+		addNums.addition();
+		
 
+		AdditionOfNumbers addNumsInt=(AdditionOfNumbers) factory.getBean("addNumBeanInt");
+		addNumsInt.addition();
 		
 	}
 
