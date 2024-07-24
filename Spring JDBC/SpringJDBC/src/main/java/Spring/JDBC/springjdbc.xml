@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd" >	
+	
+	<!-- 
+	Define JdbcTemplate and its class
+	org.springframework.jdbc.core.JdbcTemplate is a class which has DataSource as one of its argument in the
+	constructor , so the org.springframework.jdbc.core.JdbcTemplate class requires class of DataSource.
+	Now DataSource is an interface, but we have DriverMangerDataSource which implements DataSource
+	
+	In DriverManagerDataSource , we need to give database details like
+	1. URL
+	2. Username
+	3. DB name
+	4. password
+	 -->
+	 
+	 <bean name="driverManagerDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	 	<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+	 	<property name="url" value="jdbc:mysql://localhost:3306/springjdbc"></property>
+	 	<property name="username" value="root"></property>
+	 	<property name="password" value="Meetpandya40@"></property>
+	 
+	 </bean>
+	<bean name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" >
+		<property name="dataSource" ref="driverManagerDataSource"/>
+	</bean>
+</beans>

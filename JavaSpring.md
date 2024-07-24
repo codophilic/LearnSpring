@@ -392,7 +392,7 @@ Object created via constructor
 - Incase of prototype scope, a prototype bean is a new instance that is created every time the bean is requested. So the new instance is created by spring only when it is called by `getBean()`. **Now whenever we initialized ApplicationContext spring does not create those beans in case of prototype scope.**
 
 ## Setters Injection
-- Lets say we wanted to assigned some value of class variables whenever spring creates our bean, this can be done using property attribute, but property attribute has one condition. Your class variables must be private. So how will they set the value if access modifier is private? using getters and setters of the variable.
+- Lets say we wanted to assigned some value of instance variables whenever spring creates our bean, this can be done using property attribute, but property attribute has one condition. Your instance variables must be private. So how will they set the value if access modifier is private? using getters and setters of the variable.
 - Below is the config xml file for it.
 
 ```
@@ -2517,6 +2517,7 @@ This is a process
 ```
 
 - Abover learnings are implemented [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/JavaBeanConfiguration)
+- XML configuration provides easy way to check all the configurations withing one file but it is tedious to write those configurations whereas annotation configuration are easier to implement.
 
 ## Bean life cycle in Java Spring
 - The lifecycle of any object means when & how it is born, how it behaves throughout its life, and when & how it dies. Similarly, the bean life cycle refers to when & how the bean is instantiated, what action it performs until it lives, and when & how it is destroyed.
