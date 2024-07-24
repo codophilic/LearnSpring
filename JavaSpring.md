@@ -2815,7 +2815,24 @@ Container has been closed and I'm the destroy() method
 - Above learnings are implemented [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/BeanLifeCycle)
 
 
+## Use of Maven and Spring
+- Maven is a build automation tool that helps manage project dependencies and automate the software build process. It allows developers to easily manage external libraries and dependencies required for their project. For example, let's say a developer is building a web application that requires the use of the Apache Commons IO library. Instead of manually downloading and managing the library, the developer can use Maven to automatically download and add the library to their project's classpath.
 
+- Spring, on the other hand, is a framework for building Java applications that provides a set of pre-built modules and libraries for common tasks, such as managing objects, handling database transactions, and providing a web application framework. For example, if a developer is building a web application, they can use Spring's MVC framework to handle requests, map them to controller methods, and render views. This allows the developer to focus on writing business logic, rather than the low-level details of the web application infrastructure.
+
+- In summary, Maven and Spring serve different purposes in the development process. Maven is primarily focused on managing project dependencies and automating the software build process, while Spring provides a comprehensive programming model and set of tools for building complex enterprise applications.
+
+- Maven and Spring can be used together in Java application development to manage dependencies and build the project. Here's an example of how they can be used together:
+
+- Let's say we are building a web application using Spring and need to manage the dependencies for our project. We can use Maven to manage our project dependencies and build the project.
+
+- To get started, we would create a Maven project using the Spring archetype, which would provide us with a basic project structure and the necessary dependencies for building a Spring-based web application. Once we have created the Maven project, we can add our application-specific dependencies to the pom.xml file, which is used by Maven to manage project dependencies. For example, if our application requires the use of the Apache Commons IO library.
+
+- Maven would then automatically download and add the required library to our project's classpath.
+
+- Next, we would use Spring to build our web application. We would create Spring controllers to handle requests, and use Spring's data access objects (DAOs) to interact with the database.
+
+- Finally, we would build and package our application using Maven, which would create a deployable artifact that can be run on a server.
 
 
 
