@@ -2535,3 +2535,305 @@ This is a process
 2. **destroy()**: If we want to cleanup something such as closing database connections, we can write that code in destroy() method.
 
 ## Implementation of Life Cycle Beans
+
+#### 1. Using XML based configuration
+
+- Lets say we have a class XMLBasedLC
+
+```
+package com.simple.BeanLifeCycle;
+
+public class XMLBasedLC {
+
+	public void initXmlBased() {
+		System.out.println("Init Method loaded for XMLBasedLC , loading some pre-configurations");
+	}
+	
+	
+	public void operation() {
+		System.out.println("Perform some operations");
+	}
+	
+	public void destroyXmlBased() {
+		System.out.println("Destory for XMLBasedLC, destory all the connections");
+	}
+}
+
+```
+
+- Below is the config xml for life cycle, here we use `init-method` and `destory-method` attributes in configurtion to create our own custom init and destory method
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd" >
+
+
+	<bean name="xmlBasedObj" class="com.simple.BeanLifeCycle.XMLBased" init-method="initXmlBased" destroy-method="destroyXmlBased">
+	</bean>
+</beans>
+```
+
+- Below is the main method written, post execution we get below output. When spring containers are shutdown the destory method is called.
+
+```
+package com.simple.BeanLifeCycle;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/BeanLifeCycle/springConfig.xml");
+	    
+		/**
+		 * Method Got initialize
+		 */
+		XMLBasedLC obj1=factory.getBean("xmlBasedObj",XMLBasedLC.class);
+		
+		/**
+		 * Did some process
+		 */
+	    obj1.operation();
+	    
+	    /**
+	     * triggering the shutdown process for the Spring IoC (Inversion of Control) container.
+	     * The close() method on ClassPathXmlApplicationContext (which implements ConfigurableApplicationContext) 
+	     * stops the IoC container, releasing all resources and locks. 
+	     * This is crucial for releasing resources like database connections, file handles, 
+	     * or network sockets. 
+	     */
+	    ((ClassPathXmlApplicationContext) factory).close();
+	}
+}
+
+Output:
+Init Method loaded for XMLBasedLC , loading some pre-configurations
+Perform some operations
+Destory for XMLBasedLC, destory all the connections
+```
+
+#### 2. Annotation Based
+
+- In annotation, to create init and destory method we have `@PostConstruct` and `@PreDestroy` annotation used.
+- Below is the config XML file
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd" >
+
+    <!--  Enabling Component Scanning Annotations  -->
+	<context:component-scan base-package="com.simple.BeanLifeCycle"/> 
+
+</beans>
+```
+
+- Below is the class AnnotationBasedLC.
+
+```
+package com.simple.BeanLifeCycle;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class AnnotationBasedLC {
+	
+	@PostConstruct
+	public void beforeSomething() {
+		System.out.println("Initializing all AnnotationBasedLC");
+	}
+
+	public void operation() {
+		System.out.println("Performs some operations");
+	}
+	
+	@PreDestroy
+	public void endofAll() {
+		System.out.println("Closing every thing in AnnotationBasedLC");
+	}
+}
+
+```
+
+- Post Execution main method we get the output.
+
+```
+package com.simple.BeanLifeCycle;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+	public static void main(String[] args) {
+	    
+		ApplicationContext factory1 = new ClassPathXmlApplicationContext("com/simple/BeanLifeCycle/springConfig.xml");
+
+	    
+	    AnnotationBasedLC alc=factory1.getBean(AnnotationBasedLC.class);
+	    alc.operation();
+	    
+	    ((ClassPathXmlApplicationContext) factory1).close();
+
+	}
+}
+
+Output:
+Initializing all AnnotationBasedLC
+Performs some operations
+Closing every thing in AnnotationBasedLC
+```
+
+#### 3. Programmatic Approach using Interface
+
+- To provide the facility to the created bean to invoke custom `init()` method on the startup of a spring container and to invoke the custom `destroy()` method on closing the container, we need to implement our bean with two interfaces namely InitializingBean, DisposableBean and will have to override `afterPropertiesSet()` and `destroy()` method. afterPropertiesSet() method is invoked as the container starts and the bean is instantiated whereas, the `destroy()` method is invoked just after the container is closed.
+- This approach using xml configuration but only bean declaration is required and not `init-method` and `destory-method` is required.
+- Below is the config xml file.
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd" >	
+	
+	<bean name="interfaceBased" class="com.simple.BeanLifeCycle.InterfaceApproach" >
+	</bean>
+</beans>
+```
+
+- A class name InterfaceApproach is created
+
+```
+package com.simple.BeanLifeCycle;
+
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+
+public class InterfaceApproach implements InitializingBean, DisposableBean {
+ 
+    @Override
+    // It is the init() method
+    // of our bean and it gets
+    // invoked on bean instantiation
+    public void afterPropertiesSet() throws Exception
+    {
+        System.out.println(
+            "Bean HelloWorld has been "
+            + "instantiated and I'm the "
+            + "init() method");
+    }
+    
+    public void operation() {
+    	System.out.println("Processing something");
+    }
+ 
+    @Override
+    // This method is invoked
+    // just after the container
+    // is closed
+    public void destroy() throws Exception
+    {
+        System.out.println(
+            "Container has been closed "
+            + "and I'm the destroy() method");
+    }
+
+}
+```
+
+- Post Execution of main method we get the output
+
+```
+package com.simple.BeanLifeCycle;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+	public static void main(String[] args) {
+	    
+		ApplicationContext factory2 = new ClassPathXmlApplicationContext("com/simple/BeanLifeCycle/springConfig.xml");
+
+		InterfaceApproach Ia=factory2.getBean("interfaceBased",InterfaceApproach.class);
+		
+		Ia.operation();
+		
+	    ((ClassPathXmlApplicationContext) factory2).close();
+
+
+	}
+}
+
+Output:
+Bean HelloWorld has been instantiated and I'm the init() method
+Processing something
+Container has been closed and I'm the destroy() method
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
