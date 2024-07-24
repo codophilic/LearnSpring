@@ -37,4 +37,9 @@
 	<bean name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" >
 		<property name="dataSource" ref="driverManagerDataSource"/>
 	</bean>
+	
+	<bean name="daolayer" class="Spring.JDBC.dao.DAOImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+	</bean>
+	
 </beans>

@@ -130,10 +130,10 @@ public class SpringJDBCMainMethod
 		JdbcTemplate jdbcTemplate=factory.getBean("jdbcTemplate",JdbcTemplate.class);
 		
 		/**
-		 * Insert Operation
+		 * Insert Operation example
 		 */
 		String sql="insert into student(id,name,city) values (?,?,?)";
-		int result=jdbcTemplate.update(sql,3,"Meet","Mumbai");
+		int result=jdbcTemplate.update(sql,1,"Harsh","Mumbai");
 		System.out.println("Rows affected - "+result);
     }
 }
@@ -142,9 +142,167 @@ Output:
 Rows affected - 1
 ```
 
-![alt text](image.png)
+![alt text](Images/image.png)
 
 
+- In the insert query we can se **?** are added in values. What is it? the **?** symbols in the query are placeholders for parameters, which help prevent SQL injection and simplify the process of setting values dynamically.
+- The **?** placeholders are part of the PreparedStatement mechanism, which offers several advantages like prevents SQL Injection, provides good performance and simplicity in code.
+- Lets say we create a proper DAO layer, where we will have DAO interface and class which implements the interface. The DAO interface layer will just declare all the CRUD methods and another class will implement all those methods.
+- Below is the DAO interface.
+
+```
+package Spring.JDBC.dao;
+
+import Spring.JDBC.Student;
+
+public interface DAOInterface {
+	
+	/**
+	 * Declaring all the CRUD methods.
+	 * 
+	 * Create,update and delete will always return an integer value which states that
+	 * how many rows are affected post operation
+	 */
+	
+	public int create(Student student);
+	public int update(Student student);
+	public int delete(Student student);
+
+}
+```
+
+- Below is the implementation of the interface.
+
+```
+package Spring.JDBC.dao;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import Spring.JDBC.Student;
+
+public class DAOImpl implements DAOInterface{
+	
+	/**
+	 * To execute SQL queries we require JDBC template
+	 * the bean for this will be injected via config xml
+	 */
+	private JdbcTemplate jdbcTemplate;
+
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
+	@Override
+	public int create(Student student) {
+		String sql="insert into student(id,name,city) values (?,?,?)";
+		int result=jdbcTemplate.update(sql,student.getId(),student.getName(),student.getCity());
+		return result;
+	}
+
+	@Override
+	public int update(Student student) {
+		String sql="update student set name=? , city=? where id=?";
+		int result=jdbcTemplate.update(sql,student.getName(),student.getCity(),student.getId());
+		return result;		
+	}
+
+	@Override
+	public int delete(Student student) {
+		String sql="delete from student where id=?";
+		int result=jdbcTemplate.update(sql,student.getId());
+		return result;			
+	}
+
+}
+
+```
+
+- Below is the main method which performs only insertion.
+
+```
+package Spring.JDBC;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import Spring.JDBC.dao.DAOInterface;
+
+/**
+ * Hello world!
+ *
+ */
+public class SpringJDBCMainMethod 
+{
+    public static void main( String[] args )
+    {
+		ClassPathXmlApplicationContext factory = new ClassPathXmlApplicationContext("Spring/JDBC/springjdbc.xml");
+		JdbcTemplate jdbcTemplate=factory.getBean("jdbcTemplate",JdbcTemplate.class);
+		
+		/**
+		 * Insert Operation example
+		 */
+//		String sql="insert into student(id,name,city) values (?,?,?)";
+//		int result=jdbcTemplate.update(sql,1,"Harsh","Mumbai");
+//		System.out.println("Rows affected - "+result);
+		
+		DAOInterface stdao=factory.getBean("daolayer",DAOInterface.class);
+		
+		/**
+		 * This below values will come from a service layer 
+		 * when we build a web application
+		 */
+		Student st=new Student();
+		
+		/**
+		 * Insert Operation via DAO Layer
+		 */
+		st.setId(2);
+		st.setName("Meet");
+		st.setCity("Mumbai");
+		System.out.println("Insert Operation is performed, rows affected - "+stdao.create(st));
+		
+    }
+}
+
+Output:
+Insert Operation is performed, rows affected - 1
+```
+
+![alt text](Images/image-1.png)
+
+
+- Lets look when we do update operation, so here we are updating row id 2 with new name and new city.
+
+```
+		/**
+		 * Update Operation for row id 2
+		 */
+		st.setId(2);
+		st.setName("Meet Pandya");
+		st.setCity("Mumbai Suburban");
+		System.out.println("Update Operation is performed, rows affected - "+stdao.update(st));
+
+Output:
+Update Operation is performed, rows affected - 1
+```
+
+![alt text](Images/image-2.png)
+
+- Lets see delete operation, lets delete row id 2.
+
+```
+		st.setId(2);
+		System.out.println("Delete Operation is performed, rows affected - "+stdao.delete(st));
+
+Output:
+Delete Operation is performed, rows affected - 1
+```
+
+![alt text](Images/image-3.png)
 
 
 
