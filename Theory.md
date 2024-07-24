@@ -1410,7 +1410,7 @@ Printing Style in Java
 3. **byName**: Autowiring by name looks for a bean whose ID matches the name of the dependency in XML, and if found, it injects that bean.
 4. **byConstructor**: Autowiring by constructor is similar to byType, but it works for constructor injection. It looks for beans of the same type as the constructor parameter and injects them. In Autowiring by constructor, Spring will call the parameterized constructor that matches the dependencies it needs to inject. If there is no parameterized constructor available, Spring will fall back to using the default constructor (i.e., a constructor with no arguments) if it exists.
 
-- Above learnings are implement [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project).
+- Above learnings are implement [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/XMLBasedConfiguration).
 
 ## Why Spring is useful
 - Loose Coupling: Spring promotes loose coupling through dependency injection, making it easier to manage and test components. By configuring beans and their dependencies in a separate configuration file or class, the components in your application become loosely coupled. This improves modularity, testability, and flexibility in your codebase. **Example in the Autowire we had two class which implements the same interface, and during the configuration we specified to spring that which object we want, thus making it loosely coupled**.
@@ -2286,6 +2286,8 @@ Output:
 62
 ```
 
+- Above learnings are implement [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/AnnotationBasedConfiguration).
+
 ## Java Bean based Configuration
 - Until now we have saw, we have specified all the configuration in a XML file. What if we can avoid it and have a java class as our configuration? is it possible? yes, using `@Configuration` annotation we can do it.
 - Lets say we created a class which is our config class name as **SpringConfig** just like we create **springConfig.xml** .
@@ -2510,6 +2512,8 @@ public class SimpleSpringProject {
 Output:
 This is a process
 ```
+
+- Abover learnings are implemented [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/JavaBeanConfiguration)
 
 
 
