@@ -2286,13 +2286,230 @@ Output:
 62
 ```
 
+## Java Bean based Configuration
+- Until now we have saw, we have specified all the configuration in a XML file. What if we can avoid it and have a java class as our configuration? is it possible? yes, using `@Configuration` annotation we can do it.
+- Lets say we created a class which is our config class name as **SpringConfig** just like we create **springConfig.xml** .
+
+```
+package com.simple.JavaBeanConfiguration;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.simple.JavaBeanConfiguration.BeanBased.Alien;
+
+@Configuration
+public class SpringConfig {
+
+	/**
+	 * 
+	 * <bean class="com.simple.XMLBasedConfiguration.Alien" name="objectOfAlien" scope="singleton"> </bean>
+	 */
+	@Bean
+	public Alien displayAlien() {
+		return new Alien();
+	}
+	
+}
+
+```
+
+- In this class, we have specified `@Configuration` and `@Bean` which is similar to what we defined in XML based configuration.
+- Below is the Alien class.
+
+```
+package com.simple.JavaBeanConfiguration.BeanBased;
 
 
+public class Alien {
+
+	public void show() {
+		System.out.println("This is an Alien");
+	}
+}
+
+```
+
+- Below is the main method, post execution we see our bean is injected successfully.
+
+```
+package com.simple.JavaBeanConfiguration;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import com.simple.JavaBeanConfiguration.BeanBased.Alien;
+
+public class SimpleSpringProject {
 
 
+	public static void main(String[] args) {
+		
+		/**
+		 * Just like in XML we mentioned the XML file path
+		 * Similarly here we need to mentioned our config java class
+		 */
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+        Alien al=context.getBean(Alien.class);
+        al.show();
+	
+	}
+
+}
 
 
+Output:
+This is an Alien
+```
 
+- Java-based configuration in Spring, often referred to as JavaConfig, allows you to configure the Spring container using Java classes instead of traditional XML files. This approach uses annotations and Java classes to define beans and their dependencies, offering a type-safe and more readable way to configure Spring applications.
+- Lets say we wanted to give a bean a name, here how we can do it.
+
+```
+package com.simple.JavaBeanConfiguration;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.simple.JavaBeanConfiguration.BeanBased.Alien;
+
+@Configuration
+public class SpringConfig {
+
+	/**
+	 * 
+	 * <bean class="com.simple.XMLBasedConfiguration.Alien" name="objectOfAlien" scope="singleton"> </bean>
+	 * by giving name we can ask spring to provide bean by using this names, here we have given multiple names
+	 * to this bean.
+	 */
+	@Bean( name = {"objectOfAlien","instanceOfAlien"})
+	public Alien displayAlien() {
+		return new Alien(); 
+	}
+	
+}
+```
+
+- Post execution of main method, we get the output.
+
+```
+package com.simple.JavaBeanConfiguration;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import com.simple.JavaBeanConfiguration.BeanBased.Alien;
+
+public class SimpleSpringProject {
+
+
+	public static void main(String[] args) {
+		
+		/**
+		 * Just like in XML we mentioned the XML file path
+		 * Similarly here we need to mentioned our config java class
+		 */
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+        Alien al=context.getBean(Alien.class);
+        al.show();
+        
+        Alien a2=context.getBean("objectOfAlien",Alien.class);
+        a2.show();        
+        
+        Alien a3=context.getBean("instanceOfAlien",Alien.class);
+        a3.show();
+
+	}
+
+}
+
+Output:
+This is an Alien
+This is an Alien
+This is an Alien
+```
+
+- When we used `@Bean` annotation, we did not use `@Component` annotation on every class.
+- Here in the SpringConfig class we need to define `@Bean` annotation for every class which we need to use during execution. So basically if there are thousands of bean inside a package , is it worthy to write thousands of class over here? thats where we have an another annotation name `@ComponentScan` where we specify the package and all classes present in that package are treated as individual beans by spring.
+- When we use `@ComponentScan` we need to specify `@Component` on whatever class we required.
+- Lets say we have Processor class.
+
+```
+package com.simple.JavaBeanConfiguration.ComponentBased;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Processor {
+
+	public void process() {
+		System.out.println("This is a process");
+	}
+}
+
+```
+
+- Below is the configuration required to mentioned in the SpringConfig class.
+
+```
+package com.simple.JavaBeanConfiguration;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+import com.simple.JavaBeanConfiguration.BeanBased.Alien;
+
+@Configuration
+@ComponentScan( basePackages = {"com.simple.JavaBeanConfiguration.ComponentBased"})
+public class SpringConfig {
+
+	/**
+	 * 
+	 * <bean class="com.simple.XMLBasedConfiguration.Alien" name="objectOfAlien" scope="singleton"> </bean>
+	 * by giving name we can ask spring to provide bean by using this names, here we have given multiple names
+	 * to this bean.
+	 */
+	@Bean( name = {"objectOfAlien","instanceOfAlien"})
+	public Alien displayAlien() {
+		return new Alien(); 
+	}
+	
+}
+
+```
+
+- In the above configuration, we have defined only the package name, this includes all the classes inside it.
+- Below is the main method execution.
+
+```
+package com.simple.JavaBeanConfiguration;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import com.simple.JavaBeanConfiguration.BeanBased.Alien;
+import com.simple.JavaBeanConfiguration.ComponentBased.Processor;
+
+public class SimpleSpringProject {
+
+
+	public static void main(String[] args) {
+		
+		/**
+		 * Just like in XML we mentioned the XML file path
+		 * Similarly here we need to mentioned our config java class
+		 */
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+        
+        Processor p=context.getBean(Processor.class);
+        p.process();
+
+	}
+
+}
+
+
+Output:
+This is a process
+```
 
 
 
