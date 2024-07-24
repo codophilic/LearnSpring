@@ -89,6 +89,9 @@ public void setFlavourName(String name){
 - Here in analogy of car, the toolkit which has all the pieces are called IoC (Inversion of Control). Traditionally, you'd control how an object gets its dependencies (like the car creating its own wheels). However, with IoC, Spring inverts that control. You simply tell Spring what the car needs (wheels), and Spring takes over the responsibility of providing those wheels (dependency injection). This makes your application more flexible and easier to test.
 
 ### Dependency Injection (DI) and Inversion of Control (Ioc)/Bean Container
+
+![image](https://github.com/user-attachments/assets/bbb041ee-6dd8-4c6a-86b6-edc43aa9a6b2)
+
 - DI means that you don't create objects yourself. Instead, you let an IoC container create them for you. The IoC container will also inject the dependencies of those objects into them. This means that you don't have to worry about creating and configuring objects yourself. The IoC container will do it for you.
 - Dependency injection (DI) is a technique that focuses on providing the dependencies (objects or services) that a class requires from an external source, rather than having the class create or obtain those dependencies itself. The idea is to "inject" the dependencies into a class from the outside.
 - Spring IoC container acts as a centralized repository of objects (beans) in your application. It creates and manages instances of objects, resolves their dependencies, and injects them where needed. It takes care of object lifecycle management and ensures that dependencies are correctly wired together.
@@ -2515,6 +2518,20 @@ This is a process
 
 - Abover learnings are implemented [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/JavaBeanConfiguration)
 
+## Bean life cycle in Java Spring
+- The lifecycle of any object means when & how it is born, how it behaves throughout its life, and when & how it dies. Similarly, the bean life cycle refers to when & how the bean is instantiated, what action it performs until it lives, and when & how it is destroyed.
+- Bean life cycle is managed by the spring container. When we run the program then, first of all, the spring container gets started. After that, the container creates the instance of a bean as per the request, and then dependencies are injected. And finally, the bean is destroyed when the spring container is closed.
 
+![image](https://github.com/user-attachments/assets/400bc073-20c7-4a6b-af26-a6e218656416)
 
+- When a Spring Container creates a bean, it provides two methods to every bean by default. These are:
+1) public void init()
+2) public void destroy()
+- However, we can change the names of methods, but method signature must be the same. If we remain the method names as it is, the code becomes easy to understand.
+- The `init()` method is called after bean construction and before requesting an object. `destroy()` method is called just before the destruction of a bean.
 
+### What are the purpose of implementing Life Cycle Methods?
+1. **init()**: If we want to initialize anything such as loading some configurations, creating database connections, we can write that code in init() method.
+2. **destroy()**: If we want to cleanup something such as closing database connections, we can write that code in destroy() method.
+
+## Implementation of Life Cycle Beans
