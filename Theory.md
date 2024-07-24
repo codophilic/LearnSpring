@@ -2134,7 +2134,157 @@ Student [ID=123, Name=Harsh, Address=Mumbai, list=[1, 2, 3], map={123=11, 124=22
 
 - The `#{...}` syntax inside a @Value annotation in Spring is known as **Spring Expression Language (SpEL)**. It allows you to define expressions that can perform operations such as accessing properties, invoking methods, manipulating collections, and evaluating logical expressions.
 - Spring resolves this expressions during Runtime.
+- Lets say we have a class Calculator
 
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component("device")
+public class Calculator {
+
+	@Value("#{4+5}")
+	private int addition;
+	
+	@Value("#{1>1}")
+	private boolean isEqual;
+	
+	@Value("#{5*10/5}")
+	private double checkExpression;
+	
+	/**
+	 * Inject instance variable
+	 */
+	@Value("#{multiplierCalculatorModule.getMultiplier()}")
+	private int anotherClassValue;
+	
+	/**
+	 * Inject in-build modules of java
+	 */
+	@Value("#{ T(java.lang.Math).sqrt(25) }")
+	private double squareRoot;
+	
+
+	public double getSquareRoot() {
+		return squareRoot;
+	}
+
+	public void setSquareRoot(double squareRoot) {
+		this.squareRoot = squareRoot;
+	}
+
+	public double getCheckExpression() {
+		return checkExpression;
+	}
+
+	public int getAddition() {
+		return addition;
+	}
+
+	public void setAddition(int addition) {
+		this.addition = addition;
+	}
+
+	public boolean isEqual() {
+		return isEqual;
+	}
+
+	public void setEqual(boolean isEqual) {
+		this.isEqual = isEqual;
+	}
+
+	public double isCheckExpression() {
+		return checkExpression;
+	}
+
+	public void setCheckExpression(double checkExpression) {
+		this.checkExpression = checkExpression;
+	}
+
+	public int getAnotherClassValue() {
+		return anotherClassValue;
+	}
+
+	public void setAnotherClassValue(int anotherClassValue) {
+		this.anotherClassValue = anotherClassValue;
+	}
+
+	@Override
+	public String toString() {
+		return "Calculator [addition=" + addition + ", isEqual=" + isEqual + ", checkExpression=" + checkExpression
+				+ ", anotherClassValue=" + anotherClassValue + ", squareRoot=" + squareRoot + "]";
+	}
+	
+	
+}
+
+```
+- Below is the class for MultiplierCalculatorModule.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MultiplierCalculatorModule {
+
+	@Value("#{2*10}")
+	private int multiplier;
+
+	public int getMultiplier() {
+		return multiplier;
+	}
+
+	public void setMultiplier(int multiplier) {
+		this.multiplier = multiplier;
+	}
+	
+}
+
+```
+
+- Below is the main method, we run the main method we can see how spring expression language gives all the values.
+
+```
+package com.simple.AnnotationBasedConfiguration;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SimpleSpringProject {
+
+
+	public static void main(String[] args) {
+
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/simple/AnnotationBasedConfiguration/springConfig.xml");
+
+		
+		Calculator cal=factory.getBean("device",Calculator.class);
+		System.out.println(cal.toString());
+		
+		
+	}
+
+}
+
+Output:
+Calculator [addition=9, isEqual=false, checkExpression=10.0, anotherClassValue=20, squareRoot=5.0]
+```
+
+- The expression in the `@Value` annotation must be a valid expression. We can check that using **SpelExpressionParser** method. Below is the code for it.
+
+```
+		SpelExpressionParser temp=new SpelExpressionParser();
+		Expression exp=temp.parseExpression("22+40");
+		System.out.println(exp.getValue());
+
+Output:
+62
+```
 
 
 

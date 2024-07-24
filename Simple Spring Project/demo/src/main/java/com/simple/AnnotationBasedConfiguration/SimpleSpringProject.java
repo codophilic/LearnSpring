@@ -2,6 +2,8 @@ package com.simple.AnnotationBasedConfiguration;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 public class SimpleSpringProject {
 
@@ -38,6 +40,12 @@ public class SimpleSpringProject {
 		Student st=factory.getBean(Student.class);
 		System.out.println(st.toString());
 		
+		Calculator cal=factory.getBean("device",Calculator.class);
+		System.out.println(cal.toString());
+		
+		SpelExpressionParser temp=new SpelExpressionParser();
+		Expression exp=temp.parseExpression("22+40");
+		System.out.println(exp.getValue());
 		
 	}
 
