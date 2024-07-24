@@ -1,6 +1,9 @@
 package Spring.JDBC.dao;
 
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import Spring.JDBC.Student;
 
@@ -39,6 +42,21 @@ public class DAOImpl implements DAOInterface{
 		String sql="delete from student where id=?";
 		int result=jdbcTemplate.update(sql,student.getId());
 		return result;			
+	}
+
+	@Override
+	public Student selectSingleRow(Student student) {
+		String sql="Select * from student where id=?";
+		RowMapper<Student> rowmapper=new RowMapperImpl();
+		Student st=jdbcTemplate.queryForObject(sql,rowmapper,student.getId());
+		return st;	
+	}
+
+	@Override
+	public List<Student> allStudentData() {
+		String sql="Select * from student";
+		List<Student> st=jdbcTemplate.query(sql, new RowMapperImpl());
+		return st;
 	}
 
 }

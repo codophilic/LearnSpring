@@ -304,12 +304,131 @@ Delete Operation is performed, rows affected - 1
 
 ![alt text](Images/image-3.png)
 
+- We have saw create, update and delete operations, lets see how select statement works. Originally in JDBC we use to use **ResultSet** class to iterate over the select statement values. Consider the below sample which is a oldest approach used for select statements.
 
+```
+     try {
+            // 1. Establish connection to the database
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
+            // 2. Prepare SQL statement
+            String sql = "SELECT * FROM Person";
+            preparedStatement = connection.prepareStatement(sql);
 
+            // 3. Execute query and get result set
+            resultSet = preparedStatement.executeQuery();
 
+            // 4. Iterate through result set and map data to Person objects
+            while (resultSet.next()) {
+                Person person = new Person();
+                person.setId(resultSet.getInt("id"));
+                person.setName(resultSet.getString("name"));
+                persons.add(person);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle exception appropriately
+        } finally {
+            // 5. Close resources
+            try {
+                if (resultSet != null) resultSet.close();
+                if (preparedStatement != null) preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace(); // Handle exception appropriately
+            }
+        }
+```
 
+- Here we iterate over the Resultset and append those in the defined class using List. What if these piece of code is automatically handle by Spring? yes, we have **RowMapper** in JdbcTemplate which does these things.
+- Now **RowMapper** is an interface, if we want to use it we need to implement RowMapper interface with our class.
+- Below is the example how we have implemented RowMapper for Student class.
 
+```
+package Spring.JDBC.dao;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.springframework.jdbc.core.RowMapper;
+
+import Spring.JDBC.Student;
+
+public class RowMapperImpl implements RowMapper<Student> {
+	
+	/**
+	 * RowMapper is an interface which has a default mapRow abstract method in it.
+	 * So here we need to set that which all columns needs to be mapped 
+	 * with the Student instance variable.
+	 */
+
+	@Override
+	public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
+		Student st=new Student();
+		st.setId(rs.getInt(1));
+		st.setName(rs.getString(2));
+		st.setCity(rs.getString(3));
+		return st;
+	}
+
+}
+```
+
+- DAO implementation for a single query
+
+```
+	@Override
+	public Student selectSingleRow(Student student) {
+		String sql="Select * from student where id=?";
+		RowMapper<Student> rowmapper=new RowMapperImpl();
+		Student st=jdbcTemplate.queryForObject(sql,rowmapper,student.getId());
+		return st;	
+	}
+```
+
+- Post main method execution we get the output.
+
+```
+		/**
+		 * Select Single row
+		 */
+		st.setId(1);
+		System.out.println("Single row data for student class - "+stdao.selectSingleRow(st).toString());
+
+Output:
+Single row data for student class - Student [id=1, name=Harsh, city=Mumbai]
+```
+
+- To select all data from table
+
+```
+	@Override
+	public List<Student> allStudentData() {
+		String sql="Select * from student";
+		List<Student> st=jdbcTemplate.query(sql, new RowMapperImpl());
+		return st;
+	}
+```
+
+- Post main method execution, we get output.
+
+```
+		/**
+		 * Select All the rows
+		 */
+		
+		System.out.println("All row data for student class");
+		List<Student> allstudents=stdao.allStudentData();
+		for(Student s: allstudents) {
+			System.out.println(s.toString());
+		}
+
+Output:
+All row data for student class
+Student [id=1, name=Harsh, city=Mumbai]
+```
+
+- A RowMapper is an interface that defines how rows from a ResultSet are mapped to a specific type of object. It is commonly used to convert each row of a SQL query result into an instance of a class, providing a convenient way to handle the data retrieved from the database.
+- The RowMapper interface is useful because it abstracts the process of extracting data from the ResultSet and converting it into the desired type. This not only makes the code more readable but also allows for reuse and better separation of concerns.
 
 
 
