@@ -264,10 +264,209 @@ Hibernate: insert into student_information (student_city,student_name,student_id
 Rows Affected - 1
 ```
 
-![alt text](image.png) 
+![alt text](Images/springorm/image.png) 
 
 - Hold on, the session is closed ? cleared from database? yes, it is managed by `@Transactional` annotation.
+- Lets take us example where spring was not in the picture, and only hibernate performs database operations. 
+- So we have a table paginator, and below are current session enabled on it.
+
+![alt text](Images/springorm/image-1.png) 
+
+- Lets say we run a session on it and we forgot to close the session, we can see the entry of it.
+
+![alt text](Images/springorm/image-2.png) 
+
+- Lets see this thing using Spring but on another table. Here we will debug on the StudentDao when the insert operation returns.
+
+![alt text](Images/springorm/image-3.png) 
+
+![alt text](Images/springorm/image-4.png) 
+
+- When we check on the student_information table there will be a session created on it. Post completion , transactional will remove the session.
+
+![alt text](Images/springorm/image-5.png) 
+
+![alt text](Images/springorm/image-6.png) 
+
+- This is one of the benefit of using Spring and hibernate.
+
+- Lets us see CRUD operations.
+- DAO Code
+
+```
+package com.spring.orm.dao;
 
 
+import java.util.List;
+
+import org.hibernate.SessionFactory;
+
+import com.spring.orm.entities.Student;
+
+public class StudentDao{
+
+	private SessionFactory sessionFactory;
+
+	public SessionFactory getsessionFactory() {
+		return sessionFactory;
+	}
+
+	public void setsessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
+	public int insert(Student student) {
+		Integer i=(Integer) sessionFactory.getCurrentSession().save(student);
+		return i;
+	}
+	
+	public int update(Student student) {
+		sessionFactory.getCurrentSession().update(student);
+		return 1;
+	}
+	
+	public List<Student> fetchAll(){
+		return sessionFactory.getCurrentSession().createQuery("from Student", Student.class).list();
+	}
+	
+	public Student fetchbyId(int id) {
+        return sessionFactory.getCurrentSession().get(Student.class, id);
+
+	}
+	
+	public int delete(int id) {
+		Student entity = sessionFactory.getCurrentSession().get(Student.class, id);
+        if (entity != null) {
+            sessionFactory.getCurrentSession().delete(entity);
+            return 1;
+        }
+        return 0;
+	}
+}
+```
+
+- Service Code
+
+```
+package com.spring.orm.service;
+
+import java.util.List;
+
+import com.spring.orm.dao.StudentDao;
+import com.spring.orm.entities.Student;
+
+import jakarta.transaction.Transactional;
+
+@Transactional
+public class StudentService {
+
+	private StudentDao studentdao;
+
+	public StudentDao getStudentdao() {
+		return studentdao;
+	}
+
+	public void setStudentdao(StudentDao studentdao) {
+		this.studentdao = studentdao;
+	}
+	
+	public int insertOperation(Student student) {
+		return studentdao.insert(student);
+	}
+	
+	public int updateData(Student student) {
+		return studentdao.update(student);
+	}
+	
+	public Student fetchbyId(int id) {
+		return studentdao.fetchbyId(id);
+	}
+	
+	public List<Student> fetchAll(){
+		return studentdao.fetchAll();
+	}
+	
+	public int deletedata(int id) {
+		return studentdao.delete(id);
+	}
+}
+```
+
+- Post execution of main method
+
+```
+package com.spring.orm;
+
+import java.util.List;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.spring.orm.entities.Student;
+import com.spring.orm.service.StudentService;
+
+public class MainMethod 
+{
+    public static void main( String[] args )
+    {
+    	
+		ApplicationContext factory = new ClassPathXmlApplicationContext("com/spring/orm/springConfig.xml");
+
+		/**
+		 * Singleton and ProtoType
+		 */ 
+		
+		StudentService std=factory.getBean("beanOfStudentService",StudentService.class);
+		Student st=new Student();
+		st.setRollnumber(1);
+		st.setStudentName("Harsh");
+		st.setStudentCity("Mumbai");
+		
+		System.out.println("Rows Affected - "+std.insertOperation(st));
+		
+		Student st1=new Student();
+		st1.setRollnumber(1);
+		st1.setStudentCity("Delhi");
+		st1.setStudentName("Meet");
+		
+		System.out.println("Rows Affected - "+std.updateData(st1));
+		
+		Student st2=std.fetchbyId(1);
+		System.out.println(st2.getStudentName());
+		
+		List<Student> st3=std.fetchAll();
+		
+		for(Student s: st3) {
+			System.out.println(s.getStudentName());
+		}
+
+		System.out.println("Deleted row - "+std.deletedata(1));
+		
+    }
+}
 
 
+Output:
+Hibernate: drop table if exists student_information
+Hibernate: create table student_information (student_id integer not null, student_city varchar(255), student_name varchar(255), primary key (student_id)) engine=InnoDB
+Hibernate: insert into student_information (student_city,student_name,student_id) values (?,?,?)
+Rows Affected - 1
+Hibernate: update student_information set student_city=?,student_name=? where student_id=?
+Rows Affected - 1
+Hibernate: select s1_0.student_id,s1_0.student_city,s1_0.student_name from student_information s1_0 where s1_0.student_id=?
+Meet
+Hibernate: select s1_0.student_id,s1_0.student_city,s1_0.student_name from student_information s1_0
+Meet
+Hibernate: select s1_0.student_id,s1_0.student_city,s1_0.student_name from student_information s1_0 where s1_0.student_id=?
+Hibernate: delete from student_information where student_id=?
+Deleted row - 1
+```
+
+![alt text](Images/springorm/image-7.png)
+
+## Key Features of Spring ORM Using Hibernate:
+- Transaction Management: Spring ORM provides declarative transaction management, which can be configured through annotations or XML. This allows for consistent handling of transactions across different data access technologies, including Hibernate.
+- Session Management: Spring ORM simplifies the management of Hibernate sessions. It can open, flush, and close sessions automatically, integrating with the transaction lifecycle to ensure proper resource management.
+- Exception Handling: Spring ORM translates Hibernate-specific exceptions into a consistent set of data access exceptions. This abstraction allows for a consistent approach to error handling, regardless of the underlying ORM tool.
+- Integration with Spring Context: Spring ORM seamlessly integrates Hibernate into the Spring Application Context, allowing Hibernate sessions and transactions to be managed as beans. This enables the use of dependency injection for configuration and resource management.
+- Support for Hibernate's Native API and JPA: Spring ORM supports both Hibernate's native API and Java Persistence API (JPA), giving developers the flexibility to choose the approach that best fits their needs.

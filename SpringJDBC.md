@@ -142,7 +142,7 @@ Output:
 Rows affected - 1
 ```
 
-![alt text](Images/image.png)
+![alt text](Images/springjdbc/image.png)
 
 
 - In the insert query we can se **?** are added in values. What is it? the **?** symbols in the query are placeholders for parameters, which help prevent SQL injection and simplify the process of setting values dynamically.
@@ -272,7 +272,7 @@ Output:
 Insert Operation is performed, rows affected - 1
 ```
 
-![alt text](Images/image-1.png)
+![alt text](Images/springjdbc/image-1.png)
 
 
 - Lets look when we do update operation, so here we are updating row id 2 with new name and new city.
@@ -290,7 +290,7 @@ Output:
 Update Operation is performed, rows affected - 1
 ```
 
-![alt text](Images/image-2.png)
+![alt text](Images/springjdbc/image-2.png)
 
 - Lets see delete operation, lets delete row id 2.
 
@@ -302,7 +302,7 @@ Output:
 Delete Operation is performed, rows affected - 1
 ```
 
-![alt text](Images/image-3.png)
+![alt text](Images/springjdbc/image-3.png)
 
 - We have saw create, update and delete operations, lets see how select statement works. Originally in JDBC we use to use **ResultSet** class to iterate over the select statement values. Consider the below sample which is a oldest approach used for select statements.
 
