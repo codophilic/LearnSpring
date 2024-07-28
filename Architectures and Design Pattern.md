@@ -113,14 +113,54 @@ public class StudentDTO
   3. Data-tier
 
 ### Presentation Tier
-- The presentation tier consist of UI/UX frontend technologies which can be comprises of different tech stack like Angular or React. It is the user interface and topmost tier in the architecture. Its purpose is to take request from the client and displays information to the client.
+- The presentation tier consist of UI/UX frontend technologies which can be comprises of different tech stacks like Angular or React. It is the user interface and topmost tier in the architecture. Its purpose is to take request from the client and displays information to the client.
 - It communicates with other tiers using a web browser as it gives output on the browser. If we talk about Web-based tiers then these are developed using languages like HTML, CSS, JavaScript.
 
 ### Application/Service Tier
+- It is the middle tier of the architecture also known as the logic tier as the information/request gathered through the presentation tier is processed in detail here. It also interacts with the server that stores the data. It processes the client’s request, formats, it and sends it back to the client. It is developed using languages like- Python, Java, PHP, SpringBoot etc.
+- This layer may consist of all the API which communicates with the database to fetch or perform database operations. This middle tier will have a seperate codebase which can have different tech stacks
+- The presentation layer communicates with service layer with Rest API's calls.
+- The codebase of the service tier consist of a different CI/CD pipeline to build a artifact.
 
+### Database Tier
+- It is the last tier of the architecture also known as the Database Tier. It is used to store the processed information so that it can be retrieved later on when required. It consists of Database Servers like- Oracle, MySQL, DB2, etc. The communication between the Presentation Tier and Data-Tier is done using middle-tier i.e. Application Tier.
 
+![image](https://github.com/user-attachments/assets/b0ade9d2-09e5-442a-a2f7-8c6f4575f1ed)
 
+### Benefits of Three-Tier Architecture
+- Logical separation is maintained between Presentation Tier, Application Tier, and Database Tier.
+- Enhancement of Performance as the task is divided on multiple machines in distributed machines and moreover, each tier is independent of other tiers.
+- Increasing demand for adding more servers can also be handled in the architecture as tiers can be scaled independently.
+- Developers are independent to update the technology of one tier as it would not impact the other tiers.
+- Programmers can easily maintain the database, presentation code, and business/application logic separately. If any change is required in business/application logic then it does not impact the presentation code and codebase.
+- Security is improved as the client cannot communicate directly with Database Tier. Moreover, the data is validated at Application Tier before passing to Database Tier.
 
+### 3-Tier Architecture and MVC
 
+![image](https://github.com/user-attachments/assets/2264ae9f-8d96-4d28-abd7-4e62471df8e3)
+
+- The MVC pattern takes place in the **presentation** tier of the above architecture (for a webapp):
+  - Data Tier
+  - Application/Service Tier
+  - Presentation Tier
+    - controller: intercepts the HTTP request and returns the HTTP response;
+    - model: stores data to be displayed/treated;
+    - view: organises output/display.
+- Typical flow:
+  - The user sends the HTTP request;
+  - The controller intercepts it;
+  - The controller calls the appropriate service;
+  - The service calls the appropriate dao, which returns some persisted data (for example);
+  - The service treats the data, and returns data to the controller;
+  - The controller stores the data in the appropriate model and calls the appropriate view;
+  - The view get instantiated with the model's data, and get returned as the HTTP response.
+
+## Microservices Architecture
+- Microservices - also known as the microservice architecture - is an architectural style that structures an application as a collection of services that are:
+  - Independently deployable
+  - Loosely coupled
+- Services are typically organized around business capabilities. Each service is often owned by a single, small team.
+- Microservices are an architectural approach to develop software applications as a collection of small, independent services that communicate with each other over a network. Instead of building a monolithic application where all the functionality is tightly integrated into a single codebase, microservices break down the application into smaller, loosely coupled services.
+- Each microservice is designed to perform a specific business function and can be developed, deployed, and scaled independently. It allows you to take a large application and decompose or break it into easily manageable small components with narrowly defined responsibilities. It is considered the building block of modern applications. Microservices can be written in a variety of programming languages, and frameworks, and each service acts as a mini-application on its own.
 
 
