@@ -162,5 +162,15 @@ public class StudentDTO
 - Services are typically organized around business capabilities. Each service is often owned by a single, small team.
 - Microservices are an architectural approach to develop software applications as a collection of small, independent services that communicate with each other over a network. Instead of building a monolithic application where all the functionality is tightly integrated into a single codebase, microservices break down the application into smaller, loosely coupled services.
 - Each microservice is designed to perform a specific business function and can be developed, deployed, and scaled independently. It allows you to take a large application and decompose or break it into easily manageable small components with narrowly defined responsibilities. It is considered the building block of modern applications. Microservices can be written in a variety of programming languages, and frameworks, and each service acts as a mini-application on its own.
+- The single big deployable unit is seperated into small different deployable units which is based on the business functionality. So here we can see there codebase is now seperated into different functionality , each teams works on their respected codebase and each codebase have different CI/CD.
+- So each unit has a seperate database.
+
+![image](https://github.com/user-attachments/assets/2cdb9943-9997-49ac-ab6f-1a764cfecc9a)
+
+- Here API gateway is required because, today there could be less microservices or less functionality, but in future if the scope increases, then the frontend stack requires a gateway to call services based on the request of client.
+- Microservices are the individual, self-contained services that encapsulate specific business capabilities. Each microservice focuses on a distinct function or feature.
+- API Gateway is a central entry point for external clients to interact with the microservices. It manages requests, handles authentication, and routes requests to the appropriate microservices.
+
+![image](https://github.com/user-attachments/assets/69e77c8f-6855-4a74-9140-88c6f4498a29)
 
 
