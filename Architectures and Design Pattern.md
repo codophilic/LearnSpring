@@ -79,15 +79,44 @@ public class StudentDTO
 - Reference [video](https://www.youtube.com/watch?v=MDHj4vgKY6Q&t=496s).
 
 
+# Software Architecture
 
+## 1. Monolithic Architecture
+- Mono means single and lithic means stone. It means a single stone.
+- A monolithic architecture in software refers to a design where all components of an application, including the user interface, business logic, and data access layers, are integrated into a single, unified codebase. 
+- Lets say if the application consist of multiple teams, all teams will work on the same code base.
+- Since the code base is same for all the teams, if we consider a java programming language we will have build artifact called a war file.
+- This war file is deployed on the server like tomcat via CI/CD pipeline.
 
+![image](https://github.com/user-attachments/assets/8ab67658-3613-4d06-9e99-4c535b6825eb)
 
+- Monolithic architecture could be useful where the complexity won't increase in time, like a to-do list application.
 
+### Characteristics of Monolithic Architecture
+- Single Executable: The entire application is packaged and deployed as a single executable file. All components and modules are bundled together.
+- Tight Coupling: The components and modules within the application are highly interconnected and dependent on each other. Changes made to one component may require modifications in other parts of the application.
+- Shared Memory: All components within the application share the same memory space. They can directly access and modify shared data structures.
+- Monolithic Deployment: The entire application is deployed as a single unit. Updates or changes to the application require redeploying the entire monolith.
+- Centralized Control Flow: The control flow within the application is typically managed by a central module or a main function. The flow of execution moves sequentially from one component to another.
 
+### Monolithic and MVC
 
+![image](https://github.com/user-attachments/assets/fe879182-1e61-4d64-8364-e79f51f5f6c0) 
 
+- In a monolithic architecture, all elements of the application — from the user interface and business logic to the data access code — are built and bundled together in a single codebase and repository. This architecture typically uses concepts such as templates/themes and the Model-View-Controller (MVC) design pattern.
 
+## 2. 3-Tier Architecture
 
+- The most common type of multi-tier architecture in distributed systems is a three-tier client-server architecture. In this architecture, the entire application is organized into three computing tiers
+  1. Presentation tier
+  2. Application/Service tier
+  3. Data-tier
+
+### Presentation Tier
+- The presentation tier consist of UI/UX frontend technologies which can be comprises of different tech stack like Angular or React. It is the user interface and topmost tier in the architecture. Its purpose is to take request from the client and displays information to the client.
+- It communicates with other tiers using a web browser as it gives output on the browser. If we talk about Web-based tiers then these are developed using languages like HTML, CSS, JavaScript.
+
+### Application/Service Tier
 
 
 
