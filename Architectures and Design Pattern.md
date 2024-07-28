@@ -174,3 +174,84 @@ public class StudentDTO
 ![image](https://github.com/user-attachments/assets/69e77c8f-6855-4a74-9140-88c6f4498a29)
 
 
+## Lets differentiate these architecture
+
+### 1. Network Latency
+- **Monolithic**
+  - Monolithic architecture as almost zero latency thus increases the performance.
+  - All the interactions are handled in a single deployed machine through the functions called directly the monolithic architecture the user interface middleware and everything is composed into single deployable unit deployed in a single unit.
+- **3-Tier**
+  - In case of 3-Tier we have dedicated deployable unit for each layer so the user interface can be deployed in separate machine which communicates with the application or service layer through the network via rest api calls due to which there is network latency during this network call.
+  - The network latency is compatibly high in this entire architecture when compared with the monolithic architecture.
+- **Microservices**
+  - In case of the microservices the network latency is higher than both, the monolithic and the 3-Tier architecture because here we have many smaller independent deployable units modeled around the business domain in addition to that we also have API gateway which acts as abstraction layer and pass-through for the micro services
+  - In addition to that this micro services also may need to communicate with each other so there is a network latency, thus by impacting the performance.
+ 
+![image](https://github.com/user-attachments/assets/391476ca-e177-461d-b791-7715194e8e0e) 
+
+### 2. Code Seperation
+- **Monolithic**
+  - Monolithic architecture does not have code seperation here all the user interface middleware and db scripts are present in the same code base so all the teams will be working on the same code base.
+  - For every code change the team need to make sure that it does not break any other part of code for example if you are from user interface team and you want to make some security vulnerability code fix you need to make sure it does not break the other functionality layer which is dependent on user module since all the code are interdependent or tightly couple, this makes it hard for the developers.
+  - The problem further increases when the complexity of the application increases here we have one CI/CD pipeline. The pipeline running time also higher because we need to build a bigger deployment artifact bundling all the code and running all the unit test cases.
+  - If any of these unit test cases fails, the CI/CD job will fail. Thus again fixing the case and re-deploying it will take much time.
+- **3-Tier**
+  - 3-Tier architecture there is a code seperation because there will be separate code base for each layer or tire that is user interface will have a separate code base and middleware will have its own code base and separate code base for the db scripts.
+  - So here the user interface team can work independently likewise the application/service team can work independently, still if the middleware/application/service is big there will be more than one team that can be working on the same.
+- **Microservices**
+  - Code base in the microservices architecture it has a well-defined code seperation because there will be separate code base and independent deployable unit for each microservice
+  - Since the deployable units are based on business domain each unit can have a dedicated team and well-defined automated testing suit.
+  - Each services will have seperated CI/CD pipelines
+
+![image](https://github.com/user-attachments/assets/a412dedb-6b20-4d95-9907-09efa67dff1f)
+
+### 3. Scalability and Resource Utilization
+- **Monolithic**
+  - Monolithic architecture are not scalable and there is a concern in optimized resource utilization for example if there are more functionality added there will be increases in the load on the middleware, suppose now we want to scale the back-end alone which is not possible because in the monolithic.
+  - Since there's a single large deployable unit so we need to deploy the complete artifact file in the multiple instances we might not really need to deploy the user interface.
+  - In addition to this if you want to monitor the service how much time each request takes and it becomes difficult to pinpoint where there is a lag or which unit causing.
+- **3-Tier**
+  - In the 3-Tier architecture since there is a separate deployable unit for each layer here we can scale moderately
+  - Still in the middleware layer it is single deployable unit in the entire architecture so there is a issue in scaling individual business unit for example if you found that the resource utlized by a functionality is higher than other functionality, to scale that particular functionality is not possible, because all the modular layer is bundled as a single artificate.
+- **Microservices**
+  - The microservice architecture solves is the scalability and optimized resource utilization.
+  - Here we have independent deployable artifact based on the business unit. Each deployable artifact can be scaled as per the need that is we can provide three instances.
+  - Api monitoring of the each service can be done at the api gateway level or at the individual microservice level. Due to this we can keep optimizing specific unit and provide improved performance.
+
+![image](https://github.com/user-attachments/assets/09bbe8ee-2297-46c0-be5a-3025b2a527a7)
+
+### 4. Choice of Tech Stack
+- **Monolithic**
+  - Since we have single deployable file all the code must be of same programming language and same or compatible technology we can't really make use of two completely different programming language.
+- **3-Tier**
+  - We can use different technologies or programming language for each tier or layer in the calorie counter application.
+  - The frontend interface can be written in javascript framework , react.js and the backend can be in the java framework springboot.
+- **Microservices**
+  - In the microservice each deployable unit is independent which communicate with each other through the rest api calls because of which each independent component can be developed with different tech stack so we can bring variety of each programming language to our application.
+ 
+![image](https://github.com/user-attachments/assets/81fb6e5e-7da3-4955-9d5b-c731258c51f4)
+
+### 5. Deployment and Upgrade
+- **Monolithic**
+  - When it comes to deployment monolithic applications need to be deployed in traditional application server which will be of a same type.
+  - Example in case of Java web services, we need to deploy war file in tomcar, WebSphere or in Glass Fish only.
+- **3-Tier**
+  - In the 3-Tier architecture each tire deployable unit can be deployed independently in their own server we can use container or web server or the application server.
+- **Microservices**
+  - In the microservices architecture we have the flexibility to deploy it based on our need.
+  - Each unit can be deployed on different infrastructure like cloud, container or on a web server.
+
+![image](https://github.com/user-attachments/assets/ecd02eb1-5358-4a18-9999-009318625173)
+
+ 
+
+
+
+
+
+
+
+
+ 
+
+
