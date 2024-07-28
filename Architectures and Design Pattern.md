@@ -243,7 +243,25 @@ public class StudentDTO
 
 ![image](https://github.com/user-attachments/assets/ecd02eb1-5358-4a18-9999-009318625173)
 
+### 6. Fault tolerance
+- **Monolithic and 3-Tier**
+  - When it comes to fault tolerance if there is an issue in the deployed component in the entire service goes down which brings the complete application down.
+  - This is totally undesirable in today competitive world.
+- **Microservices**
+  - In the case of micro service architecture one of the biggest pros is that it is fault tolerance.
+  - With the well orchestrated micro service and well defined circuit breaker pattern it is really possible to have the application running even if one of the application service fails.
  
+![image](https://github.com/user-attachments/assets/207f5bfd-4c26-42ef-bf70-e36fd38e633c)
+
+
+## How to choose architecture for your application?
+- There is no single architecture which is suitable for all the application needs some application suits monolithic architecture better, some application suits 3-Tier architecture and enterprise applications suits microservice.
+- For example if you want to develop a very simple application with one or two units, it is better to stick to the monolithic architecture there is no point in separating the application to smaller units. if the application is very small in that case you will have a single deployable unit so it is cost effective and highly performant because there is no network latency.
+- On the other hand if you want to develop an enterprise application which need to be highly scalable and highly available then the micro services are the way to go because of the enterprise applications increasing complexity over time and will have different team to tackle each services in the component and also it will be easy to maintain.
+ 
+
+
+
 
 
 
