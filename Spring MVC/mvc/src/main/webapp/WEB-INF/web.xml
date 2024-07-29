@@ -1,0 +1,33 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+          http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    version="3.0">
+    <display-name>Servlet 3.0 Web Application</display-name>
+      
+  <!-- Configure Dispatcher Servlet -->
+  <!-- So whenever the server is started up, Dispatcher Servlet will be invoked or initialized -->
+    <servlet>
+        <servlet-name>spring</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+	<!--  
+	Based on the mapping, if users enters the url any page using our context path (springmvc) , frontcontroller will accept the request
+	  	URL examples
+	  	- localhost:8080/springmvc/getPage
+	  	- localhost:8080/springmvc/getPageinfo
+	The DispatcherServlet will handle all requests under the context path /springmvc.
+-->
+    <servlet-mapping>
+        <servlet-name>spring</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+  <!-- 
+  	How will spring know where the bean mapping is done? is it based on the servletName-servlet.xml
+  	So basically here we have created a servlet name 'spring' (<servlet-name>spring</servlet-name>)
+  	which is followed by Spring framework. So using the convection spring will get to know where are the bean mapping is done.
+  	Spring looks for a file named servletName-servlet.xml (in this case, spring-servlet.xml) in the WEB-INF directory for configuration settings, including bean definitions and view resolver configurations.
+   -->
+</web-app>

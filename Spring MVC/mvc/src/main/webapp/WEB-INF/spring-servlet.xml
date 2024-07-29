@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util.xsd" >
+
+    <!--  Enabling Component Scanning Annotations  -->
+	<context:component-scan base-package="mvc.controller"/> 
+
+<!-- Defining view resolver and passing properties of it, which it requires for resolving -->
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" name="viewResolver">
+	<!-- Prefix tells spring where all the pages are present -->
+	<property name="prefix" value="/WEB-INF/pages/"></property>
+	<!-- Suffix tells what extension of files are to be considered (here all .jsp files) -->
+	<property name="suffix" value=".jsp"></property>
+	
+	<!-- Basically Controllers gives view name, FrontController passes this view to ViewResolver
+		So example if Controller gives hello, then the ViewResolver returns the page /WEB-INF/pages/hello.jsp
+	 -->
+	
+</bean>
+
+</beans>
