@@ -1270,7 +1270,9 @@ Output:
 - **`@ModelAttribute`:** Designed for binding complex objects or adding common attributes to the model. It is particularly useful for form submissions where multiple fields need to be mapped to an object or when common data preparation is required before the main request handling.
 
 
+# Spring MVC and ORM
 
+- Lets create a actual form which takes input from page and saves those input details into database.
 
 
 

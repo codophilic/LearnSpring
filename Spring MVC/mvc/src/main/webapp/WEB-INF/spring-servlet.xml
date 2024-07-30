@@ -14,8 +14,8 @@
                            http://www.springframework.org/schema/util
                            http://www.springframework.org/schema/util/spring-util.xsd" >
 
-    <!--  Enabling Component Scanning Annotations  -->
-	<context:component-scan base-package="mvc.controller"/> 
+    <!--  Enabling Component Scanning Annotations for all packages -->
+	<context:component-scan base-package="mvc"/> 
 
 <!-- Defining view resolver and passing properties of it, which it requires for resolving -->
 <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" name="viewResolver">
