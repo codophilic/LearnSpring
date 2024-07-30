@@ -12,16 +12,17 @@
 
   </head>
   <body>
-
+	
+	<h2 class="text-center">${randomMsg }</h2>
 	<div class="container mt-5 align-items-center">
 
-	<h3 class="text-center">Registration Form using RequestParam</h3>
+	<h3 class="text-center">Registration Form using Model Attribute</h3>
 	<!-- 
 		Due to action parameter view will pass on the request to controller and using the action value processing-details
 		controller will call the respected handler method.
 		Making the transmission secure using on of the HTTPs method
 	 -->	
-	<form action="processing-details" method="post">
+	<form action="processing-details-via-modelattribute" method="post">
 		<div class="form-group" align="left">
 		  <label for="emailAddressInput" >Email address</label>
 		  <input name="fieldEmail" type="email" id="emailAddressInput" class="form-control" aria-describedby="emailHelp" placeholder="name@example.com">

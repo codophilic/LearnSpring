@@ -610,7 +610,7 @@ public class MainController {
 - `@RequestMapping` is an annotation in Spring MVC that is used to map web requests to specific handler methods or classes. It acts as a bridge between an HTTP request and a method in a controller, allowing you to specify the URL path, HTTP method (such as GET, POST, PUT, DELETE), and other parameters that determine how the request should be handled. `@RequestMapping` is an interface which has implementation method `RequestMappingHandlerMapping`.
 - When a user enters a URL in their browser, the request is processed by the Spring DispatcherServlet, which is configured to intercept requests. The DispatcherServlet uses a HandlerMapping implementation (like RequestMappingHandlerMapping) to map the URL to the appropriate controller and method based on the `@RequestMapping` annotation.
 - Uptil now we have sent data from controller to view, now how to sent data from view to controller.
-- Now lets have a form.jsp which will take input and pass that to a controller.
+- Now lets have a form.jsp which will take input and pass that to a controller, url - `http://localhost:8080/mvc/myform/contact`
 
 ```
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -629,7 +629,7 @@ public class MainController {
   <body>
 
 	<div class="container mt-5 align-items-center">
-			<h3 class="text-center"> Registration Form </h3>
+			<h3 class="text-center"> Registration Form using RequestParam</h3>
 	<!-- 
 		Due to action parameter view will pass on the request to controller and using the action value processing-details
 		controller will call the respected handler method.
@@ -742,14 +742,22 @@ Email ID: hpandya301@gmail.com, User Name: Harsh, Password: hpandya301, Security
 </html>
 ```
 
-![alt text](image-9.png) 
+![alt text](image-9.png)
 
 ![alt text](image-10.png)
+
+
 
 - The user fills out the form in **form.jsp** and submits it. The form data is sent to the server with the URL `processing-details`. The Spring DispatcherServlet intercepts the request and uses HandlerMapping to find the appropriate controller method that matches the URL `processing-details`.
 - The corresponding method in the controller, annotated with `@RequestMapping(value = "/processing-details", method = RequestMethod.POST)`, is invoked. The method processes the form data, performs business logic, and possibly interacts with the service layer or database.
 - When a form is submitted, the form data is sent as request parameters. `@RequestParam` can be used to bind these parameters to method arguments in the controller.
 - After processing, the method returns a logical view name (e.g., "success"), which is resolved by the ViewResolver to an actual view file (e.g., success.jsp) to render the response.
+
+>[!IMPORTANT]
+> When using form, whatever the form action="/pathname" has the pathname, that gets populated when we click on button and not the jsp page name.
+> In the very first example, jsp page name were present in the url.
+> In above example when user clicks on contact form page (url http://localhost:8080/mvc/myform/contact), method processingDetails returns "success" so ideally the redirected url should be http://localhost:8080/mvc/myform/success, but in the form action attribute we have specified /processing-details, thus the url is redirected to http://localhost:8080/mvc/myform/processing-details
+
 - Such similar working is seen when servlet works, it takes attributes from the HttpServletRequest like below example.
 
 ```
@@ -770,15 +778,496 @@ public void service(HttpServletRequest req, HttpServletResponse res) throws IOEx
 	}
 ```
 
+- What if we have a class which binds the input fields into instance variables?
+- Lets say we create a class `UserClass` which has instance field name as same as input field names.
+
+```
+package mvc.model;
+
+public class UserClass {
+
+	/**
+	 * Instance variable names are same as form input field 
+	 * name attributes
+	 * 
+	 * <input name="fieldEmail">
+	 * <input name="fieldUserName">
+	 * <input name="fieldPassword">
+	 * <input name="fieldSecurityCode">
+	 * 
+	 */
+	private String fieldEmail;
+	private String fieldUserName;
+	private String fieldPassword;
+	private String fieldSecurityCode;
+	
+	
+	public String getFieldEmail() {
+		return fieldEmail;
+	}
+	public void setFieldEmail(String fieldEmail) {
+		this.fieldEmail = fieldEmail;
+	}
+	public String getFieldUserName() {
+		return fieldUserName;
+	}
+	public void setFieldUserName(String fieldUserName) {
+		this.fieldUserName = fieldUserName;
+	}
+	public String getFieldPassword() {
+		return fieldPassword;
+	}
+	public void setFieldPassword(String fieldPassword) {
+		this.fieldPassword = fieldPassword;
+	}
+	public String getFieldSecurityCode() {
+		return fieldSecurityCode;
+	}
+	public void setFieldSecurityCode(String fieldSecurityCode) {
+		this.fieldSecurityCode = fieldSecurityCode;
+	}
+	
+	
+}
+```
+
+- So here we created a seperate JSP file with name form-class.jsp which has an action method `processing-details-via-class`. This jsp gets called when user enters `http://localhost:8080/mvc/myform/contact-class`.
+
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" integrity="sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb" crossorigin="anonymous">
+
+  </head>
+  <body>
+
+	<div class="container mt-5 align-items-center">
+
+	<h3 class="text-center">Registration Form creating field as Class</h3>
+	<!-- 
+		Due to action parameter view will pass on the request to controller and using the action value processing-details
+		controller will call the respected handler method.
+		Making the transmission secure using on of the HTTPs method
+	 -->	
+	<form action="processing-details-via-class" method="post">
+		<div class="form-group" align="left">
+		  <label for="emailAddressInput" >Email address</label>
+		  <input name="fieldEmail" type="email" id="emailAddressInput" class="form-control" aria-describedby="emailHelp" placeholder="name@example.com">
+		 
+		</div>
+		<div class="form-group" align="left">
+		  <label for="userNameInput" >User name</label>
+		  <input name="fieldUserName" type="text" id="userNameInput" class="form-control" aria-describedby="emailHelp">
+		</div>
+		<div class="form-group" align="left">
+		  <label for="userPassIput" >User Password</label>
+		  <input name="fieldPassword" type="password" id="userPassIput" class="form-control" aria-describedby="emailHelp">
+		</div>
+		<!-- Optional field age -->
+		<div class="form-group" align="left">
+		  <label>Security Code</label>
+		  <input name="fieldSecurityCode" type="text" id="code" class="form-control" aria-describedby="emailHelp">
+		</div>
+		<div class="form-group" align="center">
+			
+			<button type="submit" class="btn btn-primary mt-5">Login</button>
+		</div> 
+	  </form>
+	</div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+  </body>
+</html>
+```
+
+- Below is the controller details
+
+```
+package mvc.controller;
+
+import org.springframework.stereotype.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import mvc.model.UserClass;
+
+@Controller
+@RequestMapping("/myform")
+public class FormController {
+
+	@RequestMapping("/contact-class")
+	public String returnContactPageUsingClass() {
+		return "form-class";
+	}
+	
+	/**
+	 * URL -> http://localhost:8080/mvc/myform/processing-details-via-class
+	 * When user click on Login button, whatever url mentioned in the <form action> is called
+	 * by the controller and it also checks if the Request Method is post which is defined in 
+	 * form
+	 * 
+	 * Default Get method is used if not specified
+	 * 
+	 * Now here it some input fields of form could be optional, default all arguments are considered
+	 * as mandatory.
+	 */
+	@RequestMapping(path = "/processing-details-via-class", method=RequestMethod.POST)
+	public String processingDetailsForClass(
+			@RequestParam(name = "fieldEmail",required = true) String emailId,
+			@RequestParam(name = "fieldUserName",required = true) String username,
+			@RequestParam(name = "fieldPassword",required = true) String password,
+			@RequestParam(name = "fieldSecurityCode",required = false) String securitycode,
+			Model md
+		) {
+		System.out.println("Email ID: "+emailId+", User Name: "+username+", Password: "+password+", Security Code: "+securitycode);
+		UserClass uc= new UserClass();
+		uc.setFieldEmail(emailId);
+		uc.setFieldPassword(password);
+		uc.setFieldSecurityCode(securitycode);
+		uc.setFieldUserName(username);
+		
+		/**
+		 * Setting Class as a attribute
+		 */
+		md.addAttribute("user",uc);
+		return "success-class";
+	}
+}
+```
+
+- Post login on button, success-class.jsp is called, here if you see we have add an object to the model in a Spring MVC controller using model.`addAttribute("user", uc)`, you can access its properties directly in the JSP using the object name as the prefix.
+- In the JSP, you use `${user.fieldUserName}` and `${user.fieldSecurityCode}` to access the name and id properties of the User object, respectively.
+
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1> Login Successful for user ${user.fieldUserName } with security code ${user.fieldSecurityCode }</h1>
+
+</body>
+</html>
+```
+
+- This works because Spring MVC automatically makes the model attributes available in the view under the key provided. The JSP uses the provided key (`user` in this case) to access the object's properties using standard JavaBean property conventions.
+
+![alt text](image-11.png) 
+
+![alt text](image-12.png) 
+
+- What if the form fields have large number of input parameters? you need to write multiple times the `RequestParam` right? we can avoid this using another annotation `@ModelAttribute`.
+- `@ModelAttribute` and `@RequestParam` are both annotations in Spring MVC used to bind HTTP request parameters to method arguments in controller methods, but they serve different purposes and are used in different contexts.
+- Lets have a another form with name form-model-attribute.jsp
+
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" integrity="sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb" crossorigin="anonymous">
+
+  </head>
+  <body>
+
+	<div class="container mt-5 align-items-center">
+
+	<h3 class="text-center">Registration Form using Model Attribute</h3>
+	<!-- 
+		Due to action parameter view will pass on the request to controller and using the action value processing-details
+		controller will call the respected handler method.
+		Making the transmission secure using on of the HTTPs method
+	 -->	
+	<form action="processing-details-via-modelattribute" method="post">
+		<div class="form-group" align="left">
+		  <label for="emailAddressInput" >Email address</label>
+		  <input name="fieldEmail" type="email" id="emailAddressInput" class="form-control" aria-describedby="emailHelp" placeholder="name@example.com">
+		 
+		</div>
+		<div class="form-group" align="left">
+		  <label for="userNameInput" >User name</label>
+		  <input name="fieldUserName" type="text" id="userNameInput" class="form-control" aria-describedby="emailHelp">
+		</div>
+		<div class="form-group" align="left">
+		  <label for="userPassIput" >User Password</label>
+		  <input name="fieldPassword" type="password" id="userPassIput" class="form-control" aria-describedby="emailHelp">
+		</div>
+		<!-- Optional field age -->
+		<div class="form-group" align="left">
+		  <label>Security Code</label>
+		  <input name="fieldSecurityCode" type="text" id="code" class="form-control" aria-describedby="emailHelp">
+		</div>
+		<div class="form-group" align="center">
+			
+			<button type="submit" class="btn btn-primary mt-5">Login</button>
+		</div> 
+	  </form>
+	</div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+  </body>
+</html>
+```
+
+- We have a new class defined for model attribute
+
+```
+package mvc.controller;
+
+import org.springframework.stereotype.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import mvc.model.UserClass;
+
+@Controller
+@RequestMapping("/myform")
+public class FormController {
+	
+	@RequestMapping("/contact-model-attribute")
+	public String returnContactPageUsingModelAttribute() {
+		return "form-model-attribute";
+	}	
+	
+	/**
+	 * URL -> http://localhost:8080/mvc/myform/processing-details-via-modelattribute
+	 */
+	@RequestMapping(path = "/processing-details-via-modelattribute", method=RequestMethod.POST)
+	public String processingDetailsViaModelAttribute(@ModelAttribute UserClass uc) {
+		/**
+		 * ModelAttribute binds the HTTP request data into instance variable of uc
+		 * To access this attribute via JSP we need to make first character in lowercase "userClass"
+		 * and access each properties of it like userClass.fieldfieldEmail
+		 */
+		System.out.println(uc.getFieldEmail());
+		return "success-model-attribute";
+	}
+	
+}
+
+Output:
+hpandya301@gmail.com
+```
+
+- Below is the success-model-attribute.jsp
+
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1> Login Successful for user ${userClass.fieldUserName } with security code ${userClass.fieldSecurityCode }</h1>
+
+</body>
+</html>
+```
+![alt text](image-14.png)
+
+![alt text](image-13.png) 
+
+- `@ModelAttribute` is used to bind multiple request parameters to a model object or method parameter. It's typically used when you have a form with multiple fields that correspond to properties of a Java object, and you want to bind all of them at once. 
+- `@ModelAttribute` annotation in Spring MVC binds form data, query parameters, or session attributes to Java objects. This annotation is useful when working with forms that have many fields, as it eliminates the need to manually extract each form parameter.
+- The binding of HTTP request parameters to the model object's properties is handled automatically by Spring, based on naming conventions and type conversion.
+- For example, if the form has fields named **name** and **id**, and the **User** class has properties with the same names, Spring will automatically map the form data to the User object when the request is submitted. This mapping is facilitated by Spring's data binding infrastructure, which matches request parameter names to property names in the model object.
+- Lets say whenever users clicks on form page, you wanna display some random welcome message like Hello , Hi etc.. how will you do that? because jsp can access Http attributes only when it has been set by a method in java right?, again `@ModelAttribute` will use.
+- `@ModelAttribute` methods are invoked before controller methods annotated with `@RequestMapping` because the model object needs to be created before processing starts in the controller methods.
+
+```
+package mvc.controller;
+
+import java.util.Random;
+
+import org.springframework.stereotype.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import mvc.model.UserClass;
+
+@Controller
+@RequestMapping("/myform")
+public class FormController {
+
+	/**
+	 * Binding attributes to the model before controller
+	 * getting invoked
+	 */
+	@ModelAttribute
+	public void RandomMsgGenerator(Model model) {
+	  String[] messages = {
+	            "Hello, world!",
+	            "How are you today?",
+	            "Java is awesome!",
+	            "Keep coding!",
+	            "Have a great day!"};
+	  Random random = new Random();
+	  int index = random.nextInt(messages.length);
+	  String randomMessage = messages[index];
+	  System.out.println(randomMessage);
+	  model.addAttribute("randomMsg",randomMessage);
+	}
+	
+	@RequestMapping("/contact-model-attribute")
+	public String returnContactPageUsingModelAttribute() {
+		return "form-model-attribute";
+	}	
+	
+	/**
+	 * URL -> http://localhost:8080/mvc/myform/processing-details-via-modelattribute
+	 */
+	@RequestMapping(path = "/processing-details-via-modelattribute", method=RequestMethod.POST)
+	public String processingDetailsViaModelAttribute(@ModelAttribute UserClass uc) {
+		/**
+		 * ModelAttribute binds the HTTP request data into instance variable of uc
+		 * To access this attribute via JSP we need to make first character in lowercase "userClass"
+		 * and access each properties of it like userClass.fieldfieldEmail
+		 */
+		System.out.println(uc.getFieldEmail());
+		return "success-model-attribute";
+	}
+	
+}
+
+Output:
+
+```
+- contact-model-attribute and success-mode-attribute JSP files
 
 
+```
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" integrity="sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb" crossorigin="anonymous">
+
+  </head>
+  <body>
+	
+	<h2 class="text-center">${randomMsg }</h2>
+	<div class="container mt-5 align-items-center">
+
+	<h3 class="text-center">Registration Form using Model Attribute</h3>
+	<!-- 
+		Due to action parameter view will pass on the request to controller and using the action value processing-details
+		controller will call the respected handler method.
+		Making the transmission secure using on of the HTTPs method
+	 -->	
+	<form action="processing-details-via-modelattribute" method="post">
+		<div class="form-group" align="left">
+		  <label for="emailAddressInput" >Email address</label>
+		  <input name="fieldEmail" type="email" id="emailAddressInput" class="form-control" aria-describedby="emailHelp" placeholder="name@example.com">
+		 
+		</div>
+		<div class="form-group" align="left">
+		  <label for="userNameInput" >User name</label>
+		  <input name="fieldUserName" type="text" id="userNameInput" class="form-control" aria-describedby="emailHelp">
+		</div>
+		<div class="form-group" align="left">
+		  <label for="userPassIput" >User Password</label>
+		  <input name="fieldPassword" type="password" id="userPassIput" class="form-control" aria-describedby="emailHelp">
+		</div>
+		<!-- Optional field age -->
+		<div class="form-group" align="left">
+		  <label>Security Code</label>
+		  <input name="fieldSecurityCode" type="text" id="code" class="form-control" aria-describedby="emailHelp">
+		</div>
+		<div class="form-group" align="center">
+			
+			<button type="submit" class="btn btn-primary mt-5">Login</button>
+		</div> 
+	  </form>
+	</div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+  </body>
+</html>
 
 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1> Login Successful for user ${userClass.fieldUserName } with security code ${userClass.fieldSecurityCode }</h1>
+<h2>${randomMsg }</h2>
+</body>
+</html>
+```
+
+![alt text](image-15.png) 
+
+![alt text](image-16.png)
+
+- **When `@ModelAttribute` used on a method (not as a parameter), @ModelAttribute indicates that the method should add one or more attributes to the model. These attributes are available to all handler methods in the controller and can be used in the view, the attributes set in the model is available to all the class**.
+- In the above example, the data is bind with model and it is accessible by any view. Here the data is randomly generated.
+
+## Comparison of `@RequestParam` and `@ModelAttribute` in Spring MVC
+
+| **Aspect**                  | **`@RequestParam`**                                                                                              | **`@ModelAttribute`**                                                                                               |
+|-----------------------------|------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
+| **Purpose**                 | `@RequestParam` binds individual request parameters to method arguments in a controller. It extracts data from query parameters, form fields, or URL parts. | `@ModelAttribute` binds all relevant request parameters to an object or adds attributes to the model. It is useful for form submissions where multiple fields map to a Java object or for setting up common data for views. |
+| **Typical Use Case**        | Ideal for extracting specific query parameters or form fields, especially when you need fine-grained control over individual parameters. | Best for handling complex form submissions where the data needs to be bound to a Java object, or for setting up common attributes required across multiple requests. |
+| **Usage Example**           | ```MethodName(@RequestParam("name") String name)```<br>This captures the `name` parameter from the request and binds it to the method argument `name`. | ```MethodName(@ModelAttribute User user)```<br>This binds all matching request parameters to the fields of the `User` object. |
+| **Method-Level Usage**      | Not applicable. `@RequestParam` is used only on method parameters. | When used on methods (not parameters), `@ModelAttribute` methods are invoked before `@RequestMapping` methods to populate the model with common attributes needed by multiple views or controllers. |
+| **Data Binding**            | Suitable for simple data types like strings, integers, or basic collections. Spring automatically converts the request parameter value to the specified type. | Suitable for binding complex objects such as JavaBeans or domain objects. Spring populates the object's fields based on matching request parameters. |
+| **Annotation Position**     | Placed directly on method parameters to bind specific request parameters. | Can be placed on method parameters to bind form data or on methods to add attributes to the model. |
+| **Default Value Handling**  | Allows specifying a default value if the request parameter is not present using the `defaultValue` attribute. For example:<br>`@RequestParam(value = "name", defaultValue = "Guest")` | Default values are typically handled within the object itself or in the method that initializes the object. Not specified directly through the annotation. |
+| **Optional Parameters**     | Can mark parameters as optional by setting the `required` attribute to `false`. For example:<br>`@RequestParam(value = "age", required = false)` | Handles optional fields within the model object itself. If some fields are not present in the request, the corresponding object properties will remain unset or take default values of the class. |
+| **Pre-processing**          | Not applicable. `@RequestParam` directly binds parameters when the method is invoked. | `@ModelAttribute` methods are called before `@RequestMapping` methods, allowing for data preparation or object initialization before the main request handling. |
 
 
+### Summary
 
+- **`@RequestParam`:** Ideal for extracting and binding simple request parameters to controller method arguments. It provides straightforward control over individual parameters, with options for setting defaults and marking parameters as optional.
 
-
+- **`@ModelAttribute`:** Designed for binding complex objects or adding common attributes to the model. It is particularly useful for form submissions where multiple fields need to be mapped to an object or when common data preparation is required before the main request handling.
 
 
 
