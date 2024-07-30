@@ -8,7 +8,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1> Login Successful for user ${customer.custfirtName } with security code ${customer.custlastName }</h1>
-<%-- <h2>User id  - ${customer.custid }</h2>
- --%></body>
+<h1> Login Successful for user ${customer.custfirtName } </h1>
+</body>
 </html>

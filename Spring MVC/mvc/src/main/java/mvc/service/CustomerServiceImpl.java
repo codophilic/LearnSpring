@@ -29,7 +29,6 @@ public class CustomerServiceImpl implements CustomerService {
 		this.customerDao = customerDao;
 	}
 
-	@Override
 	public int insert(Customer cust) {
 		return customerDao.insert(cust);
 	}

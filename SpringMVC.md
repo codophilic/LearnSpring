@@ -1272,11 +1272,543 @@ Output:
 
 # Spring MVC and ORM
 
-- Lets create a actual form which takes input from page and saves those input details into database.
+- Lets create a actual form which takes input from page and saves those input details into database. Suppose we have registration form for a customer. Here we will use hibernate as ORM tool.
+- First lets download the dependencies using maven
+
+```
+    <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.33</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-orm</artifactId>
+    <version>5.2.4.RELEASE</version>
+</dependency>
 
 
+<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>5.6.10.Final</version> <!-- or any compatible version -->
+</dependency>
+
+<dependency>
+    <groupId>javax.xml.bind</groupId>
+    <artifactId>jaxb-api</artifactId>
+    <version>2.3.1</version>
+</dependency>
+<dependency>
+    <groupId>org.glassfish.jaxb</groupId>
+    <artifactId>jaxb-runtime</artifactId>
+    <version>2.3.1</version>
+</dependency>
+    
+```
+
+- Perform some configurations, here will use annotations configuration method.
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context 
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--  Enabling Component Scanning Annotations for all packages -->
+	<context:component-scan base-package="mvc"/> 
+	<tx:annotation-driven />
+	<!-- DataSource bean: Providing resources (database connection details) -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/springhibernate" />
+        <property name="username" value="root" />
+        <property name="password" value="Meetpandya40@" />
+    </bean>
+
+    <!-- Hibernate properties: Configuration settings -->
+    <bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- SessionFactory bean: Coordinating the overall database interaction -->
+    <bean id="factory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="hibernateProperties" ref="hibernateProperties" />
+        <!-- Scanning for annotated entity classes -->
+	<property name="annotatedClasses">
+			<list>
+			<value>mvc.model.entities.Customer</value>
+			</list>
+			</property>    
+	</bean>
+
+    <!-- Transaction manager: Ensures transaction management -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="factory" />
+    </bean>
+
+<!-- Defining view resolver and passing properties of it, which it requires for resolving -->
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" name="viewResolver">
+	<!-- Prefix tells spring where all the pages are present -->
+	<property name="prefix" value="/WEB-INF/pages/"></property>
+	<!-- Suffix tells what extension of files are to be considered (here all .jsp files) -->
+	<property name="suffix" value=".jsp"></property>
+	
+	<!-- Basically Controllers gives view name, FrontController passes this view to ViewResolver
+		So example if Controller gives hello, then the ViewResolver returns the page /WEB-INF/pages/hello.jsp
+	 -->
+</bean>
+
+</beans>
+```
+
+- Below is the customer object class.
+
+```
+package mvc.model.entities;
+
+import javax.persistence.*;
+
+@Entity(name = "customer_table")
+public class Customer {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="customer_id")
+	private int custId;
+	
+	@Column(name="first_name")
+	private String custfirtName;
+
+	@Column(name="last_name")
+	private String custlastName;
+	
+	@Column(name="user_name")
+	private String custuserName;
+	
+	@Column(name="password")
+	private String custpassword;
+	
+	@Column(name="address")
+	private String custaddress;
+	
+	@Column(name="contact")
+	private String custcontact;
+
+	public int getCustId() {
+		return custId;
+	}
+
+	public void setCustId(int custId) {
+		this.custId = custId;
+	}
+
+	public String getCustfirtName() {
+		return custfirtName;
+	}
+
+	public void setCustfirtName(String custfirtName) {
+		this.custfirtName = custfirtName;
+	}
+
+	public String getCustlastName() {
+		return custlastName;
+	}
+
+	public void setCustlastName(String custlastName) {
+		this.custlastName = custlastName;
+	}
+
+	public String getCustuserName() {
+		return custuserName;
+	}
+
+	public void setCustuserName(String custuserName) {
+		this.custuserName = custuserName;
+	}
+
+	public String getCustpassword() {
+		return custpassword;
+	}
+
+	public void setCustpassword(String custpassword) {
+		this.custpassword = custpassword;
+	}
+
+	public String getCustaddress() {
+		return custaddress;
+	}
+
+	public void setCustaddress(String custaddress) {
+		this.custaddress = custaddress;
+	}
+
+	public String getCustcontact() {
+		return custcontact;
+	}
+
+	public void setCustcontact(String custcontact) {
+		this.custcontact = custcontact;
+	}
+	
+	
+}
+```
+
+- Below is the Dao interface and its implementation
+
+```
+Inteface:
+
+package mvc.dao;
+
+import mvc.model.entities.Customer;
+
+public interface CustomerDao {
+
+	public int insert(Customer cust);
+}
 
 
+Interface Implementation:
+
+package mvc.dao;
+
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import mvc.model.entities.Customer;
+
+@Repository
+public class CustomerDaoImpl implements CustomerDao{
+	
+	/*
+	 * Injecting Dependencies
+	 */
+	@Autowired
+	private SessionFactory factory;
+
+	public SessionFactory getFactory() {
+		return factory;
+	}
+
+	public void setFactory(SessionFactory factory) {
+		this.factory = factory;
+	}
+
+	public int insert(Customer cust) {
+		int rowsAffected=(int) factory.getCurrentSession().save(cust);
+		System.out.println("Rows affected -"+rowsAffected);
+		return rowsAffected;
+	}
+
+	
+}
+```
+
+- Below is the Service layer interface and its implementation
+
+```
+Inteface:
+package mvc.service;
+
+import mvc.model.entities.Customer;
+
+public interface CustomerService {
+
+	public int insert(Customer cust);
+}
+
+
+Interface Implementation:
+package mvc.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import mvc.dao.CustomerDao;
+import mvc.model.entities.Customer;
+
+
+/**
+ * Database changes are either committed (saved permanently) or rolled back (canceled) as a single unit via Transactional
+ */
+@Service
+@Transactional
+public class CustomerServiceImpl implements CustomerService {
+	
+	/**
+	 * Injecting Dependencies
+	 */
+	@Autowired
+	private CustomerDao customerDao;
+
+	public CustomerDao getCustomerDao() {
+		return customerDao;
+	}
+
+	public void setCustomerDao(CustomerDao customerDao) {
+		this.customerDao = customerDao;
+	}
+
+	public int insert(Customer cust) {
+		return customerDao.insert(cust);
+	}
+
+	
+}
+```
+
+- Hold on? what is this `@Repository` annotation, it should be `@Component` right?
+- Both `@Service` and `@Repository` are specializations of the `@Component` annotation, meaning they are essentially `@Component` with additional semantics.
+- `@Service` this annotation marks a class as a service provider. It's typically used for classes that contain business logic. In essence, it indicates that the class is part of the service layer in your application.   
+- `@Repository` this annotation marks a class as a data access object (DAO). It's used for classes that interact with the database, such as performing CRUD operations. It's part of the persistence layer.
+
+###### Why to use Service and Repository inplace of Component
+- Clearly defines the role of a class within the application architecture. Improves code readability and understanding.
+- One of the key benefits of `@Repository` is that it provides a mechanism for exception translation. Spring automatically converts database-related exceptions into Spring's DataAccessException hierarchy. This makes the data access layer less coupled to the underlying persistence technology.
+
+- So we have defined our dao and service layer, lets define two jsp files one will be for customer form and one will be registered success form.
+
+```
+customer-form.jsp
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+ pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<!-- https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+<link href="${contextPath}/resource/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+ <div class="container">
+  <h1>Customer Register Form for Business:</h1>
+  <div class="card">
+   <div class="card-body">
+    <form action="register" method="post">
+
+     <div class="form-group row">
+      <label class="col-sm-2 col-form-label">First
+       Name</label>
+      <div class="col-sm-7">
+       <input type="text" class="form-control" name="custfirtName"
+        placeholder="Enter first name">
+      </div>
+     </div>
+
+     <div class="form-group row">
+      <label class="col-sm-2 col-form-label">Last
+       Name</label>
+      <div class="col-sm-7">
+       <input type="text" class="form-control" name="custlastName"
+        placeholder="Enter last name">
+      </div>
+     </div>
+
+     <div class=" form-group row">
+      <label class="col-sm-2 col-form-label">User
+       Name</label>
+      <div class="col-sm-7">
+       <input type="text" class="form-control" name="custuserName"
+        placeholder="Enter user name">
+      </div>
+     </div>
+
+     <div class="form-group row">
+      <label class="col-sm-2 col-form-label">Password</label>
+      <div class="col-sm-7">
+       <input type="password" class="form-control" name="custpassword"
+        placeholder="Enter Password">
+      </div>
+     </div>
+
+     <div class="form-group row">
+      <label class="col-sm-2 col-form-label">Address</label>
+      <div class="col-sm-7">
+       <input type="text" class="form-control" name="custaddress"
+        placeholder="Enter Address">
+      </div>
+     </div>
+
+     <div class="form-group row">
+      <label class="col-sm-2 col-form-label">Contact
+       No</label>
+      <div class="col-sm-7">
+       <input type="text" class="form-control" name="custcontact"
+        placeholder="Enter Contact Address">
+      </div>
+     </div>
+
+     <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+   </div>
+  </div>
+ </div>
+</body>
+</html>
+
+registered-success.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1> Login Successful for user ${customer.custfirtName } </h1>
+</body>
+</html>
+```
+
+lets define a controller for the customer form.
+
+```
+package mvc.controller;
+
+import java.util.Random;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import mvc.model.entities.Customer;
+import mvc.service.CustomerService;
+
+@Controller
+@RequestMapping("/customer")
+public class CustomerController {
+	
+	@Autowired
+	private CustomerService customerService;
+	
+	public CustomerService getCustomerService() {
+		return customerService;
+	}
+
+	public void setCustomerService(CustomerService customerService) {
+		this.customerService = customerService;
+	}
+
+	@ModelAttribute
+	public void welcomeMsg(Model model) {
+		  String[] messages = {
+		            "Hello, welcome to the portal",
+		            "Greetings, welcome to the portal",
+		            "Hi, welcome to the portal"};
+		  Random random = new Random();
+		  int index = random.nextInt(messages.length);
+		  String randomMessage = messages[index];
+		  model.addAttribute("greetingMsg",randomMessage);
+	}
+
+	@RequestMapping(path = "/register",method = RequestMethod.POST)
+	public ModelAndView register(
+		@ModelAttribute Customer customer 
+			) {
+		ModelAndView mav=new ModelAndView();
+		int result=customerService.insert(customer);
+		if(result!=1) {
+			mav.addObject("registrationMsg","unsuccessful");
+		}
+		else {
+			mav.addObject("registrationMsg","successful");
+		}
+		mav.setViewName("registered-success");
+		return mav;
+	}
+	
+	@RequestMapping("/create")
+	public String create() {
+		return "customer-form";
+	}
+}
+
+Output:
+Hibernate: 
+    
+    create table customer_table (
+       customer_id integer not null,
+        address varchar(255),
+        contact varchar(255),
+        first_name varchar(255),
+        last_name varchar(255),
+        password varchar(255),
+        user_name varchar(255),
+        primary key (customer_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table hibernate_sequence (
+       next_val bigint
+    ) engine=InnoDB
+Hibernate: 
+    
+    insert into hibernate_sequence values ( 1 )
+Hibernate: 
+    select
+        next_val as id_val 
+    from
+        hibernate_sequence for update
+            
+Hibernate: 
+    update
+        hibernate_sequence 
+    set
+        next_val= ? 
+    where
+        next_val=?
+Rows affected -1
+Hibernate: 
+    insert 
+    into
+        customer_table
+        (address, contact, first_name, last_name, password, user_name, customer_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+```
+
+![alt text](image-17.png) 
+
+![alt text](image-18.png)
+
+![alt text](image-19.png) 
 
 
 

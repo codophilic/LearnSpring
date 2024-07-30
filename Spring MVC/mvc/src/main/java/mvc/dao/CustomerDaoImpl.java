@@ -23,9 +23,9 @@ public class CustomerDaoImpl implements CustomerDao{
 		this.factory = factory;
 	}
 
-	@Override
 	public int insert(Customer cust) {
-		int rowsAffected=(int) factory.openSession().save(cust);
+		int rowsAffected=(int) factory.getCurrentSession().save(cust);
+		System.out.println("Rows affected -"+rowsAffected);
 		return rowsAffected;
 	}
 

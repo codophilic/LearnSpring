@@ -42,7 +42,6 @@
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
-<!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-orm</artifactId>
