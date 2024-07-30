@@ -1,6 +1,6 @@
 package mvc.dao;
 
-import mvc.model.Customer;
+import mvc.model.entities.Customer;
 
 public interface CustomerDao {
 

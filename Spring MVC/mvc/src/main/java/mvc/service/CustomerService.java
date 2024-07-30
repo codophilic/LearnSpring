@@ -1,6 +1,6 @@
 package mvc.service;
 
-import mvc.model.Customer;
+import mvc.model.entities.Customer;
 
 public interface CustomerService {
 
