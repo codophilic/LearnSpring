@@ -8,6 +8,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1> Login Successful for user ${customer.custfirtName } </h1>
+<h1> Login Successful for user ${student.stdname } , your address is ${student.studentAddress.addressline1 }</h1>
 </body>
 </html>

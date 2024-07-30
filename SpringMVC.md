@@ -1263,11 +1263,99 @@ Output:
 | **Pre-processing**          | Not applicable. `@RequestParam` directly binds parameters when the method is invoked. | `@ModelAttribute` methods are called before `@RequestMapping` methods, allowing for data preparation or object initialization before the main request handling. |
 
 
-### Summary
-
 - **`@RequestParam`:** Ideal for extracting and binding simple request parameters to controller method arguments. It provides straightforward control over individual parameters, with options for setting defaults and marking parameters as optional.
 
 - **`@ModelAttribute`:** Designed for binding complex objects or adding common attributes to the model. It is particularly useful for form submissions where multiple fields need to be mapped to an object or when common data preparation is required before the main request handling.
+
+- What if , we want to get redirected from one page to another? is it possible in spring mvc? yes, we have two ways to do it, **redirect** and **RedirectView**. Lets see an example of both
+
+```
+package mvc.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+/**
+ * Front Controller, this controller acts as a front controller in the MVC pattern
+ * If we add @RequestMapping on a class each endpoint url will have this handler url as prefix
+ * So example the url without it we were accessing -> http://localhost:8080/mvc/welcome
+ * Will change to http://localhost:8080/mvc/mypage/welcome
+ */
+@Controller
+//@RequestMapping("/mypage")
+public class MainController {
+
+	/**
+	 * redirect:/ approach
+	 * Entered URL -> http://localhost:8080/mvc/redirectform
+	 * Redirect to the URL -> http://localhost:8080/mvc/customer/create
+	 */
+	@RequestMapping("/redirectform")
+	public String redirectingPageusingRedirect() {
+		System.out.println("Redirected to the customer form page using redirect approach");
+		return "redirect:/customer/create";
+	}
+	
+	
+	/**
+	 * redirect:/ approach
+	 * Entered URL -> http://localhost:8080/mvc/redirectviewform
+	 * Redirect to the URL -> http://localhost:8080/mvc/customer/create
+	 */
+	@RequestMapping("/redirectviewform")
+	public RedirectView redirectingPageusingRedirectView() {
+		System.out.println("Redirected to the customer form page using redirectview approach");
+		RedirectView rv= new RedirectView();
+		rv.setUrl("customer/create");
+		return rv;
+	}
+	
+	/**
+	 * Redirect to codechef platform
+	 */
+	@RequestMapping("/codechef")
+	public RedirectView redirectingtoCodechef() {
+		System.out.println("Redirected to codechef platform");
+		RedirectView rv= new RedirectView();
+		rv.setUrl("https://www.codechef.com");
+		return rv;
+	} 
+}
+
+
+Output:
+Redirected to the customer form page using redirect approach
+Redirected to the customer form page using redirectview approach
+Redirected to codechef platform
+```
+
+- **/redirectform** redirected to **/customer/create**
+
+![alt text](image-20.png) 
+
+![alt text](image-21.png) 
+
+- **/redirectviewform** redirected to **/customer/create** 
+
+![alt text](image-22.png) 
+
+![alt text](image-21.png)  
+
+- **/codechef** redicted to codechef platform.
+
+![alt text](image-23.png) 
+
+![alt text](image-24.png) 
+
+- The `redirect:/` prefix is simpler and more convenient for straightforward use cases where you only need to redirect to another URL.
+- `RedirectView` provides more control and flexibility, allowing for detailed configuration of the redirect process, such as setting custom HTTP status codes or handling model attributes in specific ways.
+
 
 
 # Spring MVC and ORM
@@ -1804,11 +1892,6 @@ Hibernate:
         (?, ?, ?, ?, ?, ?, ?)
 ```
 
-![alt text](image-17.png) 
-
-![alt text](image-18.png)
-
-![alt text](image-19.png) 
 
 
 

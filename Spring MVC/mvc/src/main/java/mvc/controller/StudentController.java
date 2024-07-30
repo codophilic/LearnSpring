@@ -10,21 +10,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import mvc.model.entities.Customer;
-import mvc.service.CustomerService;
+import mvc.model.entities.Student;
+import mvc.service.StudentService;
 
 @Controller
-@RequestMapping("/customer")
-public class CustomerController {
+@RequestMapping("/student")
+public class StudentController {
 	
 	@Autowired
-	private CustomerService customerService;
+	private StudentService customerService;
 	
-	public CustomerService getCustomerService() {
+	public StudentService getCustomerService() {
 		return customerService;
 	}
 
-	public void setCustomerService(CustomerService customerService) {
+	public void setCustomerService(StudentService customerService) {
 		this.customerService = customerService;
 	}
 
@@ -42,10 +42,11 @@ public class CustomerController {
 
 	@RequestMapping(path = "/register",method = RequestMethod.POST)
 	public ModelAndView register(
-		@ModelAttribute Customer customer 
+		@ModelAttribute Student student 
 			) {
+		System.out.println("Student Bind details: "+student);
 		ModelAndView mav=new ModelAndView();
-		int result=customerService.insert(customer);
+		int result=customerService.insert(student);
 		if(result!=1) {
 			mav.addObject("registrationMsg","unsuccessful");
 		}
@@ -58,6 +59,6 @@ public class CustomerController {
 	
 	@RequestMapping("/create")
 	public String create() {
-		return "customer-form";
+		return "student-form";
 	}
 }

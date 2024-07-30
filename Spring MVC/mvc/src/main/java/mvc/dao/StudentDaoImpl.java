@@ -4,10 +4,10 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import mvc.model.entities.Customer;
+import mvc.model.entities.Student;
 
 @Repository
-public class CustomerDaoImpl implements CustomerDao{
+public class StudentDaoImpl implements StudentDao{
 	
 	/*
 	 * Injecting Dependencies
@@ -23,8 +23,8 @@ public class CustomerDaoImpl implements CustomerDao{
 		this.factory = factory;
 	}
 
-	public int insert(Customer cust) {
-		int rowsAffected=(int) factory.getCurrentSession().save(cust);
+	public int insert(Student student) {
+		int rowsAffected=(int) factory.getCurrentSession().save(student);
 		System.out.println("Rows affected -"+rowsAffected);
 		return rowsAffected;
 	}

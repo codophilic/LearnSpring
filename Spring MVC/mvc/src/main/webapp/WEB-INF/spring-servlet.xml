@@ -41,7 +41,7 @@
         <!-- Scanning for annotated entity classes -->
 	<property name="annotatedClasses">
 			<list>
-			<value>mvc.model.entities.Customer</value>
+			<value>mvc.model.entities.Student</value>
 			</list>
 			</property>    
 	</bean>

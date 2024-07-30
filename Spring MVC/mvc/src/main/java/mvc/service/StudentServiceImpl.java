@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import mvc.dao.CustomerDao;
-import mvc.model.entities.Customer;
+import mvc.dao.StudentDao;
+import mvc.model.entities.Student;
 
 
 /**
@@ -13,24 +13,24 @@ import mvc.model.entities.Customer;
  */
 @Service
 @Transactional
-public class CustomerServiceImpl implements CustomerService {
+public class StudentServiceImpl implements StudentService {
 	
 	/**
 	 * Injecting Dependencies
 	 */
 	@Autowired
-	private CustomerDao customerDao;
+	private StudentDao studentDao;
 
-	public CustomerDao getCustomerDao() {
-		return customerDao;
+	public StudentDao getStudentDao() {
+		return studentDao;
 	}
 
-	public void setCustomerDao(CustomerDao customerDao) {
-		this.customerDao = customerDao;
+	public void setStudentDao(StudentDao studentDao) {
+		this.studentDao = studentDao;
 	}
 
-	public int insert(Customer cust) {
-		return customerDao.insert(cust);
+	public int insert(Student student) {
+		return studentDao.insert(student);
 	}
 
 	
