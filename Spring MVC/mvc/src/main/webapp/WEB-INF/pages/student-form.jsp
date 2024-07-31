@@ -64,7 +64,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="text-center mb-4">IT Application Form for Students</h3>
+                    <h3 class="text-center mb-4">IT Application Form for Students,path variable, adding images, error handling</h3>
                     <form action="register" method="post">
                         <div class="form-group">
                             <label for="stdname">Your Name</label>

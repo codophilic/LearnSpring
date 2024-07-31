@@ -1,10 +1,13 @@
 package mvc.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -54,4 +57,57 @@ public class MainController {
 		rv.setUrl("https://www.codechef.com");
 		return rv;
 	} 
+	
+	/**
+	 * Here the id specified in the URL will get bind to the userid 
+	 * argument of the method.
+	 */
+	@RequestMapping("/userid/{id}/{name}")
+	public String fetchUserId(@PathVariable("id") int userid,@PathVariable("name") String username) {
+		System.out.println("User ID: "+userid+", User Name: "+username);
+		return "welcome";
+	}
+	
+
+	@RequestMapping("/string")
+	public String stringEvent() {
+		String st=null;
+		st.equalsIgnoreCase(""); // NullPointerException
+		return "welcome";
+	}
+	
+	/**
+	 * Defining a exception handler
+	 * for NullPointerException and IOException
+	 */
+	@ExceptionHandler({NullPointerException.class,IOException.class})
+	public ModelAndView exceptionHandlerMethod() {
+		ModelAndView mav=new ModelAndView();
+		mav.addObject("errorhandler","NullPointerException");
+		mav.setViewName("error");
+		return mav;
+	}
+	
+	@RequestMapping("/number")
+	public String integerEvent() {
+		String st="abc";
+		Integer.parseInt(st); //NumberFormatException
+		return "welcome";
+	}
+	/**
+	 * Defining NumberFormatException handler
+	 */
+	@ExceptionHandler(value=NumberFormatException.class)
+	public ModelAndView exceptionHandlerMethod1() {
+		ModelAndView mav=new ModelAndView();
+		mav.addObject("errorhandler","NumberFormatException");
+		mav.setViewName("error");
+		return mav;
+	}
+	
+	@RequestMapping("/maths")
+	public String arithmeticException() {
+		int a=1/0;
+		return "welcome";
+	}
 }

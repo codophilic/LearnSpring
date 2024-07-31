@@ -1356,6 +1356,175 @@ Redirected to codechef platform
 - The `redirect:/` prefix is simpler and more convenient for straightforward use cases where you only need to redirect to another URL.
 - `RedirectView` provides more control and flexibility, allowing for detailed configuration of the redirect process, such as setting custom HTTP status codes or handling model attributes in specific ways.
 
+- Lets say you developing an API which takes userid from URI example `https://organization/employee/userid/12345` . Suppose its is an APU url and user id is 12345, so using spring can you access this numerical id?, yes using `@PathVariable` annotation.
+- When we hit `http://localhost:8080/mvc/userid/34/harsh`, we get the output.
+
+```
+package mvc.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+/**
+ * Front Controller, this controller acts as a front controller in the MVC pattern
+ * If we add @RequestMapping on a class each endpoint url will have this handler url as prefix
+ * So example the url without it we were accessing -> http://localhost:8080/mvc/welcome
+ * Will change to http://localhost:8080/mvc/mypage/welcome
+ */
+@Controller
+//@RequestMapping("/mypage")
+public class MainController {
+
+	/**
+	 * Here the id specified in the URL will get bind to the userid 
+	 * argument of the method.
+	 */
+	@RequestMapping("/userid/{id}/{name}")
+	public String fetchUserId(@PathVariable("id") int userid,@PathVariable("name") String username) {
+		System.out.println("User ID: "+userid+", User Name: "+username);
+		return "welcome";
+	}
+}
+
+
+Output:
+User ID: 34, User Name: harsh
+```
+
+![alt text](image-17.png) 
+
+- The `@PathVariable` annotation in Spring MVC is used to extract values from the URI path in a request and bind them to method parameters in a controller. It allows you to handle dynamic parts of the URI, such as IDs or other path segments, in a type-safe manner.
+- This approach is commonly used in RESTful APIs where resources are identified by unique IDs, such as users, products, orders, etc.
+- Uptil now we have seen commonly used annotation in Spring MVC, but when the annotation binding fails does spring provides any exception handler? usually we write multiple try-catch blocks which can provide same exception for different methods, so can spring handle exception for all sort of methods? lets see `@ExceptionHandler` annotation.
+- Below is the MainController
+
+```
+package mvc.controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
+/**
+ * Front Controller, this controller acts as a front controller in the MVC pattern
+ * If we add @RequestMapping on a class each endpoint url will have this handler url as prefix
+ * So example the url without it we were accessing -> http://localhost:8080/mvc/welcome
+ * Will change to http://localhost:8080/mvc/mypage/welcome
+ */
+@Controller
+//@RequestMapping("/mypage")
+public class MainController {
+
+
+	@RequestMapping("/string")
+	public String stringEvent() {
+		String st=null;
+		st.equalsIgnoreCase(""); // NullPointerException
+		return "welcome";
+	}
+	
+	/**
+	 * Defining a exception handler
+	 * for NullPointerException and IOException
+	 */
+	@ExceptionHandler({NullPointerException.class,IOException.class})
+	public ModelAndView exceptionHandlerMethod() {
+		ModelAndView mav=new ModelAndView();
+		mav.addObject("errorhandler","NullPointerException");
+		mav.setViewName("error");
+		return mav;
+	}
+	
+	@RequestMapping("/number")
+	public String integerEvent() {
+		String st="abc";
+		Integer.parseInt(st); //NumberFormatException
+		return "welcome";
+	}
+	/**
+	 * Defining NumberFormatException handler
+	 */
+	@ExceptionHandler(value=NumberFormatException.class)
+	public ModelAndView exceptionHandlerMethod1() {
+		ModelAndView mav=new ModelAndView();
+		mav.addObject("errorhandler","NumberFormatException");
+		mav.setViewName("error");
+		return mav;
+	}
+}
+```
+
+![alt text](image-19.png)
+
+![alt text](image-18.png)
+
+
+- The `@ExceptionHandler` annotation is used to define a method that will handle specific exceptions thrown by controller methods. This allows you to encapsulate the exception handling logic in a dedicated method, improving code organization and readability.
+- When an exception is thrown in a controller method, Spring searches for an `@ExceptionHandler` method within the same controller that matches the exception type. If found, the `@ExceptionHandler` method is invoked, allowing you to handle the exception and return an appropriate response.
+- In the above code, the scope of exception handler was defined for a single controller, can we define a single exception handler across all controller? , yes using `@ControllerAdvice`.
+- So here we have AllExceptionHandler class.
+
+```
+package mvc.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+
+/**
+ * Generic Exception Handler for all controllers
+ */
+@ControllerAdvice
+public class AllExceptionHandler {
+
+	@ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(value=ArithmeticException.class)
+	public ModelAndView ArithmeticExceptionHandler() {
+		ModelAndView mav= new ModelAndView();
+		mav.setViewName("error");
+		mav.addObject("errorhandler","ArithmeticException");
+		return mav;
+	}
+}
+```
+
+- MainController class
+
+```
+	@RequestMapping("/maths")
+	public String arithmeticException() {
+		int a=1/0;
+		return "welcome";
+	}
+```
+
+![alt text](image-25.png)
+
+- `@ControllerAdvice` is a specialization of the `@Component` annotation, which allows you to handle exceptions across the whole application, not just within a single controller. It can be used to define global exception handling methods, data binding methods, and model attribute methods.
+- `@ControllerAdvice` classes can contain `@ExceptionHandler` methods that will be applied across all controllers in the application.
+Spring will search for a matching `@ExceptionHandler` method in the `@ControllerAdvice` class if no match is found within the controller itself.
+- Spring uses the following mechanism to determine which `@ExceptionHandler` method to call:
+	- Controller Level: First, Spring checks if there is a matching `@ExceptionHandler` method within the controller that threw the exception.
+	- ControllerAdvice Level: If no matching handler is found at the controller level, Spring looks for a suitable `@ExceptionHandler` method in `@ControllerAdvice` classes.
+	- Default Exception Handling: If no specific handler is found, Spring's default exception handling mechanism will take over, typically resulting in a generic error message.
+	- Inheritance Hierarchy: If multiple handlers could match, Spring chooses the one with the closest match in the inheritance hierarchy.
 
 
 # Spring MVC and ORM
