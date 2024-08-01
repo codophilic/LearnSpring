@@ -73,6 +73,10 @@
 		<mvc:mapping path="/welcome"/>
 		<bean class= "mvc.interceptor.MyHandlerClassInterceptorAdapter"/>
 	</mvc:interceptor>
+	<mvc:interceptor>
+		<mvc:mapping path="/welcome"/>
+		<bean class= "mvc.interceptor.MyHandlerInterceptor"/>
+	</mvc:interceptor>
 	<!-- Defining multiple interceptor for different URI
 		<mvc:interceptor>
 		<mvc:mapping path="/welcome"/>

@@ -10,7 +10,9 @@ public class MyHandlerClassInterceptorAdapter extends HandlerInterceptorAdapter{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		System.out.println("Inside Prehandle");
+		System.out.println("Inside Prehandle of MyHandlerClassInterceptorAdapter");
 		return true;
 	}
+	
+	
 }

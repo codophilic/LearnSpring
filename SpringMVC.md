@@ -1559,7 +1559,7 @@ public class MyHandlerClassInterceptorAdapter extends HandlerInterceptorAdapter{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		System.out.println("Inside Prehandle");
+		System.out.println("Inside Prehandle of MyHandlerClassInterceptorAdapter");
 		return true;
 	}
 }
@@ -1583,8 +1583,86 @@ public class MyHandlerClassInterceptorAdapter extends HandlerInterceptorAdapter{
 </mvc:interceptors>
 ```
 
-- When we hit the url `
+- When we hit the url `http://localhost:8080/mvc/welcome`.
 
+```
+Output:
+Inside Prehandle of MyHandlerClassInterceptorAdapter
+Returns page name welcome, thus /WEB-INF/pages/welcome.jsp
+```
+
+- Below are other methods.
+
+![alt text](image-26.png)
+
+- Lets try Handler Interceptor , so we have defined another class MyHandlerInterceptor
+
+```
+package mvc.interceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+public class MyHandlerInterceptor implements HandlerInterceptor{
+
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
+		System.out.println("Inside PreHandle of MyHandlerInterceptor");
+		return true;
+		
+	}
+	
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+			ModelAndView modelAndView) throws Exception {
+		System.out.println("Inside Posthandle of MyHandlerInterceptor");
+	}
+	
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+			throws Exception {
+		System.out.println("Inside afterCompletion of MyHandlerInterceptor");
+	}
+}
+```
+
+- Below is the configuration done for the same `/welcome` URI.
+
+```
+<!--  Interceptor -->
+<mvc:interceptors>
+	<mvc:interceptor>
+		<mvc:mapping path="/welcome"/>
+		<bean class= "mvc.interceptor.MyHandlerClassInterceptorAdapter"/>
+	</mvc:interceptor>
+	<mvc:interceptor>
+		<mvc:mapping path="/welcome"/>
+		<bean class= "mvc.interceptor.MyHandlerInterceptor"/>
+	</mvc:interceptor>
+	<!-- Defining multiple interceptor for different URI
+		<mvc:interceptor>
+		<mvc:mapping path="/welcome"/>
+		<bean class= "mvc.interceptor.MyHandlerClassInterceptorAdapter"/>
+	</mvc:interceptor>
+	 -->
+</mvc:interceptors>
+```
+
+```
+Output:
+Inside Prehandle of MyHandlerClassInterceptorAdapter
+Inside PreHandle of MyHandlerInterceptor
+Returns page name welcome, thus /WEB-INF/pages/welcome.jsp
+Inside Posthandle of MyHandlerInterceptor
+Inside afterCompletion of MyHandlerInterceptor
+```
+
+- **HandlerInterceptor**: Use this interface if you need to implement all or most of the methods, or if you want to implement a specific method that is not covered by HandlerInterceptorAdapter.
+- **HandlerInterceptorAdapter**: Use this class if you only need to override a few methods, as it provides a convenient way to avoid implementing unnecessary methods.
 
 # Spring MVC and ORM
 
