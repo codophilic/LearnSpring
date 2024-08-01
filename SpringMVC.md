@@ -1526,6 +1526,65 @@ Spring will search for a matching `@ExceptionHandler` method in the `@Controller
 	- Default Exception Handling: If no specific handler is found, Spring's default exception handling mechanism will take over, typically resulting in a generic error message.
 	- Inheritance Hierarchy: If multiple handlers could match, Spring chooses the one with the closest match in the inheritance hierarchy.
 
+- What if you wanted some filtertion or validation or log the request before it reaches out the controller? you require some intercepting layer before your request reaches out controller? we can achieve it using **Spring MVC Interceptor**.
+
+
+
+![alt text](<Spring Interceptor.jpg>)
+
+
+- In Spring MVC, an interceptor is a component that allows you to intercept HTTP requests and responses, much like a filter in the Servlet API. Interceptors provide a way to apply certain logic or operations before the request reaches the controller or after the response leaves the controller, without modifying the controller itself.
+
+#### Why Interceptors Are Required
+- Cross-Cutting Concerns: Interceptors are often used to handle cross-cutting concerns that are common across multiple controllers or endpoints. These concerns can include logging, security checks, performance monitoring, and more.
+
+- Pre-Processing and Post-Processing: They provide hooks to execute code before (pre-processing) and after (post-processing) the main processing logic of a request.
+
+- Centralized Logic: By using interceptors, you can centralize common logic in one place, making it easier to manage and modify without touching the business logic in the controllers.
+
+- In Spring MVC, Handler Interceptor ( interface ) and HandlerInterceptorAdapter ( abstract class ) are key components used to intercept HTTP requests and responses, allowing for pre-processing and post-processing logic. 
+
+- Lets us see the code, so we have created a new MyHandlerClassInterceptorAdapter which extends HandlerInterceptorAdapter
+
+```
+package mvc.interceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+public class MyHandlerClassInterceptorAdapter extends HandlerInterceptorAdapter{
+
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
+		System.out.println("Inside Prehandle");
+		return true;
+	}
+}
+```
+
+- Now which request should be intercept by the handler? there could be multiple URI for our applications right? so we need to define a configuration were we will mentioned that whenever the request is from `/welcome` (example) , handler should intercept it.
+
+```
+<!--  Interceptor -->
+<mvc:interceptors>
+	<mvc:interceptor>
+		<mvc:mapping path="/welcome"/>
+		<bean class= "mvc.interceptor.MyHandlerClassInterceptorAdapter"/>
+	</mvc:interceptor>
+	<!-- Defining multiple interceptor for different URI
+		<mvc:interceptor>
+		<mvc:mapping path="/welcome"/>
+		<bean class= "mvc.interceptor.MyHandlerClassInterceptorAdapter"/>
+	</mvc:interceptor>
+	 -->
+</mvc:interceptors>
+```
+
+- When we hit the url `
+
 
 # Spring MVC and ORM
 

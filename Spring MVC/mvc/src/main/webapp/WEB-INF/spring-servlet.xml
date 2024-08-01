@@ -4,12 +4,16 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
            http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/context 
            http://www.springframework.org/schema/context/spring-context.xsd
            http://www.springframework.org/schema/tx 
-           http://www.springframework.org/schema/tx/spring-tx.xsd">
+           http://www.springframework.org/schema/tx/spring-tx.xsd       
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+           >
 
     <!--  Enabling Component Scanning Annotations for all packages -->
 	<context:component-scan base-package="mvc"/> 
@@ -62,5 +66,19 @@
 		So example if Controller gives hello, then the ViewResolver returns the page /WEB-INF/pages/hello.jsp
 	 -->
 </bean>
+
+<!--  Interceptor -->
+<mvc:interceptors>
+	<mvc:interceptor>
+		<mvc:mapping path="/welcome"/>
+		<bean class= "mvc.interceptor.MyHandlerClassInterceptorAdapter"/>
+	</mvc:interceptor>
+	<!-- Defining multiple interceptor for different URI
+		<mvc:interceptor>
+		<mvc:mapping path="/welcome"/>
+		<bean class= "mvc.interceptor.MyHandlerClassInterceptorAdapter"/>
+	</mvc:interceptor>
+	 -->
+</mvc:interceptors>
 
 </beans>
