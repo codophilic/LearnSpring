@@ -1,6 +1,6 @@
 # About Spring MVC
 
-- [Learn about MVC first](Images/springmvc/https://github.com/codophilic/LearnSpring/blob/main/Architectures%20and%20Design%20Pattern.md).
+- [Learn about MVC first](https://github.com/codophilic/LearnSpring/blob/main/Architectures%20and%20Design%20Pattern.md).
 - Spring MVC is a sub-framework of Spring which is used to build web applications.
 - It is built on a Servlet API
 - Spring MVC provides additional component along with MVC design patterns.
