@@ -14,7 +14,9 @@
            http://www.springframework.org/schema/mvc
            http://www.springframework.org/schema/mvc/spring-mvc.xsd"
            >
-
+<!-- Configure static resource handling -->
+	<mvc:annotation-driven />
+	<mvc:resources mapping="/images/**" location="/images/" />
     <!--  Enabling Component Scanning Annotations for all packages -->
 	<context:component-scan base-package="mvc"/> 
 	<tx:annotation-driven />

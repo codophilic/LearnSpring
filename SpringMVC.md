@@ -1,12 +1,12 @@
 # About Spring MVC
 
-- [Learn about MVC first](https://github.com/codophilic/LearnSpring/blob/main/Architectures%20and%20Design%20Pattern.md).
+- [Learn about MVC first](Images/springmvc/https://github.com/codophilic/LearnSpring/blob/main/Architectures%20and%20Design%20Pattern.md).
 - Spring MVC is a sub-framework of Spring which is used to build web applications.
 - It is built on a Servlet API
 - Spring MVC provides additional component along with MVC design patterns.
 - Lets understand the Spring MVC flow.
 
-![alt text](image.png)
+![alt text](Images/springmvc/image.png)
 
 - Whenever client sents a request, the request first goes to the **Front Controller** (also known as **DispatcherServlet**). The Spring Web model-view-controller (MVC) framework is designed around a **DispatcherServlet**.
 - Now when the Front Controller gets a request, it delegates the request to a **Controller/Handler**. Now there could be multiple controllers whats why one way to understand is that we have a **Front Controller** decides to whom (Controller) it has to hand over the request, based on the URL mappings or **RequestMapping**. So lets say if client as enter `/getStudent` so the controller who manages the `/getStudent` url will be delegated by Front Controller.
@@ -153,15 +153,15 @@ Returns page name error, thus /WEB-INF/pages/error.jsp
 
 - Welcome page url : http://localhost:8080/mvc/welcome
 
-![alt text](image-1.png) 
+![alt text](Images/springmvc/image-1.png) 
 
 - Error page url : http://localhost:8080/mvc/error 
 
-![alt text](image-2.png)  
+![alt text](Images/springmvc/image-2.png)  
 
 - Default page url : http://localhost:8080/mvc/ 
 
-![alt text](image-3.png)
+![alt text](Images/springmvc/image-3.png)
 
 >[!IMPORTANT]
 > The default page url end-point does not have /index. If you add it , you will get recieve 404 tomcat error details page.
@@ -332,7 +332,7 @@ public class MainController {
 }
 ```
 
-![alt text](image-4.png) 
+![alt text](Images/springmvc/image-4.png) 
 
 - Hold on, similar approach is been seen when we take values from normal servlet class and feed those values in JSP. In Spring MVC the controller sents model as well as view right? the Controller passes the view and model to viewResolver, here above we are passing only model.
 - This is one of the approach to sent data to the viewResolver where the dynamic content is fetched from `request.getAttribute()`.
@@ -424,7 +424,7 @@ public class MainController {
 }
 ```
 
-![alt text](image-5.png) 
+![alt text](Images/springmvc/image-5.png) 
 
 - The Model object is used to add attributes to the model, which are then accessible in the view (such as a JSP) via request attributes. A method in a controller annotated with `@Controller` can have a Model parameter.
 - ModelAndView is a container for both the model and the view. It allows you to set both the view name and the model attributes in a single object.
@@ -512,7 +512,7 @@ public class MainController {
 }
 ```
 
-![alt text](image-6.png)
+![alt text](Images/springmvc/image-6.png)
 
 - Wait why aren't our list items not getting print out sequentially? for that we need to use JSTL
 - Lets us use JSTL (JavaServer Pages Standard Tag Library). So to use JSTL we need to download the dependencies and add this `<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>` to the top of the JSP page.
@@ -563,7 +563,7 @@ public class MainController {
 </html>
 ```
 
-![alt text](image-7.png)
+![alt text](Images/springmvc/image-7.png)
 
 - We have applied `@RequestMapping` on a method , what happens if we applied it on the class?, so the url which we were accessing will change to a new url which will consist of the RequestMapping url name.
 - See the below example
@@ -601,7 +601,7 @@ public class MainController {
 
 ```
 
-![alt text](image-8.png) 
+![alt text](Images/springmvc/image-8.png) 
 
 - If we add @RequestMapping on a class each endpoint url will have this handler url as prefix. 
 - So example the url without it we were accessing -> `http://localhost:8080/mvc/welcome` will change to `http://localhost:8080/mvc/mypage/welcome`
@@ -742,9 +742,9 @@ Email ID: hpandya301@gmail.com, User Name: Harsh, Password: hpandya301, Security
 </html>
 ```
 
-![alt text](image-9.png)
+![alt text](Images/springmvc/image-9.png)
 
-![alt text](image-10.png)
+![alt text](Images/springmvc/image-10.png)
 
 
 
@@ -968,9 +968,9 @@ public class FormController {
 
 - This works because Spring MVC automatically makes the model attributes available in the view under the key provided. The JSP uses the provided key (`user` in this case) to access the object's properties using standard JavaBean property conventions.
 
-![alt text](image-11.png) 
+![alt text](Images/springmvc/image-11.png) 
 
-![alt text](image-12.png) 
+![alt text](Images/springmvc/image-12.png) 
 
 - What if the form fields have large number of input parameters? you need to write multiple times the `RequestParam` right? we can avoid this using another annotation `@ModelAttribute`.
 - `@ModelAttribute` and `@RequestParam` are both annotations in Spring MVC used to bind HTTP request parameters to method arguments in controller methods, but they serve different purposes and are used in different contexts.
@@ -1093,9 +1093,9 @@ hpandya301@gmail.com
 </body>
 </html>
 ```
-![alt text](image-14.png)
+![alt text](Images/springmvc/image-14.png)
 
-![alt text](image-13.png) 
+![alt text](Images/springmvc/image-13.png) 
 
 - `@ModelAttribute` is used to bind multiple request parameters to a model object or method parameter. It's typically used when you have a form with multiple fields that correspond to properties of a Java object, and you want to bind all of them at once. 
 - `@ModelAttribute` annotation in Spring MVC binds form data, query parameters, or session attributes to Java objects. This annotation is useful when working with forms that have many fields, as it eliminates the need to manually extract each form parameter.
@@ -1241,9 +1241,9 @@ Output:
 </html>
 ```
 
-![alt text](image-15.png) 
+![alt text](Images/springmvc/image-15.png) 
 
-![alt text](image-16.png)
+![alt text](Images/springmvc/image-16.png)
 
 - **When `@ModelAttribute` used on a method (not as a parameter), @ModelAttribute indicates that the method should add one or more attributes to the model. These attributes are available to all handler methods in the controller and can be used in the view, the attributes set in the model is available to all the class**.
 - In the above example, the data is bind with model and it is accessible by any view. Here the data is randomly generated.
@@ -1337,21 +1337,21 @@ Redirected to codechef platform
 
 - **/redirectform** redirected to **/customer/create**
 
-![alt text](image-20.png) 
+![alt text](Images/springmvc/image-20.png) 
 
-![alt text](image-21.png) 
+![alt text](Images/springmvc/image-21.png) 
 
 - **/redirectviewform** redirected to **/customer/create** 
 
-![alt text](image-22.png) 
+![alt text](Images/springmvc/image-22.png) 
 
-![alt text](image-21.png)  
+![alt text](Images/springmvc/image-21.png)  
 
 - **/codechef** redicted to codechef platform.
 
-![alt text](image-23.png) 
+![alt text](Images/springmvc/image-23.png) 
 
-![alt text](image-24.png) 
+![alt text](Images/springmvc/image-24.png) 
 
 - The `redirect:/` prefix is simpler and more convenient for straightforward use cases where you only need to redirect to another URL.
 - `RedirectView` provides more control and flexibility, allowing for detailed configuration of the redirect process, such as setting custom HTTP status codes or handling model attributes in specific ways.
@@ -1398,7 +1398,7 @@ Output:
 User ID: 34, User Name: harsh
 ```
 
-![alt text](image-17.png) 
+![alt text](Images/springmvc/image-17.png) 
 
 - The `@PathVariable` annotation in Spring MVC is used to extract values from the URI path in a request and bind them to method parameters in a controller. It allows you to handle dynamic parts of the URI, such as IDs or other path segments, in a type-safe manner.
 - This approach is commonly used in RESTful APIs where resources are identified by unique IDs, such as users, products, orders, etc.
@@ -1469,9 +1469,9 @@ public class MainController {
 }
 ```
 
-![alt text](image-19.png)
+![alt text](Images/springmvc/image-19.png)
 
-![alt text](image-18.png)
+![alt text](Images/springmvc/image-18.png)
 
 
 - The `@ExceptionHandler` annotation is used to define a method that will handle specific exceptions thrown by controller methods. This allows you to encapsulate the exception handling logic in a dedicated method, improving code organization and readability.
@@ -1515,7 +1515,7 @@ public class AllExceptionHandler {
 	}
 ```
 
-![alt text](image-25.png)
+![alt text](Images/springmvc/image-25.png)
 
 - `@ControllerAdvice` is a specialization of the `@Component` annotation, which allows you to handle exceptions across the whole application, not just within a single controller. It can be used to define global exception handling methods, data binding methods, and model attribute methods.
 - `@ControllerAdvice` classes can contain `@ExceptionHandler` methods that will be applied across all controllers in the application.
@@ -1530,7 +1530,7 @@ Spring will search for a matching `@ExceptionHandler` method in the `@Controller
 
 
 
-![alt text](<Spring Interceptor.jpg>)
+![alt text](Images/springmvc/SpringInterceptor.jpg)
 
 
 - In Spring MVC, an interceptor is a component that allows you to intercept HTTP requests and responses, much like a filter in the Servlet API. Interceptors provide a way to apply certain logic or operations before the request reaches the controller or after the response leaves the controller, without modifying the controller itself.
@@ -1593,7 +1593,7 @@ Returns page name welcome, thus /WEB-INF/pages/welcome.jsp
 
 - Below are other methods.
 
-![alt text](image-26.png)
+![alt text](Images/springmvc/image-26.png)
 
 - Lets try Handler Interceptor , so we have defined another class MyHandlerInterceptor
 
@@ -1666,7 +1666,7 @@ Inside afterCompletion of MyHandlerInterceptor
 
 # Spring MVC and ORM
 
-- Lets create a actual form which takes input from page and saves those input details into database. Suppose we have registration form for a customer. Here we will use hibernate as ORM tool.
+- Lets create a actual form which takes input from page and saves those input details into database. Suppose we have IT portal form for a Students who will be registering to get placed in **MAANG** companies. Here we will use hibernate as ORM tool.
 - First lets download the dependencies using maven
 
 ```
@@ -1714,13 +1714,19 @@ Inside afterCompletion of MyHandlerInterceptor
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
            http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/context 
            http://www.springframework.org/schema/context/spring-context.xsd
            http://www.springframework.org/schema/tx 
-           http://www.springframework.org/schema/tx/spring-tx.xsd">
-
+           http://www.springframework.org/schema/tx/spring-tx.xsd       
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+           >
+<!-- Configure static resource handling -->
+	<mvc:annotation-driven />
+	<mvc:resources mapping="/images/**" location="/images/" />
     <!--  Enabling Component Scanning Annotations for all packages -->
 	<context:component-scan base-package="mvc"/> 
 	<tx:annotation-driven />
@@ -1751,7 +1757,7 @@ Inside afterCompletion of MyHandlerInterceptor
         <!-- Scanning for annotated entity classes -->
 	<property name="annotatedClasses">
 			<list>
-			<value>mvc.model.entities.Customer</value>
+			<value>mvc.model.entities.Student</value>
 			</list>
 			</property>    
 	</bean>
@@ -1772,130 +1778,215 @@ Inside afterCompletion of MyHandlerInterceptor
 		So example if Controller gives hello, then the ViewResolver returns the page /WEB-INF/pages/hello.jsp
 	 -->
 </bean>
-
 </beans>
 ```
-
-- Below is the customer object class.
+- `<mvc:resources mapping="/images/**" location="/images/" />`: This element configures the handling of static resources, such as images, CSS, JavaScript, and other static files, in your Spring MVC application.
+- **mapping**: Specifies the URL pattern that static resources will be served from. In this case, all requests that start with /images/ will be mapped to static resources.
+- **location**: Specifies the path where the static resources are located. The path is relative to the root of the web application. For example, `location="/images/"` means that the server will look for static resources in the images directory inside your web application's root like below.
+`
+```
+your-webapp/
+├── images/
+│   └── background.jpg
+├── WEB-INF/
+│   ├── web.xml
+│   ├── spring-mvc-config.xml
+│   └── views/
+│       └── your-jsp-file.jsp
+```
+- By including `<mvc:annotation-driven />` in your configuration, you enable the use of these annotations without needing to define the corresponding handler beans manually. It also integrates additional features like data binding, formatting, and validation.
+- Below is the Student & Address object class.
 
 ```
+Student Class
+
 package mvc.model.entities;
+
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
-@Entity(name = "customer_table")
-public class Customer {
+import org.springframework.format.annotation.DateTimeFormat;
+
+@Entity(name = "student_form_details")
+public class Student {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="customer_id")
-	private int custId;
+	@Column(name="unique_id")
+	private int uniqueId;
 	
-	@Column(name="first_name")
-	private String custfirtName;
+	@Column(name="student_name")
+	private String stdname;
 
-	@Column(name="last_name")
-	private String custlastName;
+	@Column(name="college_roll_number")
+	private long stdrollnum;
 	
-	@Column(name="user_name")
-	private String custuserName;
+	@DateTimeFormat(pattern="dd-MMMM-yyyy")
+	@Column(name="date_of_birth")
+	private Date stddatedob;
 	
-	@Column(name="password")
-	private String custpassword;
+
+    @ElementCollection
+    @CollectionTable(name="student_subjects_data", joinColumns = @JoinColumn(name="student_subjects_id"))
+    @Column(name="foreign_key_student_subjects_id")
+    private List<String> stdsubjects;
 	
-	@Column(name="address")
-	private String custaddress;
+	@Column(name="gender")
+	private String gender;
+
+	@Column(name="type")
+	private String stdtype;
+
+	@Column(name="foreign_key_address_id")
+	@Embedded
+	private Address studentAddress;
+
+	public int getUniqueId() {
+		return uniqueId;
+	}
+
+	public void setUniqueId(int uniqueId) {
+		this.uniqueId = uniqueId;
+	}
+
+	public String getStdname() {
+		return stdname;
+	}
+
+	public void setStdname(String stdname) {
+		this.stdname = stdname;
+	}
+
+	public long getStdrollnum() {
+		return stdrollnum;
+	}
+
+	public void setStdrollnum(long stdrollnum) {
+		this.stdrollnum = stdrollnum;
+	}
+
+	public Date getStddatedob() {
+		return stddatedob;
+	}
+
+	public void setStddatedob(Date stddatedob) {
+		this.stddatedob = stddatedob;
+	}
+
+	public List<String> getStdsubjects() {
+		return stdsubjects;
+	}
+
+	public void setStdsubjects(List<String> stdsubjects) {
+		this.stdsubjects = stdsubjects;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getStdtype() {
+		return stdtype;
+	}
+
+	public void setStdtype(String stdtype) {
+		this.stdtype = stdtype;
+	}
+
+	public Address getStudentAddress() {
+		return studentAddress;
+	}
+
+	public void setStudentAddress(Address studentAddress) {
+		this.studentAddress = studentAddress;
+	}
 	
-	@Column(name="contact")
-	private String custcontact;
+	
+	
+}
 
-	public int getCustId() {
-		return custId;
+
+
+Address Class
+
+package mvc.model.entities;
+
+import javax.persistence.Embeddable;
+
+@Embeddable
+public class Address {
+
+	private String addressline1;
+	
+	private String addressline2;
+
+	public String getAddressline1() {
+		return addressline1;
 	}
 
-	public void setCustId(int custId) {
-		this.custId = custId;
+	public void setAddressline1(String addressline1) {
+		this.addressline1 = addressline1;
 	}
 
-	public String getCustfirtName() {
-		return custfirtName;
+	public String getAddressline2() {
+		return addressline2;
 	}
 
-	public void setCustfirtName(String custfirtName) {
-		this.custfirtName = custfirtName;
-	}
-
-	public String getCustlastName() {
-		return custlastName;
-	}
-
-	public void setCustlastName(String custlastName) {
-		this.custlastName = custlastName;
-	}
-
-	public String getCustuserName() {
-		return custuserName;
-	}
-
-	public void setCustuserName(String custuserName) {
-		this.custuserName = custuserName;
-	}
-
-	public String getCustpassword() {
-		return custpassword;
-	}
-
-	public void setCustpassword(String custpassword) {
-		this.custpassword = custpassword;
-	}
-
-	public String getCustaddress() {
-		return custaddress;
-	}
-
-	public void setCustaddress(String custaddress) {
-		this.custaddress = custaddress;
-	}
-
-	public String getCustcontact() {
-		return custcontact;
-	}
-
-	public void setCustcontact(String custcontact) {
-		this.custcontact = custcontact;
+	public void setAddressline2(String addressline2) {
+		this.addressline2 = addressline2;
 	}
 	
 	
 }
 ```
+
+- `@ElementCollection`: This annotation is used to define a collection of basic types (like String, Integer, etc.) or embeddable types in JPA. It indicates that the collection of elements is not a separate entity but a part of the entity to which it belongs.
+- In this case, stdsubjects is a List<String>, and the `@ElementCollection` annotation specifies that this list should be stored in a separate table rather than in the main entity table.
+- `@CollectionTable`: This annotation specifies the details of the table that will store the collection elements. It includes the table name and the join columns used to map the collection elements to the owning entity.
+- `name="student_subjects_data"`: This defines the name of the table that will store the collection elements (List<String> items in stdsubjects).
+- `joinColumns = @JoinColumn(name="student_subjects_id")`: This specifies the column in the `student_subjects_data` table that will be used to join the table to the owning entity's table. The `name="student_subjects_id"` indicates the name of the foreign key column in the `student_subjects_data` table that links to the primary key of the owning entity's table.
+- For example, if a Student entity has an ID of 1 and subjects ["Math", "Science"], the `student_subjects_data` table might look like this:
+
+
+
+| student_subjects_id | foreign_key_student_subjects_id |
+| ------------------- | ------------------------------- |
+| 1                   | Math                            |
+| 1                   | Science                         |
+
 
 - Below is the Dao interface and its implementation
 
 ```
-Inteface:
+Interface:
 
 package mvc.dao;
 
-import mvc.model.entities.Customer;
+import mvc.model.entities.Student;
 
-public interface CustomerDao {
+public interface StudentDao {
 
-	public int insert(Customer cust);
+	public int insert(Student student);
 }
 
 
-Interface Implementation:
-
+Implementation:
 package mvc.dao;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import mvc.model.entities.Customer;
+import mvc.model.entities.Student;
 
 @Repository
-public class CustomerDaoImpl implements CustomerDao{
+public class StudentDaoImpl implements StudentDao{
 	
 	/*
 	 * Injecting Dependencies
@@ -1911,8 +2002,8 @@ public class CustomerDaoImpl implements CustomerDao{
 		this.factory = factory;
 	}
 
-	public int insert(Customer cust) {
-		int rowsAffected=(int) factory.getCurrentSession().save(cust);
+	public int insert(Student student) {
+		int rowsAffected=(int) factory.getCurrentSession().save(student);
 		System.out.println("Rows affected -"+rowsAffected);
 		return rowsAffected;
 	}
@@ -1921,29 +2012,29 @@ public class CustomerDaoImpl implements CustomerDao{
 }
 ```
 
-- Below is the Service layer interface and its implementation
+- Below service layer
 
 ```
-Inteface:
+Interface:
 package mvc.service;
 
-import mvc.model.entities.Customer;
+import mvc.model.entities.Student;
 
-public interface CustomerService {
+public interface StudentService {
 
-	public int insert(Customer cust);
+	public int insert(Student student);
 }
 
 
-Interface Implementation:
+Implementation:
 package mvc.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import mvc.dao.CustomerDao;
-import mvc.model.entities.Customer;
+import mvc.dao.StudentDao;
+import mvc.model.entities.Student;
 
 
 /**
@@ -1951,24 +2042,24 @@ import mvc.model.entities.Customer;
  */
 @Service
 @Transactional
-public class CustomerServiceImpl implements CustomerService {
+public class StudentServiceImpl implements StudentService {
 	
 	/**
 	 * Injecting Dependencies
 	 */
 	@Autowired
-	private CustomerDao customerDao;
+	private StudentDao studentDao;
 
-	public CustomerDao getCustomerDao() {
-		return customerDao;
+	public StudentDao getStudentDao() {
+		return studentDao;
 	}
 
-	public void setCustomerDao(CustomerDao customerDao) {
-		this.customerDao = customerDao;
+	public void setStudentDao(StudentDao studentDao) {
+		this.studentDao = studentDao;
 	}
 
-	public int insert(Customer cust) {
-		return customerDao.insert(cust);
+	public int insert(Student student) {
+		return studentDao.insert(student);
 	}
 
 	
@@ -1984,92 +2075,173 @@ public class CustomerServiceImpl implements CustomerService {
 - Clearly defines the role of a class within the application architecture. Improves code readability and understanding.
 - One of the key benefits of `@Repository` is that it provides a mechanism for exception translation. Spring automatically converts database-related exceptions into Spring's DataAccessException hierarchy. This makes the data access layer less coupled to the underlying persistence technology.
 
-- So we have defined our dao and service layer, lets define two jsp files one will be for customer form and one will be registered success form.
+- Below are the JSP files
 
 ```
-customer-form.jsp
+student-form.jsp
 
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
- pageEncoding="ISO-8859-1"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
-
-<!DOCTYPE html>
-<html>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-<!-- https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<link href="${contextPath}/resource/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <title>IT Application Form</title>
+    <style>
+        body {
+	        background-image: url('<c:url value="/images/background.jpg" />');
+	        background-repeat: no-repeat;
+	        background-size: cover;
+	        background-position: center;
+	        background-attachment: fixed;
+        }
+        .card {
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            background: #cccccc;
+        }
+        .card-body {
+            padding: 2rem;
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #ced4da;
+        }
+        .btn-primary {
+            border-radius: 10px;
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+        .form-check-label {
+            margin-left: 0.5rem;
+            color: #333;
+        }
+        .form-group input[type="text"], .form-group input[type="date"], .form-group select {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+    </style>
 </head>
 <body>
- <div class="container">
-  <h1>Customer Register Form for Business:</h1>
-  <div class="card">
-   <div class="card-body">
-    <form action="register" method="post">
 
-     <div class="form-group row">
-      <label class="col-sm-2 col-form-label">First
-       Name</label>
-      <div class="col-sm-7">
-       <input type="text" class="form-control" name="custfirtName"
-        placeholder="Enter first name">
-      </div>
-     </div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="text-center mb-4">IT Application Form for Students,path variable, adding images, error handling</h3>
+                    <form action="register" method="post">
+                        <div class="form-group">
+                            <label for="stdname">Your Name</label>
+                            <input name="stdname" type="text" class="form-control" id="stdname" placeholder="Enter Name">
+                        </div>
 
-     <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Last
-       Name</label>
-      <div class="col-sm-7">
-       <input type="text" class="form-control" name="custlastName"
-        placeholder="Enter last name">
-      </div>
-     </div>
+                        <div class="form-group">
+                            <label for="stdrollnum">Your College Roll Number</label>
+                            <input name="stdrollnum" type="text" class="form-control" id="stdrollnum" placeholder="Enter Roll Number">
+                        </div>
 
-     <div class=" form-group row">
-      <label class="col-sm-2 col-form-label">User
-       Name</label>
-      <div class="col-sm-7">
-       <input type="text" class="form-control" name="custuserName"
-        placeholder="Enter user name">
-      </div>
-     </div>
+                        <div class="form-group">
+                            <label for="dob">Your DOB</label>
+                            <input name="stddatedob" type="text" class="form-control" id="dob" placeholder="dd-MM-yyyy">
+                        </div>
 
-     <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Password</label>
-      <div class="col-sm-7">
-       <input type="password" class="form-control" name="custpassword"
-        placeholder="Enter Password">
-      </div>
-     </div>
+                        <div class="form-group">
+                            <label for="stdsubjects">Select Courses</label>
+                            <select name="stdsubjects" class="form-control" id="stdsubjects" multiple>
+                                <option>Java</option>
+                                <option>Python</option>
+                                <option>C++</option>
+                                <option>Spring</option>
+                                <option>Hibernate</option>
+                            </select>
+                        </div>
 
-     <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Address</label>
-      <div class="col-sm-7">
-       <input type="text" class="form-control" name="custaddress"
-        placeholder="Enter Address">
-      </div>
-     </div>
+                        <div class="form-group">
+                            <span class="mr-3">Select Gender</span>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="male">
+                                <label class="form-check-label" for="inlineRadio1">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="female">
+                                <label class="form-check-label" for="inlineRadio2">Female</label>
+                            </div>
+                        </div>
 
-     <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Contact
-       No</label>
-      <div class="col-sm-7">
-       <input type="text" class="form-control" name="custcontact"
-        placeholder="Enter Contact Address">
-      </div>
-     </div>
+                        <div class="form-group">
+                            <label for="stdtype">Select Type</label>
+                            <select class="form-control" name="stdtype" id="stdtype">
+                                <option value="oldstudent">Old Student</option>
+                                <option value="normalstudent">Normal Student</option>
+                            </select>
+                        </div>
 
-     <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-   </div>
-  </div>
- </div>
+                        <div class="card mt-4">
+                            <div class="card-body">
+                                <p>Your Address</p>
+                                <div class="form-group">
+                                    <input name="studentAddress.addressline1" type="text" class="form-control" id="addressline1" placeholder="Address Line 1">
+                                </div>
+                                <div class="form-group">
+                                    <input name="studentAddress.addressline2" type="text" class="form-control" id="addressline2" placeholder="Address Line 2">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery and Bootstrap Bundle (includes Popper) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+    crossorigin="anonymous"></script>
+
+<script>
+    $(function() {
+        $("#dob").datepicker({
+            dateFormat: "dd-MM-yy",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-100:+0"
+        });
+    });
+</script>
 </body>
 </html>
+
 
 registered-success.jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -2082,12 +2254,12 @@ registered-success.jsp
 <title>Insert title here</title>
 </head>
 <body>
-<h1> Login Successful for user ${customer.custfirtName } </h1>
+<h1> Login Successful for user ${student.stdname } , your address is ${student.studentAddress.addressline1 }</h1>
 </body>
 </html>
 ```
 
-lets define a controller for the customer form.
+- Below is the StudentController class
 
 ```
 package mvc.controller;
@@ -2102,30 +2274,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import mvc.model.entities.Customer;
-import mvc.service.CustomerService;
+import mvc.model.entities.Student;
+import mvc.service.StudentService;
 
 @Controller
-@RequestMapping("/customer")
-public class CustomerController {
+@RequestMapping("/student")
+public class StudentController {
 	
 	@Autowired
-	private CustomerService customerService;
+	private StudentService customerService;
 	
-	public CustomerService getCustomerService() {
+	public StudentService getCustomerService() {
 		return customerService;
 	}
 
-	public void setCustomerService(CustomerService customerService) {
+	public void setCustomerService(StudentService customerService) {
 		this.customerService = customerService;
 	}
 
 	@ModelAttribute
 	public void welcomeMsg(Model model) {
 		  String[] messages = {
-		            "Hello, welcome to the portal",
-		            "Greetings, welcome to the portal",
-		            "Hi, welcome to the portal"};
+		            "Hello, welcome to the IT portal",
+		            "Greetings, welcome to the IT portal",
+		            "Hi, welcome to the IT portal"};
 		  Random random = new Random();
 		  int index = random.nextInt(messages.length);
 		  String randomMessage = messages[index];
@@ -2134,10 +2306,11 @@ public class CustomerController {
 
 	@RequestMapping(path = "/register",method = RequestMethod.POST)
 	public ModelAndView register(
-		@ModelAttribute Customer customer 
+		@ModelAttribute Student student 
 			) {
+		System.out.println("Student Bind details: "+student);
 		ModelAndView mav=new ModelAndView();
-		int result=customerService.insert(customer);
+		int result=customerService.insert(student);
 		if(result!=1) {
 			mav.addObject("registrationMsg","unsuccessful");
 		}
@@ -2150,23 +2323,11 @@ public class CustomerController {
 	
 	@RequestMapping("/create")
 	public String create() {
-		return "customer-form";
+		return "student-form";
 	}
 }
 
 Output:
-Hibernate: 
-    
-    create table customer_table (
-       customer_id integer not null,
-        address varchar(255),
-        contact varchar(255),
-        first_name varchar(255),
-        last_name varchar(255),
-        password varchar(255),
-        user_name varchar(255),
-        primary key (customer_id)
-    ) engine=InnoDB
 Hibernate: 
     
     create table hibernate_sequence (
@@ -2175,6 +2336,32 @@ Hibernate:
 Hibernate: 
     
     insert into hibernate_sequence values ( 1 )
+Hibernate: 
+    
+    create table student_form_details (
+       unique_id integer not null,
+        gender varchar(255),
+        date_of_birth datetime(6),
+        student_name varchar(255),
+        college_roll_number bigint,
+        type varchar(255),
+        addressline1 varchar(255),
+        addressline2 varchar(255),
+        primary key (unique_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table student_subjects_data (
+       student_subjects_id integer not null,
+        foreign_key_student_subjects_id varchar(255)
+    ) engine=InnoDB
+Hibernate: 
+    
+    alter table student_subjects_data 
+       add constraint FK938ff9j5qoc7knp703nn00d20 
+       foreign key (student_subjects_id) 
+       references student_form_details (unique_id)
+Student Bind details: mvc.model.entities.Student@1a50b37f
 Hibernate: 
     select
         next_val as id_val 
@@ -2192,20 +2379,41 @@ Rows affected -1
 Hibernate: 
     insert 
     into
-        customer_table
-        (address, contact, first_name, last_name, password, user_name, customer_id) 
+        student_form_details
+        (gender, date_of_birth, student_name, college_roll_number, type, addressline1, addressline2, unique_id) 
     values
-        (?, ?, ?, ?, ?, ?, ?)
+        (?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        student_subjects_data
+        (student_subjects_id, foreign_key_student_subjects_id) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        student_subjects_data
+        (student_subjects_id, foreign_key_student_subjects_id) 
+    values
+        (?, ?)
+Hibernate: 
+    insert 
+    into
+        student_subjects_data
+        (student_subjects_id, foreign_key_student_subjects_id) 
+    values
+        (?, ?)
 ```
 
+![alt text](Images/springmvc/image-27.png)
 
 
+![alt text](Images/springmvc/image-28.png)
 
 
+- DB Output
 
+![alt text](Images/springmvc/image-29.png)
 
-
-
-
-
-
+![alt text](Images/springmvc/image-30.png) 

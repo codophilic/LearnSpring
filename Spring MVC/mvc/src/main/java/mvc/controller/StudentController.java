@@ -31,9 +31,9 @@ public class StudentController {
 	@ModelAttribute
 	public void welcomeMsg(Model model) {
 		  String[] messages = {
-		            "Hello, welcome to the portal",
-		            "Greetings, welcome to the portal",
-		            "Hi, welcome to the portal"};
+		            "Hello, welcome to the IT portal",
+		            "Greetings, welcome to the IT portal",
+		            "Hi, welcome to the IT portal"};
 		  Random random = new Random();
 		  int index = random.nextInt(messages.length);
 		  String randomMessage = messages[index];

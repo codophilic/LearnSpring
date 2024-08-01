@@ -1,13 +1,11 @@
 package mvc.model.entities;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Entity(name = "student_form_details")
 public class Student {

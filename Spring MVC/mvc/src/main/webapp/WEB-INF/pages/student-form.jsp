@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,13 +18,17 @@
     <title>IT Application Form</title>
     <style>
         body {
-            background: #f0f2f5;
+	        background-image: url('<c:url value="/images/background.jpg" />');
+	        background-repeat: no-repeat;
+	        background-size: cover;
+	        background-position: center;
+	        background-attachment: fixed;
         }
         .card {
             border-radius: 15px;
             border: none;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            background: #ffffff;
+            background: #cccccc;
         }
         .card-body {
             padding: 2rem;
