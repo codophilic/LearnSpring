@@ -48,6 +48,27 @@
 - In the online shopping cart example, let us consider transaction as our aspect which is require to be implemented post calculation of total amount. How will the transaction aspect will know where to be called and when to be call while execution of calculation of total amount? thats why AOP has concepts of JoinPoint, Advice, Weaving and Pointcut which determine where and when the transaction aspect should be executed.
 - AOP is implemented by multiple frameworks but commonly used are AspectJ and Spring.
 
+## AOP Core Concepts
+
+![image](https://github.com/user-attachments/assets/3a92b7bb-236a-4695-b7b1-4c7edd469685)
+
+
+1. **Join Point:**
+  - In online shopping cart. Every action you take on the cart is a potential join point. This could be adding an item, removing an item, checking out, applying a discount, etc. These are specific moments in the shopping cart's lifecycle where something could happen.
+  - A join point represents a specific point during the execution of a program.
+2. **Pointcut:**
+    - A pointcut is an expression that determines where advice should be applied in the application.
+    - A pointcut is like a filter that selects which join points you're interested in. If you only want to apply a discount when the cart total exceeds a certain amount, your pointcut would be "cart total greater than 1000". This filter will only activate the advice when the cart total meets this condition.
+3. **Advice**
+    - Advice is the action you want to take at the selected join points out of all set of join points. In our shopping cart example, the advice could be applying a 10% discount to the cart total. This action will be executed whenever the pointcut condition is met (cart total greater than 1000).
+4. **Weaving**
+  - The process of combining the transaction management aspect with the checkout method. This can be imagined as weaving threads together to create a fabric.
+  - Weaving is the process of integrating or combining core concepts (like the main business logic) with aspect units (like cross-cutting concerns such as transaction management, logging, or security).
+  - In Spring, weaving can be accomplished through either compile-time or runtime weaving.
+    - Compile-Time: The process of integrating aspects into the application code during the compilation process. The resulting code already includes the aspect logic.
+    - Run-Time: The process of integrating aspects into the application code at runtime using dynamic proxies. The aspect logic is added on the fly when the application is running.
+    - Spring AOP primarily uses runtime weaving. This means that the aspects are applied to your application's objects when they are created and used. This offers flexibility as you can modify aspects without recompiling the entire application. However, it might have a slight performance overhead compared to compile-time weaving.
+
 ## Spring AOP
 
 
