@@ -2835,7 +2835,7 @@ Container has been closed and I'm the destroy() method
 
 - Finally, we would build and package our application using Maven, which would create a deployable artifact that can be run on a server.
 
-- Now lets learn about [Spring JDBC](https://github.com/codophilic/LearnSpring/blob/main/Spring%20%JDBC.md)
+- Now lets learn about [Spring JDBC](https://github.com/codophilic/LearnSpring/blob/main/Spring%20JDBC.md)
 
 
 
