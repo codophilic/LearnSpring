@@ -430,7 +430,7 @@ Student [id=1, name=Harsh, city=Mumbai]
 - A RowMapper is an interface that defines how rows from a ResultSet are mapped to a specific type of object. It is commonly used to convert each row of a SQL query result into an instance of a class, providing a convenient way to handle the data retrieved from the database.
 - The RowMapper interface is useful because it abstracts the process of extracting data from the ResultSet and converting it into the desired type. This not only makes the code more readable but also allows for reuse and better separation of concerns.
 
-- Now lets learn [Spring ORM](https://github.com/codophilic/LearnSpring/blob/main/Spring%20%ORM.md)
+- Now lets learn [Spring ORM](https://github.com/codophilic/LearnSpring/blob/main/Spring%20ORM.md)
 
 
 
