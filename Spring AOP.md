@@ -45,5 +45,10 @@
 
 ![image](https://github.com/user-attachments/assets/30766a4b-f0e9-4bd2-8eb8-6b6c3ab9ea90)
 
+- In the online shopping cart example, let us consider transaction as our aspect which is require to be implemented post calculation of total amount. How will the transaction aspect will know where to be called and when to be call while execution of calculation of total amount? thats why AOP has concepts of JoinPoint, Advice, Weaving and Pointcut which determine where and when the transaction aspect should be executed.
+- AOP is implemented by multiple frameworks but commonly used are AspectJ and Spring.
+
+## Spring AOP
+
 
 
