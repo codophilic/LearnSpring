@@ -470,3 +470,5 @@ Deleted row - 1
 - Exception Handling: Spring ORM translates Hibernate-specific exceptions into a consistent set of data access exceptions. This abstraction allows for a consistent approach to error handling, regardless of the underlying ORM tool.
 - Integration with Spring Context: Spring ORM seamlessly integrates Hibernate into the Spring Application Context, allowing Hibernate sessions and transactions to be managed as beans. This enables the use of dependency injection for configuration and resource management.
 - Support for Hibernate's Native API and JPA: Spring ORM supports both Hibernate's native API and Java Persistence API (JPA), giving developers the flexibility to choose the approach that best fits their needs.
+
+- Lets learn about [Spring MVC](https://github.com/codophilic/LearnSpring/blob/main/SpringMVC.md)
