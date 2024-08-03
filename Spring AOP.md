@@ -14,14 +14,36 @@
 - So which is better? to have a generalize layer rights which deals with all the users shopping cart , that is AOP.
 - **AOP helps manage cross-cutting concerns—tasks ( like payments, logging, applying discounts etc..) that affect multiple parts (individual users) of an application—separately from the main logic (core features like adding or removing items from the cart)**.
 - **Think of it as handling additional tasks (cross-cutting concerns) like logging user actions, checking inventory, and applying discounts. AOP allows you to define these tasks separately and automatically weave them into the shopping cart operations where needed.**
+- **This cross-cutting concerns are referred as aspect**
+
 
 ![image](https://github.com/user-attachments/assets/f457afe9-98fc-457f-920b-977c5f7f8853)
 
+- As per the defination it seems we would have a separate class which will consists of method and those method can be manually called before/after of execution of core functionalities, so what's the big difference without AOP?
 
+### Manual Handling vs. AOP
+- **Manual Handling Approach**:
+  - Code Clutter: When you manually handle cross-cutting concerns, you have to explicitly call the methods for logging, security checks, transaction management, etc., within your main business logic. This leads to repetitive and cluttered code.
+  - Tight Coupling: Your business logic becomes tightly coupled with cross-cutting concerns. Any change in the logging or security mechanism would require changes in multiple places.
+  - Scalability Issues: As your application grows, managing these concerns manually can become cumbersome and error-prone.
 
+- **AOP Approach**:
+  - Separation of Concerns: AOP cleanly separates cross-cutting concerns from the main business logic. Aspects are defined separately and applied declaratively, making the core logic cleaner and more maintainable.
+  - Reduced Code Duplication: You define an aspect (e.g., logging) once, and it can be applied to multiple methods or classes without duplicating the logging code in each place.
+  - Loose Coupling: Your business logic remains independent of the cross-cutting concerns, allowing changes to aspects without modifying the core logic.
+  - Dynamic Weaving: AOP allows you to dynamically apply or change aspects at runtime without altering the existing codebase.
+ 
+- AOP improves the organization of your code by keeping different types of functionality separate, reducing repeated code, and making your main business logic clearer and easier to manage. It enhances modularity by separating concerns, reduces code duplication, and promotes cleaner and more focused core logic. 
 
+## AOP VS OOP
+#### Object-Oriented Programming (OOP):
+- OOP is a programming paradigm that focuses on creating objects that represent entities and their behaviors. Considering online shopping car example,
+  - Encapsulation: In the shopping cart example, encapsulation would mean bundling data (items, quantities) and methods (addItem, removeItem, calculateTotal) into the ShoppingCart class.
+  - Inheritance: If there are different types of shopping carts (e.g., GuestCart, MemberCart or PremiumCart), they could inherit from a base ShoppingCart class.
+  - Polymorphism: Different types of discounts (e.g., percentage-based, buy-one-get-one-free) can be applied in a polymorphic way.
+- In OOP all the cross-cutting concerns and core functionalities are intermixed in some class which creates duplication of code. This is avoided in AOP thus providing modularity or seperation of concerns.
 
-
+![image](https://github.com/user-attachments/assets/30766a4b-f0e9-4bd2-8eb8-6b6c3ab9ea90)
 
 
 
