@@ -17,7 +17,9 @@
 ![image](https://github.com/user-attachments/assets/56326cdd-b739-473d-b180-f33de8517e3a)
 
 - OWASP release top 10 security measure every 4 years, which states new security measure or any update in existing. So referring all such security measure you need to implement in your application making it robust from any kind of attacks.
+- So one can implement manually all these security controls or we have spring security which has built-in measure for most of the securities aspects.
 
+# About Spring Security
 
 
 
