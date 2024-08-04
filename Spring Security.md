@@ -24,15 +24,105 @@
 - Lets say you are building a web application which consist of private pages. These private pages will be accessible only to particular user, now to make a page you need to have a login page.
 - Now when you are designing your page you need to main the user details, typically name and password, so now you require database, but do you will save it in plain text? nope, you would have encryption or SHA-256 logic but even after that such methods were hack, so we have LDAP, OAuth and other login security controlls.
 - Spring provides bundle of this as its in-build methods.
-- Lets do some codes, first lets download only spring dependencies.
+- Lets create a spring mvc project, first lets download only spring dependencies and use java beans for spring based configuration.
 
 ```
-
-
-
+  <dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-webmvc</artifactId>
+    <version>5.2.4.RELEASE</version>
+</dependency>
 ```
 
+- Below is the Spring configuration using Java beans, this is like a spring-servlet.xml
 
+```
+package security;
+
+import org.springframework.context.annotation.*;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+@Configuration
+@ComponentScan( basePackages = "security")
+@EnableWebMvc
+public class SpringConfiguration implements WebMvcConfigurer{
+
+    // Creating InternalResourceViewResolver bean 
+    @Bean
+    public ViewResolver getInternalResourceViewResolver(){ 
+        InternalResourceViewResolver viewResolver 
+            = new InternalResourceViewResolver(); 
+        
+        // setting prefix and suffix to the path & extension 
+        viewResolver.setPrefix("/WEB-INF/pages/"); 
+        viewResolver.setSuffix(".jsp"); 
+        return viewResolver; 
+    }
+}
+```
+
+- Here we are not writting anything in web.xml file , we will be creating a class of WebXML
+
+```
+package security.config;
+
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import security.SpringConfiguration;
+
+// This class serves as a replacement for the traditional web.xml file. 
+// It initializes the Spring DispatcherServlet and specifies the configuration classes.
+
+public class WebXML extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    // This method returns the configuration classes for the root application context.
+    // The root application context typically contains beans that are shared across the entire application.
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[] { SpringConfiguration.class }; //spring-servlet.xml
+    }
+
+    // This method returns the configuration classes for the DispatcherServlet application context.
+    // Since it returns null here, it means all configurations are provided by the root context.
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return null;
+    }
+
+    // This method specifies the URL patterns that the DispatcherServlet will be mapped to.
+    // In this case, it maps the DispatcherServlet to the root URL pattern ("/"),
+    // meaning it will handle all incoming requests.
+    @Override
+    protected String[] getServletMappings() {
+        return new String[] { "/" };
+    }
+}
+```
+
+- Below is the main controller 
+
+```
+package security;
+
+import org.springframework.stereotype.*;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+public class MainController {
+
+	@RequestMapping("/welcome")
+	public String welcomePage() {
+		return "welcome";
+	}
+}
+```
+
+- Post execution when we hit the url `http://localhost:8080/security/welcome` we get below output.
+
+![alt text](image.png)
 
 
 
