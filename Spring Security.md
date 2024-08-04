@@ -18,9 +18,19 @@
 
 - OWASP release top 10 security measure every 4 years, which states new security measure or any update in existing. So referring all such security measure you need to implement in your application making it robust from any kind of attacks.
 - So one can implement manually all these security controls or we have spring security which has built-in measure for most of the securities aspects.
+- Reference [video](https://www.youtube.com/watch?v=2tf0UY6gV3Y)
 
 # About Spring Security
+- Lets say you are building a web application which consist of private pages. These private pages will be accessible only to particular user, now to make a page you need to have a login page.
+- Now when you are designing your page you need to main the user details, typically name and password, so now you require database, but do you will save it in plain text? nope, you would have encryption or SHA-256 logic but even after that such methods were hack, so we have LDAP, OAuth and other login security controlls.
+- Spring provides bundle of this as its in-build methods.
+- Lets do some codes, first lets download only spring dependencies.
 
+```
+
+
+
+```
 
 
 
