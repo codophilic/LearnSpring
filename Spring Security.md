@@ -34,7 +34,7 @@
 </dependency>
 ```
 
-- Below is the Spring configuration using Java beans, this is like a spring-servlet.xml
+- Below is the Spring configuration using Java beans, this is like a spring-servlet.xml like we have seen in [Spring MVC](https://github.com/codophilic/LearnSpring/blob/main/Spring%20MVC.md)
 
 ```
 package security;
