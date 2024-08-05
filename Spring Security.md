@@ -24,6 +24,39 @@
 - Lets say you are building a web application which consist of private pages. These private pages will be accessible only to particular user, now to make a page you need to have a login page.
 - Now when you are designing your page you need to main the user details, typically name and password, so now you require database, but do you will save it in plain text? nope, you would have encryption or SHA-256 logic but even after that such methods were hack, so we have LDAP, OAuth and other login security controlls.
 - Spring provides bundle of this as its in-build methods.
+- Before diving into technical part first let us understand spring security flow.
+
+![image](https://github.com/user-attachments/assets/4081df6e-95c1-4efa-a5bb-59bd546b7625)
+
+- Spring security maintain a chain of filters for doing authentication and authorization. It has filters for providing different features and they are arranged in a predefined order e.g. it has got a ConcurrentSessionFilter to prevent concurrent sessions from same user.
+- Authentication means who you are ? whereas Authorization means i know you but what is your role (admin, user, staff etc.) to access this page ?
+- In order to enable Spring security in your Java web application, you need to declare this **DelegatingFilterProxy** filter in your **web.xml**, just like any other filter but you must specify the name as **springSecurityFilterChain**. The name is very important because the **DelegatingFilterProxy** which implements FilterChain interface delegates request to filter named **springSecurityFilterChain**.
+- Spring security layers are the filters or interceptors which performs security checks using FilterChainProxy and different security filters mentioned.
+- When an HTTP request hit the web-server it is handed over to **DelegatingFilterProxy** because its generally configured to intercept all request by specifying wild card (*) in its url-pattern. The DelegatingFilterProxy then pass this request to all the filters which are part of springSecurityFilterChain.
+
+### Spring Security Flow
+- **Client Request**: A client sends a request to the Spring Boot application.
+- **Servlet Container**: The embedded servlet container (e.g., Tomcat) receives the request.
+- **DelegatingFilterProxy**:
+	-  DelegatingFilterProxy is a special type of filter that acts as a bridge between the servlet container and the Spring application context.
+	- It delegates the actual work of handling the security-related request to a Spring-managed bean that implements the Filter interface.
+	- In Spring application, you need to defined in web.xml.
+	- DelegatingFilterProxy itself does not handle security logic. Instead, it delegates to another filter bean defined in the Spring application context, usually **FilterChainProxy**.
+- **FilterChainProxy**:
+	- FilterChainProxy is a filter that manages a list of security filters defined by Spring Security.
+	- It contains the actual security filters (like authentication and authorization filters) and applies them in a specific order to the request.
+	- When FilterChainProxy receives the request from DelegatingFilterProxy, it consults the **SpringSecurityFilterChain** to determine which filters to apply.
+	- These filters are then applied in sequence to the request.
+- **Security Filters:**
+	- UsernamePasswordAuthenticationFilter: Handles form-based login.
+	- BasicAuthenticationFilter: Handles HTTP Basic authentication.
+	- CsrfFilter: Provides CSRF protection.
+	- SecurityContextPersistenceFilter: Manages the SecurityContext for the request.
+	- ExceptionTranslationFilter: Translates security exceptions to HTTP responses.
+	- **Flow**: Each filter performs a specific task and passes the request to the next filter in the chain if the task is successfully completed. If any filter fails, it may interrupt the flow and return a response immediately (e.g., an unauthorized error).
+- **Servlet**: After passing through all security filters, the request reaches the servlet, which processes it and generates a response. The response goes back through the filter chain (if any post-processing is required) and is sent back to the client.
+- By using **DelegatingFilterProxy**, **FilterChainProxy**, and **SecurityFilterChain**, Spring Security provides a flexible and powerful way to handle various security concerns in a modular and configurable manner.
+
 - Lets create a spring mvc project, first lets download only spring dependencies and use java beans for spring based configuration.
 
 ```
