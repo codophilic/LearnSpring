@@ -9,6 +9,13 @@
   <url>http://maven.apache.org</url>
   <dependencies>
 
+<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-web</artifactId>
+    <version>6.3.1</version>
+</dependency>
+
   <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-webmvc</artifactId>
