@@ -175,6 +175,7 @@ public class MainController {
 - Uptil now we have not configure any security controll on our web project. Lets add it, so we have download additional dependencies along with JSTL libraries.
 
 ```
+
 <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
 <dependency>
     <groupId>org.springframework.security</groupId>
@@ -379,6 +380,7 @@ welcome.jsp
     </div>
 </body>
 </html>
+
 ```
 
 - Below is the **MainController** , lets execute it
