@@ -45,7 +45,7 @@
 - **FilterChainProxy**:
 	- FilterChainProxy is a filter that manages a list of security filters defined by Spring Security.
 	- It contains the actual security filters (like authentication and authorization filters) and applies them in a specific order to the request.
-	- When FilterChainProxy receives the request from DelegatingFilterProxy, it consults the **SpringSecurityFilterChain** to determine which filters to apply.
+	- When FilterChainProxy receives the request from **DelegatingFilterProxy**, it consults the **SpringSecurityFilterChain** to determine which filters to apply.
 	- These filters are then applied in sequence to the request.
 - **Security Filters:**
 	- UsernamePasswordAuthenticationFilter: Handles form-based login.
@@ -55,7 +55,7 @@
 	- ExceptionTranslationFilter: Translates security exceptions to HTTP responses.
 	- **Flow**: Each filter performs a specific task and passes the request to the next filter in the chain if the task is successfully completed. If any filter fails, it may interrupt the flow and return a response immediately (e.g., an unauthorized error).
 - **Servlet**: After passing through all security filters, the request reaches the servlet, which processes it and generates a response. The response goes back through the filter chain (if any post-processing is required) and is sent back to the client.
-- By using **DelegatingFilterProxy**, **FilterChainProxy**, and **SecurityFilterChain**, Spring Security provides a flexible and powerful way to handle various security concerns in a modular and configurable manner.
+- By using **DelegatingFilterProxy**, **FilterChainProxy**, and **SpringSecurityFilterChain**, Spring Security provides a flexible and powerful way to handle various security concerns in a modular and configurable manner.
 
 - Lets create a spring mvc project, first lets download only spring dependencies and use java beans for spring based configuration.
 
