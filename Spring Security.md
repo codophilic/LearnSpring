@@ -361,17 +361,7 @@ Output:
 
 - When we hit the url, `http://localhost:8080/security/welcome` it gets redirected to `http://localhost:8080/security/login` page.
 
-
-
-
-
-
-
-
-
-
-
-
+https://github.com/user-attachments/assets/63d63306-cae6-4362-8e76-8bdb769aaa8f
 
 
 
