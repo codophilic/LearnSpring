@@ -15,6 +15,7 @@
         <label>Username : </label><input type='text' name='username' />
         <label>Password : </label><input type='password' name='password' />
         <input name="submit" type="submit" value="Sign In"/>
+        
     </form>
     <div>
         <c:if test="${not empty error}">

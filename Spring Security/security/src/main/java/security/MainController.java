@@ -1,4 +1,4 @@
-package security.config;
+package security;
 
 import org.springframework.stereotype.*;
 import org.springframework.ui.Model;

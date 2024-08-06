@@ -4,8 +4,6 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import jakarta.servlet.Filter;
-import security.SpringConfiguration;
-import security.SpringSecurityConfig;
 
 // This class serves as a replacement for the traditional web.xml file. 
 // It initializes the Spring DispatcherServlet and specifies the configuration classes.

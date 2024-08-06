@@ -1,4 +1,4 @@
-package security;
+package security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +41,7 @@ public class SpringSecurityConfig {
         // Creating an in-memory user details manager for demonstration purposes
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         // Adding a user with username "harsh", password "1234", and role "USER"
-        manager.createUser(User.withDefaultPasswordEncoder().username("harsh").password("1234").roles("USER").build());
+        manager.createUser(User.withDefaultPasswordEncoder().username("harsh").password("hpandya@301").roles("USER").build());
         return manager; // Return the in-memory user details manager
     }
 }

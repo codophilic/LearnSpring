@@ -314,6 +314,73 @@ public class SpringSecurityConfig {
 ```
 
 - **InMemoryUserDetailsManager** is a Spring Security class that implements the **UserDetailsService** interface. It is used to create an in-memory user store, where user details (like username, password, and roles) are stored in memory during the application's runtime. This is useful for simple applications or for testing purposes where a persistent storage (like a database) is not required.
+
+- Below is the **login.jsp** and **welcome.jsp** file
+
+```
+login.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h2>Login Page</h2>
+    <form action="<c:url value='/login' />" method="post">
+  <input type="hidden" name="_csrf" value="${_csrf.token}" />  
+        <label>Username : </label><input type='text' name='username' />
+        <label>Password : </label><input type='password' name='password' />
+        <input name="submit" type="submit" value="Sign In"/>
+    </form>
+    <div>
+        <c:if test="${not empty error}">
+            <p style="color:red;">${error}</p>
+        </c:if>
+        <c:if test="${not empty message}">
+            <p style="color:green;">${message}</p>
+        </c:if>
+    </div>
+</body>
+</html>
+
+
+welcome.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome Page</title>
+</head>
+<body>
+    <h2>Welcome Page</h2>
+
+    <!-- Logout Form -->
+    <form action="<c:url value='/logout' />" method="post">
+        <input type="hidden" name="_csrf" value="${_csrf.token}" />
+        <button type="submit">Logout</button>
+    </form>
+
+    <div>
+        <c:if test="${not empty error}">
+            <p style="color:red;">${error}</p>
+        </c:if>
+        <c:if test="${not empty message}">
+            <p style="color:green;">${message}</p>
+        </c:if>
+    </div>
+</body>
+</html>
+```
+
 - Below is the **MainController** , lets execute it
 
 ```
@@ -372,7 +439,7 @@ https://github.com/user-attachments/assets/63d63306-cae6-4362-8e76-8bdb769aaa8f
 https://github.com/user-attachments/assets/1f0fb892-9bb6-40c2-b218-227eaa0b4257
 
 
-
+ 
 
 
 
