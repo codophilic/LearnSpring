@@ -55,18 +55,21 @@
 	- ExceptionTranslationFilter: Translates security exceptions to HTTP responses.
 	- **Flow**: Each filter performs a specific task and passes the request to the next filter in the chain if the task is successfully completed. If any filter fails, it may interrupt the flow and return a response immediately (e.g., an unauthorized error).
  	- Filters like UsernamePasswordAuthenticationFilter and BasicAuthenticationFilter intercept the request to perform authentication. These filters use the **Authentication Manager** to process the authentication request.
-  		- **Authentication Manager**
-    			-  Receives the authentication request from the filter (e.g., username and password).
-			- Validates the credentials against the configured user details service or authentication provider.
-			- If authentication is successful, returns an Authentication object.
-    		- **Security Context**
-			- The Security Context holds the authenticated user's details, including their roles and authorities (permissions).
-			- This information is stored in an Authentication object, which is held in the **SecurityContextHolder**.
-    		-  **Authorization**:
-			- Authorization Filters: Filters like AuthorizationFilter use the information in the Security Context to check if the authenticated user has the necessary permissions to access a particular resource.
-			- During the request processing, the Security Context is consulted to determine if the user has the required authorities (roles/permissions) to perform specific actions.
+  	- **Authentication Manager**
+    		-  Receives the authentication request from the filter (e.g., username and password).
+		- Validates the credentials against the configured user details service or authentication provider.
+		- If authentication is successful, returns an Authentication object.
+   	- **Security Context**
+		- The Security Context holds the authenticated user's details, including their roles and authorities (permissions).
+		- This information is stored in an Authentication object, which is held in the **SecurityContextHolder**.
+ 	-  **Authorization**:
+		- Authorization Filters: Filters like AuthorizationFilter use the information in the Security Context to check if the authenticated user has the necessary permissions to access a particular resource.
+		- During the request processing, the Security Context is consulted to determine if the user has the required authorities (roles/permissions) to perform specific actions.
 - **Servlet**: After passing through all security filters, the request reaches the servlet, which processes it and generates a response. The response goes back through the filter chain (if any post-processing is required) and is sent back to the client.
 - By using **DelegatingFilterProxy**, **FilterChainProxy**, and **SpringSecurityFilterChain**, Spring Security provides a flexible and powerful way to handle various security concerns in a modular and configurable manner.
+
+![image](https://github.com/user-attachments/assets/988bced3-9e4a-4480-8c42-9154165ee966)
+
 
 - Lets create a spring mvc project, first lets download only spring dependencies and use java beans for spring based configuration.
 
