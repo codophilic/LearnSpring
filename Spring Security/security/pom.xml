@@ -21,6 +21,45 @@
     <artifactId>spring-webmvc</artifactId>
     <version>6.1.6</version>
 </dependency>
+
+<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-core</artifactId>
+    <version>6.3.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-web</artifactId>
+    <version>6.3.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-config</artifactId>
+    <version>6.3.1</version>
+</dependency>
+
+    <!-- JSTL API -->
+    <dependency>
+        <groupId>jakarta.servlet.jsp.jstl</groupId>
+        <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+        <version>3.0.0</version>
+    </dependency>
+    <!-- JSTL Implementation -->
+    <dependency>
+        <groupId>org.glassfish.web</groupId>
+        <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+        <version>3.0.0</version>
+    </dependency>
+
+ <dependency>
+  <groupId>org.springframework.security</groupId>
+  <artifactId>spring-security-taglibs</artifactId>
+  <version>6.1.5</version>
+ </dependency>
+ 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

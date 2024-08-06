@@ -172,7 +172,207 @@ public class MainController {
 ![alt text](image.png)
 
 
-- Uptil now we have not configure any security controll on our web project. Lets add 
+- Uptil now we have not configure any security controll on our web project. Lets add it, so we have download additional dependencies along with JSTL libraries.
+
+```
+<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-core</artifactId>
+    <version>6.3.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-web</artifactId>
+    <version>6.3.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-config</artifactId>
+    <version>6.3.1</version>
+</dependency>
+
+    <!-- JSTL API -->
+    <dependency>
+        <groupId>jakarta.servlet.jsp.jstl</groupId>
+        <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+        <version>3.0.0</version>
+    </dependency>
+    <!-- JSTL Implementation -->
+    <dependency>
+        <groupId>org.glassfish.web</groupId>
+        <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+        <version>3.0.0</version>
+    </dependency>
+
+ <dependency>
+  <groupId>org.springframework.security</groupId>
+  <artifactId>spring-security-taglibs</artifactId>
+  <version>6.1.5</version>
+ </dependency>
+```
+
+- Lets configure WebXML class
+
+```
+package security.config;
+
+import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import jakarta.servlet.Filter;
+import security.SpringConfiguration;
+import security.SpringSecurityConfig;
+
+// This class serves as a replacement for the traditional web.xml file. 
+// It initializes the Spring DispatcherServlet and specifies the configuration classes.
+
+public class WebXML extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    // This method returns the configuration classes for the root application context.
+    // The root application context typically contains beans that are shared across the entire application.
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[] { SpringConfiguration.class,SpringSecurityConfig.class }; //spring-servlet.xml
+    }
+
+    // This method returns the configuration classes for the DispatcherServlet application context.
+    // Since it returns null here, it means all configurations are provided by the root context.
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return null;
+    }
+
+    // This method specifies the URL patterns that the DispatcherServlet will be mapped to.
+    // In this case, it maps the DispatcherServlet to the root URL pattern ("/"),
+    // meaning it will handle all incoming requests.
+    @Override
+    protected String[] getServletMappings() {
+        return new String[] { "/" };
+    }
+
+    @Override
+    protected Filter[] getServletFilters() {
+        // Registering the DelegatingFilterProxy to delegate filter processing to Spring Security
+        return new Filter[] { new DelegatingFilterProxy("springSecurityFilterChain") };
+    }
+}
+```
+
+- Lets configure **spring-security.xml** file using java configuration
+
+```
+package security;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SpringSecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Creating a SecurityFilterChain object to define security configurations
+        http
+            .authorizeRequests(authorizeRequests -> authorizeRequests
+                .requestMatchers("/login", "/css/**", "/js/**", "/images/**").permitAll() // Allow public access to these URLs
+                .requestMatchers("/welcome").hasRole("USER") // Require USER role for /welcome
+                .anyRequest().permitAll() // Allow all other requests
+            )
+            .formLogin(formLogin -> formLogin
+                .loginPage("/login") // Specify the custom login page
+                .loginProcessingUrl("/login") // URL to submit username and password
+                .defaultSuccessUrl("/welcome", true) // Redirect to /welcome upon successful login
+                .failureUrl("/login?error=true") // Redirect to /login with error parameter on failure
+                .permitAll() // Allow access to the login page
+            )
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout=true") // Redirect to /login with logout parameter upon logout
+                .permitAll() // Allow access to the logout URL
+            );
+        return http.build(); // Build and return the SecurityFilterChain object
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        // Creating an in-memory user details manager for demonstration purposes
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        // Adding a user with username "harsh", password "1234", and role "USER"
+        manager.createUser(User.withDefaultPasswordEncoder().username("harsh").password("1234").roles("USER").build());
+        return manager; // Return the in-memory user details manager
+    }
+}
+```
+
+- **InMemoryUserDetailsManager** is a Spring Security class that implements the **UserDetailsService** interface. It is used to create an in-memory user store, where user details (like username, password, and roles) are stored in memory during the application's runtime. This is useful for simple applications or for testing purposes where a persistent storage (like a database) is not required.
+- Below is the **MainController** , lets execute it
+
+```
+package security.config;
+
+import org.springframework.stereotype.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+public class MainController {
+
+	/**
+	 * Same as @RequestMapping(method = RequestMethod.GET)
+	 */
+    @GetMapping("/login")
+    public String login(@RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "logout", required = false) String logout,
+                        Model model) {
+    	System.out.println("Inside Login Method");
+        if (error != null) {
+        	System.out.println("Invalid username or password.");
+            model.addAttribute("error", "Invalid username or password.");
+        }
+        if (logout != null) {
+        	System.out.println("Logged out successfully.");
+            model.addAttribute("message", "Logged out successfully.");
+        }
+        return "login";
+    }
+	
+	/**
+	 * Same as @RequestMapping(method = RequestMethod.GET)
+	 */
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "welcome";
+    }
+}
+
+
+Output:
+
+```
+
+- When we hit the url, `http://localhost:8080/security/welcome` it gets redirected to `http://localhost:8080/security/login` page.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

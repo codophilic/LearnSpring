@@ -1,22 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Welcome Page</title>
+    <title>Login</title>
 </head>
 <body>
-    <h2>Welcome Page</h2>
-
-    <!-- Logout Form -->
-    <form action="<c:url value='/logout' />" method="post">
-        <input type="hidden" name="_csrf" value="${_csrf.token}" />
-        <button type="submit">Logout</button>
+    <h2>Login Page</h2>
+    <form action="<c:url value='/login' />" method="post">
+  <input type="hidden" name="_csrf" value="${_csrf.token}" />  
+        <label>Username : </label><input type='text' name='username' />
+        <label>Password : </label><input type='password' name='password' />
+        <input name="submit" type="submit" value="Sign In"/>
     </form>
-
     <div>
         <c:if test="${not empty error}">
             <p style="color:red;">${error}</p>

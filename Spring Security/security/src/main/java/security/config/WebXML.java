@@ -1,8 +1,11 @@
 package security.config;
 
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import jakarta.servlet.Filter;
 import security.SpringConfiguration;
+import security.SpringSecurityConfig;
 
 // This class serves as a replacement for the traditional web.xml file. 
 // It initializes the Spring DispatcherServlet and specifies the configuration classes.
@@ -13,7 +16,7 @@ public class WebXML extends AbstractAnnotationConfigDispatcherServletInitializer
     // The root application context typically contains beans that are shared across the entire application.
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] { SpringConfiguration.class }; //spring-servlet.xml
+        return new Class[] { SpringConfiguration.class,SpringSecurityConfig.class }; //spring-servlet.xml
     }
 
     // This method returns the configuration classes for the DispatcherServlet application context.
@@ -29,5 +32,11 @@ public class WebXML extends AbstractAnnotationConfigDispatcherServletInitializer
     @Override
     protected String[] getServletMappings() {
         return new String[] { "/" };
+    }
+
+    @Override
+    protected Filter[] getServletFilters() {
+        // Registering the DelegatingFilterProxy to delegate filter processing to Spring Security
+        return new Filter[] { new DelegatingFilterProxy("springSecurityFilterChain") };
     }
 }
