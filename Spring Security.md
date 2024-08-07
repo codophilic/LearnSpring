@@ -169,7 +169,7 @@ public class MainController {
 
 - Post execution when we hit the url `http://localhost:8080/security/welcome` we get below output.
 
-![alt text](image.png)
+![alt text](Images/springsecurity/image.png)
 
 
 - Uptil now we have not configure any security controll on our web project. Lets add it, so we have download additional dependencies along with JSTL libraries.
