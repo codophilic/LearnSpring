@@ -817,7 +817,7 @@ Coding done
 - **Reference type injection is a powerful way to decouple beans in a Spring application. By using reference type injection, you can avoid tightly coupling beans together. This makes your application more flexible and easier to maintain.**
 
 ## Constructor Injection
-- Lets say we have a class variable name lines in class Laptop, it is an integer variable.
+- Lets say we have a class variable name lines in class Laptop, it is an integer datatype.
 
 ```
 package com.simple.springProject;
