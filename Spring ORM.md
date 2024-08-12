@@ -179,7 +179,7 @@ package com.spring.orm.service;
 import com.spring.orm.dao.StudentDao;
 import com.spring.orm.entities.Student;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 public class StudentService {
 
@@ -225,6 +225,11 @@ public class StudentDao{
 	}
 }
 ```
+
+>[!NOTE]
+> - There are two imports available for **`@Transactional`** annotation.
+> - In a Java EE 7 application, you'll use the Java EE annotation (jakarta.transaction.Transactional).
+> - In a Spring application, you'll use the Spring annotation (org.springframework.transaction.annotation.Transactional).
 
 - Post execution of main method, our table is created and data is inserted.
 
@@ -355,7 +360,7 @@ import java.util.List;
 import com.spring.orm.dao.StudentDao;
 import com.spring.orm.entities.Student;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class StudentService {
