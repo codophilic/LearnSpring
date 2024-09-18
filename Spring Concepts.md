@@ -1,6 +1,6 @@
 # About Spring
 - The Spring framework is a set of tools and libraries for building Java applications. It provides a way to simplify the development of complex enterprise applications by providing a set of pre-built modules that handle common tasks, such as managing objects and handling database transactions, and providing a web application framework. By using Spring, developers can focus on writing business logic and let the framework handle the low-level details of infrastructure.
-- Spring framework The Spring framework can be considered as a collection of sub-frameworks, example if we want to build a web module, we have a collection of Spring MVC, if we want to build a REST APIs we have Spring REST, if we want to secure the application we have Spring Security. So like these there are multiple sub-frameworks which together becomes a collections, thus giving a Spring framework.
+- The Spring framework can be considered as a collection of sub-frameworks, example if we want to build a web module, we have a collection of Spring MVC, if we want to build a REST APIs we have Spring REST, if we want to secure the application we have Spring Security. So like this there are multiple sub-frameworks which together becomes a collections, thus giving a Spring framework.
 - In Spring, POJOs are used extensively as the building blocks of the application. Spring leverages POJOs in several ways.
 
 <details>
@@ -78,7 +78,7 @@ public void setFlavourName(String name){
 - Spring Core is like a magic box for Legos. You tell it what kind of car you want (using a configuration file), and it:
   - Grabs all the necessary pieces (wheels, engine, chassis) - creates the objects
   - Snaps them together in the right way (configures them) - injects dependencies between objects
-  - Makes sure you have everything you need (no missing pieces) - ensures all dependencies are met
+  - Make sure you have everything you need (no missing pieces) - ensures all dependencies are met
 - This way, you just tell Spring Core what you want to build, and it takes care of the messy details of putting it all together. You can focus on making your car cool, not hunting for spare axles!
 - Spring Core manages objects in your code like Legos:
   - Object Creation: Imagine a Lego wheel. Spring can create that wheel object (like new Wheel() in Java) based on your instructions.
@@ -107,7 +107,7 @@ public void setFlavourName(String name){
 		Alien obj = new Alien();
 ```
 
-- Now any object we want in our code it will be provided by IoC, but how shall we ask for which object we want to IoC? thats where we assign every bean an ID. Now every bean has an ID or a bean name, this ID needs to be store somewhere right? thats where we have a configuration file in spring.
+- Now any object we want in our code, it will be provided by IoC, but how shall we ask for which object we want to IoC? thats where we assign every bean an ID. Now every bean has an ID or a bean name, this ID needs to be store somewhere right? thats where we have a configuration file in spring.
 - Spring uses configuration files (like XML or YAML) to define how objects (called beans) are created, configured, and wired together. These configuration files don't directly assign IDs to objects. Instead, they use a bean definition mechanism:
   - You specify the class type of the bean (e.g., com.Cars.Engine).
   - You can optionally provide a unique identifier (id="EngineOfcar") for the bean, but it's not mandatory. Spring can use class names by default.
@@ -323,7 +323,7 @@ This single instance can have multiple references, meaning different parts of yo
 - By default, Spring creates beans with singleton scope. This means Spring creates only one instance of the bean for a particular bean definition in the XML configuration. Similar to singletons, this single bean instance can have multiple references. Different parts of your application can request the bean from the Spring container, and they will all receive the same instance data values.
 - In Spring, the bean scope defines the lifecycle and visibility of a Spring bean within the Spring application context. It determines how many instances of a particular bean are created and how they are managed by Spring when they are requested by other beans or components
 - So in singleton if we ask spring to provide 10 reference it will still create a single object and share all the references to that single object only.
-- Lets say if we want to have a difference object for each references we create in spring. So for that we change the scope of bean to **prototype**. Below is the config xml file.
+- Lets say if we want to have a different object for each references we create in spring. So for that we change the scope of bean to **prototype**. Below is the config xml file.
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -392,7 +392,7 @@ Object created via constructor
 - Incase of prototype scope, a prototype bean is a new instance that is created every time the bean is requested. So the new instance is created by spring only when it is called by `getBean()`. **Now whenever we initialized ApplicationContext spring does not create those beans in case of prototype scope.**
 
 ## Setters Injection
-- Lets say we wanted to assigned some value of instance variables whenever spring creates our bean, this can be done using property attribute, but property attribute has one condition. Your instance variables must be private. So how will they set the value if access modifier is private? using getters and setters of the variable.
+- Lets say we wanted to assign some value of instance variables whenever spring creates our bean, this can be done using property attribute, but property attribute has one condition. Your instance variables must be private. So how will they set the value if access modifier is private? using getters and setters of the variable.
 - Below is the config xml file for it.
 
 ```
