@@ -1148,7 +1148,7 @@ Addition is: 13
 Addition is: 13
 ```
 
-## Autowire
+## Field or Property or Autowire Injection
 - Lets say we have a ProgrammingLanguage interface which has a method `print()`.
 
 ```
@@ -1414,6 +1414,7 @@ Printing Style in Java
 4. **byConstructor**: Autowiring by constructor is similar to byType, but it works for constructor injection. It looks for beans of the same type as the constructor parameter and injects them. In Autowiring by constructor, Spring will call the parameterized constructor that matches the dependencies it needs to inject. If there is no parameterized constructor available, Spring will fall back to using the default constructor (i.e., a constructor with no arguments) if it exists.
 
 - Above learnings are implement [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/XMLBasedConfiguration).
+
 
 ## Why Spring is useful
 - Loose Coupling: Spring promotes loose coupling through dependency injection, making it easier to manage and test components. By configuring beans and their dependencies in a separate configuration file or class, the components in your application become loosely coupled. This improves modularity, testability, and flexibility in your codebase. **Example in the Autowire we had two class which implements the same interface, and during the configuration we specified to spring that which object we want, thus making it loosely coupled**.
@@ -2518,6 +2519,86 @@ This is a process
 
 - Abover learnings are implemented [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/JavaBeanConfiguration)
 - XML configuration provides easy way to check all the configurations withing one file but it is tedious to write those configurations whereas annotation configuration are easier to implement.
+
+## When to use which type of Injection in Spring?
+
+- **Constructor Injection is preferred for mandatory dependencies, as it ensures all required dependencies are available at the time of object creation. It is the most recommended approach**.
+- Constructor injection makes it clear which dependencies are mandatory for a class to function. Since the dependencies are provided through the constructor, they must be provided at object creation time. This ensures that the object is always created in a valid state. The class cannot be instantiated without the required dependencies, which reduces the likelihood of null pointer exceptions and similar issues.
+- Consider below code
+
+```
+public class Car {
+    private final Engine engine;
+    
+    public Car(Engine engine) {
+        this.engine = engine;
+    }
+    
+    public void drive() {
+        engine.start();
+        System.out.println("Car is moving");
+    }
+}
+```
+
+- In this example, the `Car` class cannot be instantiated without an `Engine`. This guarantees that any `Car` object is always created with an engine, ensuring the class is in a valid state.
+- Besides the `final` keyword is used to declare the variable `engine` as a constant. This way, once a value is assigned in the constructor, the variable cannot be reassigned to another object. The use of the `final` keyword is optional when injecting dependencies through the constructor, but it is a good programming practice because it helps ensure the immutability and consistency of objects. By making a variable final, you avoid accidentally changing its value in other parts of the code.
+- When you use constructor injection, it's clear from the constructor signature what the dependencies of a class are. This makes the class easier to understand and maintain, as all required dependencies are explicitly listed in one place.
+
+
+>[!TIP]
+> - There is a **Lombok** library which uses **constructor injection** and depends on annotation based configuration. The Lombok library significantly reduces the lines of code, it provides auto-generated methods like getters, setters, constructor, `toString()` during compilation.
+> - Consider below code
+>  ```
+>  import lombok.RequiredArgsConstructor;
+>
+>  @RequiredArgsConstructor
+>  @Getter
+>  @Setter
+>  @ToString
+>  public class Car {
+>  	private final Engine engine;  // Lombok generates a constructor with this field
+>
+>  	public void drive() {
+>  		engine.start();
+>  		System.out.println("Car is moving");
+>  	}
+>  }
+>  ```
+
+
+- **Setter Injection (autowire on setter method) should be used when a dependency is optional or when you need to change a dependency after the object has been created.** . Consider below example
+
+```
+public class Car {
+    private Engine engine;
+    
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+    
+    public void drive() {
+        if (engine == null) {
+            throw new IllegalStateException("Engine is not set!");
+        }
+        engine.start();
+        System.out.println("Car is moving");
+    }
+}
+```
+
+- In this case, the `Car` class can be instantiated without an engine, which could lead to an invalid state if someone forgets to set the engine before calling the `drive()` method. This is riskier.
+- Setter-based injection can make it difficult to understand the dependencies of an object in the code, since the dependencies are not explicitly specified in the constructor. This can make it more difficult to follow the flow of control through the code.
+- **Field Injection (autowire on variable) should be avoided in most cases because it makes the code less testable and harder to manage in complex applications.**
+- Injecting dependencies through properties can make dependencies optional, which means that the object may be in an invalid state until all dependencies are set.
+- Consider below code
+
+```
+@Autowired(required = false)
+private Engine engine;  // If Spring doesn’t find an Engine bean, it won’t throw an error.
+```
+
+- This can lead to runtime issues if the object tries to use the `engine` without realizing it's null. So while Spring doesn’t fail at startup, you might get a `null` pointer exception later in your code.
 
 ## Bean life cycle in Java Spring
 - The lifecycle of any object means when & how it is born, how it behaves throughout its life, and when & how it dies. Similarly, the bean life cycle refers to when & how the bean is instantiated, what action it performs until it lives, and when & how it is destroyed.
