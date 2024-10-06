@@ -1375,7 +1375,7 @@ Caused by: org.springframework.beans.factory.NoUniqueBeanDefinitionException: No
 	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireByType(AbstractAutowireCapableBeanFactory.java:1521)
 	... 13 more
 ```
-- If we observer config XML, there are two classes or types for ProgrammingLanguage one is with PythonCode and another one is JavaCode, this makes confusion for spring to pick which one and inject it into Laptop class. In such scenario we can mentioned which been needs to be set once of them as primary or give one of them as preference. Below is the config xml for it.
+- If we observe config XML, there are two classes or types for ProgrammingLanguage one is with PythonCode and another one is JavaCode, this makes confusion for spring to pick which one and inject it into Laptop class. In such scenario we can mention which been needs to be set once of them as primary or give one of them as preference. Below is the config xml for it.
 
 ```
     <bean class="com.simple.springProject.Alien" name="objectOfAlienSetters" >
@@ -1446,7 +1446,7 @@ public class Laptop {
 
 ```
 
-- Below is our main method where we execute the beans by asking Spring to gives us the object or beans.
+- Below is our main method where we execute the beans by asking Spring to give us the object or beans.
 
 ```
 package com.simple.AnnotationBasedConfiguration;
@@ -2068,7 +2068,7 @@ public class Student {
 }
 ```
 
-- For primitive values where String or integer are the datatypes, withing `@Value` annotation we can pass the value for those datatype, whereas for standalone collections like list, map ,properties etc.. we use Spring Expression Language (SpEL). Spring Expression Language (SpEL) is used for defining expressions to evaluate dynamically.
+- For primitive values where String or integer are the datatypes, within `@Value` annotation we can pass the value for those datatype, whereas for standalone collections like list, map ,properties etc.. we use Spring Expression Language (SpEL). Spring Expression Language (SpEL) is used for defining expressions to evaluate dynamically.
 - Below is the config xml for util schema where we declare the values of list , map and properties.
 
 ```
@@ -2432,8 +2432,8 @@ This is an Alien
 This is an Alien
 ```
 
-- When we used `@Bean` annotation, we did not use `@Component` annotation on every class.
-- Here in the SpringConfig class we need to define `@Bean` annotation for every class which we need to use during execution. So basically if there are thousands of bean inside a package , is it worthy to write thousands of class over here? thats where we have an another annotation name `@ComponentScan` where we specify the package and all classes present in that package are treated as individual beans by spring.
+- When we use `@Bean` annotation, we did not use `@Component` annotation on every class.
+- Here in the SpringConfig class we need to define `@Bean` annotation for every class which we need to use during execution. So basically if there are thousands of bean inside a package , is it worthy to write thousands of class over here? thats where we have an another annotation named `@ComponentScan` where we specify the package and all classes present in that package are treated as individual beans by spring.
 - When we use `@ComponentScan` we need to specify `@Component` on whatever class we required.
 - Lets say we have Processor class.
 
