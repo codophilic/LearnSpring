@@ -1424,7 +1424,7 @@ Printing Style in Java
 - Reducing development time: By providing a set of pre-built modules, Spring helps developers write code faster and reduces the amount of boilerplate code they need to write.
 
 ## Annotation-based Configuration
-- In the above approach , we configured configurations using XML files. In annotation appraoch we declare annotations like `@Component`, `@Service`, `@Repository`, etc., to mark classes as Spring beans. The Spring IoC container scans the application's classpath and automatically detects and manages these annotated beans.
+- In the above approach , we configured configurations using XML files. In annotation approach we declare annotations like `@Component`, `@Service`, `@Repository`, etc., to mark classes as Spring beans. The Spring IoC container scans the application's classpath and automatically detects and manages these annotated beans.
 - In Spring, annotations are special markers used to simplify configuration and setup of the application.
 - Let us take an example, so we have a class Laptop, so earlier in xml config we create config file for a class using `<bean>` attribute, but in annotation we have `@Component` as annotation way to create beans in Spring.
 
