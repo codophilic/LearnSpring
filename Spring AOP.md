@@ -1,6 +1,6 @@
 # About AOP (Aspect-Oriented Programming)
 - Imagine you have an online shopping cart.
-- People will add or remove items and accordingly the quatities will be updated, calculation of total price will be done, if any discount is applicable then it will be applied , processing payment will be done etc..
+- People will add or remove items and accordingly the quantities will be updated, calculation of total price will be done, if any discount is applicable then it will be applied , processing payment will be done etc..
 - Now the core feature in this online shopping cart for individual user includes
   - User adding or removing items
   - Updating quantities
@@ -435,6 +435,6 @@ Aspect - Transaction: Amount - 1000.0 is debited
 ```
 
 - Reference [video](https://www.youtube.com/watch?v=xdl1b97GANk&t=1474s)
-- Above learnings are implemented [here](https://github.com/codophilic/LearnSpring/tree/main/Spring%20AOP/aop/src/main/java/com/spring/aop).
-- Now lets learn about [Spring Security](https://github.com/codophilic/LearnSpring/blob/main/Spring%20Security.md)
+- Above learnings are implemented [here](Spring%20AOP/aop/src/main/java/com/spring/aop).
+- Now lets learn about [Spring Security](Spring%20Security.md)
 

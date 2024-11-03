@@ -1,5 +1,5 @@
 # LearnSpring
-Learn about [Spring Framework](https://github.com/codophilic/LearnSpring/blob/main/Spring%20Concepts.md)
+Learn about [Spring Framework](Spring%20Concepts.md)
 
 >[!IMPORTANT]
 > - Make the clone of repository and use visual studio code to preview all the markdown files during the process of learning.

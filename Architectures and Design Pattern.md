@@ -1,6 +1,6 @@
 # Design Pattern
 
-## What is design patter in software engineering?
+## What is design pattern in software engineering?
 - In software engineering, a design pattern is a reusable solution to a commonly occurring problem within a software design. It's like a blueprint or template that can be adapted to different situations.
 - Imagine you're building a house.
   - You have different parts to construct: the foundation, walls, roof, plumbing, electrical system, etc. Each part has its own complexities.

@@ -9,7 +9,7 @@
 
 ```
 What is a POJO?
-- POJO is a plain old java object like in the above example coneIceCream. Which means any java object is a POJO.
+- POJO is a plain old java object like in the below example coneIceCream. Which means any java object is a POJO.
 
 What is NOT a POJO?
 →Shouldn’t extend any class.
@@ -1413,7 +1413,7 @@ Printing Style in Java
 3. **byName**: Autowiring by name looks for a bean whose ID matches the name of the dependency in XML, and if found, it injects that bean.
 4. **byConstructor**: Autowiring by constructor is similar to byType, but it works for constructor injection. It looks for beans of the same type as the constructor parameter and injects them. In Autowiring by constructor, Spring will call the parameterized constructor that matches the dependencies it needs to inject. If there is no parameterized constructor available, Spring will fall back to using the default constructor (i.e., a constructor with no arguments) if it exists.
 
-- Above learnings are implement [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/XMLBasedConfiguration).
+- Above learnings are implement [here](Simple%20Spring%20Project/demo/src/main/java/com/simple/XMLBasedConfiguration).
 
 
 ## Why Spring is useful
@@ -2290,7 +2290,7 @@ Output:
 62
 ```
 
-- Above learnings are implement [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/AnnotationBasedConfiguration).
+- Above learnings are implement [here](Simple%20Spring%20Project/demo/src/main/java/com/simple/AnnotationBasedConfiguration).
 
 ## Java Bean based Configuration
 - Until now we have saw, we have specified all the configuration in a XML file. What if we can avoid it and have a java class as our configuration? is it possible? yes, using `@Configuration` annotation we can do it.
@@ -2517,7 +2517,7 @@ Output:
 This is a process
 ```
 
-- Abover learnings are implemented [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/JavaBeanConfiguration)
+- Above learnings are implemented [here](Simple%20Spring%20Project/demo/src/main/java/com/simple/JavaBeanConfiguration)
 - XML configuration provides easy way to check all the configurations withing one file but it is tedious to write those configurations whereas annotation configuration are easier to implement.
 
 ## When to use which type of Injection in Spring?
@@ -2894,7 +2894,7 @@ Processing something
 Container has been closed and I'm the destroy() method
 ```
 
-- Above learnings are implemented [here](https://github.com/codophilic/LearnSpring/tree/main/Simple%20Spring%20Project/demo/src/main/java/com/simple/BeanLifeCycle)
+- Above learnings are implemented [here](Simple%20Spring%20Project/demo/src/main/java/com/simple/BeanLifeCycle)
 
 
 ## Use of Maven and Spring
@@ -2916,7 +2916,7 @@ Container has been closed and I'm the destroy() method
 
 - Finally, we would build and package our application using Maven, which would create a deployable artifact that can be run on a server.
 
-- Now lets learn about [Spring JDBC](https://github.com/codophilic/LearnSpring/blob/main/Spring%20JDBC.md)
+- Now lets learn about [Spring JDBC](Spring%20JDBC.md)
 
 
 
