@@ -7,7 +7,7 @@
   
 <summary>About Pojo</summary>
 
-```
+
 What is a POJO?
 - POJO is a plain old java object like in the below example coneIceCream. Which means any java object is a POJO.
 
@@ -16,7 +16,9 @@ What is NOT a POJO?
 →Shouldn’t implement any interface.
 →No annotations.
 
-Example: 
+- Example: 
+
+```
 class IceCream{  
  //defining fields/ properties of icecream/states of icecream  
  double price;
